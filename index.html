@@ -51,6 +51,12 @@
         .text-glow {
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
+
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,6 +82,11 @@
                             class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">About</a>
                         <a href="#services"
                             class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Services</a>
+                        <a href="#process"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Process</a>
+                        <a href="#case-studies"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Success
+                            Stories</a>
                         <a href="#contact"
                             class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Contact</a>
                     </div>
@@ -92,43 +103,51 @@
             <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-cyan/20 rounded-full blur-3xl animate-float"
                 style="animation-delay: 2s;"></div>
             <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+            <div
+                class="absolute inset-0 bg-grid-pattern [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]">
+            </div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-                Protecting Every Dollar,<br>
+            <div
+                class="inline-block px-4 py-2 bg-white/5 rounded-full border border-white/10 backdrop-blur-md mb-8 animate-pulse">
+                <span class="text-neon-cyan font-bold">New</span> <span class="text-gray-300 ml-2">2.2 Trillion
+                    Transactions Analyzed</span>
+            </div>
+            <h1 class="text-5xl md:text-8xl font-bold mb-8 tracking-tighter leading-tight">
+                They find what's lost.<br>
                 <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple text-glow">Empowering
-                    Every Customer</span>
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-deep-purple text-glow">We
+                    stop the loss.</span>
             </h1>
-            <p class="mt-4 text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-                Identify and prevent financial leakage, fraud, waste, and abuse through automated analytics and advanced
-                machine learning.
+            <p class="mt-4 text-xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+                The only AI-driven platform that moves beyond recovery to <strong>predictive spend assurance</strong>.
+                Stop financial leakage, fraud, and waste <em>before</em> it leaves your account.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
                 <a href="#contact"
-                    class="px-8 py-4 bg-neon-cyan text-rich-black font-bold rounded-full hover:bg-white transition-colors shadow-[0_0_20px_rgba(0,243,255,0.5)]">
-                    Get Started
+                    class="px-10 py-5 bg-neon-cyan text-rich-black font-bold text-lg rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,243,255,0.4)]">
+                    Start Your Audit
                 </a>
-                <a href="#about"
-                    class="px-8 py-4 glass text-white font-bold rounded-full hover:bg-white/10 transition-colors border border-white/20">
-                    Learn More
+                <a href="#case-studies"
+                    class="px-10 py-5 glass text-white font-bold text-lg rounded-full hover:bg-white/10 transition-all border border-white/20 hover:border-neon-cyan/50">
+                    View Success Stories
                 </a>
             </div>
 
             <!-- Key Metrics -->
-            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="p-6 glass rounded-2xl">
-                    <div class="text-4xl font-bold text-neon-cyan mb-2">18x</div>
-                    <div class="text-gray-400">ROI in 60 Days</div>
+            <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-8 glass rounded-3xl border border-white/5 hover:border-neon-cyan/30 transition-colors">
+                    <div class="text-5xl font-bold text-neon-cyan mb-2">18x</div>
+                    <div class="text-gray-400 font-medium">ROI in First 60 Days</div>
                 </div>
-                <div class="p-6 glass rounded-2xl">
-                    <div class="text-4xl font-bold text-neon-cyan mb-2">0.5-2%</div>
-                    <div class="text-gray-400">AP Spend Recovered</div>
+                <div class="p-8 glass rounded-3xl border border-white/5 hover:border-neon-cyan/30 transition-colors">
+                    <div class="text-5xl font-bold text-neon-cyan mb-2">&lt; 2.5h</div>
+                    <div class="text-gray-400 font-medium">To Analyze $1B Spend</div>
                 </div>
-                <div class="p-6 glass rounded-2xl">
-                    <div class="text-4xl font-bold text-neon-cyan mb-2">100%</div>
-                    <div class="text-gray-400">Audit-Ready Reporting</div>
+                <div class="p-8 glass rounded-3xl border border-white/5 hover:border-neon-cyan/30 transition-colors">
+                    <div class="text-5xl font-bold text-neon-cyan mb-2">100%</div>
+                    <div class="text-gray-400 font-medium">Audit-Ready Reporting</div>
                 </div>
             </div>
         </div>
@@ -137,56 +156,74 @@
     <!-- About Section -->
     <section id="about" class="py-24 bg-rich-black relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold mb-4">The iTK Difference</h2>
-                <div class="w-24 h-1 bg-neon-cyan mx-auto rounded-full"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <h3 class="text-2xl font-bold text-white">AI-Driven Financial Assurance</h3>
-                    <p class="text-gray-400 leading-relaxed">
-                        iTK Technologies is a leader in AI-driven financial assurance. For over a decade, we have
-                        delivered intelligent anomaly detection, revenue recovery, and real-time leak prevention for AP
-                        and Finance organizations across healthcare, retail, manufacturing, and government sectors.
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">AI That Pays for Itself</h2>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Traditional audits rely on rules and sampling. We analyze 100% of your data using a layered AI
+                        stack that finds what others miss.
                     </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
-                            <span class="text-gray-300">Recovers 0.5–2% of AP spend</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
-                            <span class="text-gray-300">Prevents future payment errors in real time</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
-                            <span class="text-gray-300">Integrates with SAP, Oracle, Workday, Infor</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="glass p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
-                    <h4 class="text-xl font-bold mb-6">Leadership</h4>
+
                     <div class="space-y-6">
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-start">
                             <div
-                                class="w-12 h-12 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold">
-                                MP</div>
+                                class="w-12 h-12 bg-neon-cyan/10 rounded-xl flex items-center justify-center text-neon-cyan mr-4 flex-shrink-0">
+                                <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                            </div>
                             <div>
-                                <div class="font-bold">Matthew Palmer</div>
-                                <div class="text-sm text-neon-cyan">CEO</div>
+                                <h3 class="text-xl font-bold text-white mb-2">Machine Learning (ML)</h3>
+                                <p class="text-gray-400 text-sm">The "Watchdog" that learns your normal vendor behaviors
+                                    and flags outliers.</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-start">
                             <div
-                                class="w-12 h-12 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold">
-                                AG</div>
+                                class="w-12 h-12 bg-deep-purple/10 rounded-xl flex items-center justify-center text-deep-purple mr-4 flex-shrink-0">
+                                <i data-lucide="network" class="w-6 h-6"></i>
+                            </div>
                             <div>
-                                <div class="font-bold">Alex Geraldo</div>
-                                <div class="text-sm text-neon-cyan">CTO</div>
+                                <h3 class="text-xl font-bold text-white mb-2">Deep Learning (DL)</h3>
+                                <p class="text-gray-400 text-sm">The "Pattern Whisperer" detecting complex, non-linear
+                                    fraud schemes across time.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-neon-cyan/10 rounded-xl flex items-center justify-center text-neon-cyan mr-4 flex-shrink-0">
+                                <i data-lucide="message-square-code" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-2">Large Language Models (LLM)</h3>
+                                <p class="text-gray-400 text-sm">The "Finance Linguist" understanding invoice text,
+                                    emails, and approval intent.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-neon-cyan to-deep-purple blur-3xl opacity-20 rounded-full">
+                    </div>
+                    <div class="glass p-8 rounded-3xl border border-white/10 relative z-10">
+                        <h4 class="text-xl font-bold mb-6 border-b border-white/10 pb-4">Leadership</h4>
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="w-14 h-14 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold text-lg">
+                                    MP</div>
+                                <div>
+                                    <div class="font-bold text-lg">Matthew Palmer</div>
+                                    <div class="text-sm text-neon-cyan">CEO</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="w-14 h-14 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold text-lg">
+                                    AG</div>
+                                <div>
+                                    <div class="font-bold text-lg">Alex Geraldo</div>
+                                    <div class="text-sm text-neon-cyan">CTO</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -210,13 +247,13 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
                 <div
-                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    class="glass p-8 rounded-3xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50 group">
                     <div
-                        class="w-14 h-14 bg-neon-cyan/20 rounded-xl flex items-center justify-center mb-6 text-neon-cyan">
+                        class="w-16 h-16 bg-neon-cyan/10 rounded-2xl flex items-center justify-center mb-8 text-neon-cyan group-hover:bg-neon-cyan group-hover:text-rich-black transition-colors">
                         <i data-lucide="search" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Deep Historical Review</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <h3 class="text-2xl font-bold mb-4">Deep Historical Review</h3>
+                    <p class="text-gray-400 leading-relaxed">
                         Recover overpayments, duplicates, and fraud from past transactions. We analyze over $1B spend in
                         under three hours using our proprietary LLM.
                     </p>
@@ -224,13 +261,13 @@
 
                 <!-- Service 2 -->
                 <div
-                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    class="glass p-8 rounded-3xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50 group">
                     <div
-                        class="w-14 h-14 bg-deep-purple/20 rounded-xl flex items-center justify-center mb-6 text-deep-purple">
+                        class="w-16 h-16 bg-deep-purple/10 rounded-2xl flex items-center justify-center mb-8 text-deep-purple group-hover:bg-deep-purple group-hover:text-white transition-colors">
                         <i data-lucide="shield-alert" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Real-Time Detection</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <h3 class="text-2xl font-bold mb-4">Real-Time Detection</h3>
+                    <p class="text-gray-400 leading-relaxed">
                         Stop erroneous payments before bank submission. Our AI proactively prevents leaks rather than
                         just identifying them after the fact.
                     </p>
@@ -238,17 +275,188 @@
 
                 <!-- Service 3 -->
                 <div
-                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    class="glass p-8 rounded-3xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50 group">
                     <div
-                        class="w-14 h-14 bg-neon-cyan/20 rounded-xl flex items-center justify-center mb-6 text-neon-cyan">
+                        class="w-16 h-16 bg-neon-cyan/10 rounded-2xl flex items-center justify-center mb-8 text-neon-cyan group-hover:bg-neon-cyan group-hover:text-rich-black transition-colors">
                         <i data-lucide="lock" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Security Services</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <h3 class="text-2xl font-bold mb-4">Security Services</h3>
+                    <p class="text-gray-400 leading-relaxed">
                         Proactive threat detection, vulnerability assessment, and remediation aligned with NIST and SOC
                         2 standards.
                     </p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section (NEW) -->
+    <section id="process" class="py-24 bg-rich-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">How It Works</h2>
+                <p class="text-gray-400">From data ingestion to recovery in four simple steps.</p>
+            </div>
+
+            <div class="relative">
+                <!-- Connecting Line -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-white/5 -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div
+                        class="glass p-6 rounded-2xl border border-white/10 text-center hover:border-neon-cyan transition-colors">
+                        <div
+                            class="w-12 h-12 bg-rich-black border-2 border-neon-cyan rounded-full flex items-center justify-center text-neon-cyan font-bold text-xl mx-auto mb-6 relative z-10">
+                            1</div>
+                        <h3 class="text-lg font-bold mb-2">Deep Historical Review</h3>
+                        <p class="text-sm text-gray-400">We scan up to 6 years of data to find lost capital.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div
+                        class="glass p-6 rounded-2xl border border-white/10 text-center hover:border-neon-cyan transition-colors">
+                        <div
+                            class="w-12 h-12 bg-rich-black border-2 border-neon-cyan rounded-full flex items-center justify-center text-neon-cyan font-bold text-xl mx-auto mb-6 relative z-10">
+                            2</div>
+                        <h3 class="text-lg font-bold mb-2">Real-Time Detection</h3>
+                        <p class="text-sm text-gray-400">AI monitors live transactions to block errors instantly.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div
+                        class="glass p-6 rounded-2xl border border-white/10 text-center hover:border-neon-cyan transition-colors">
+                        <div
+                            class="w-12 h-12 bg-rich-black border-2 border-neon-cyan rounded-full flex items-center justify-center text-neon-cyan font-bold text-xl mx-auto mb-6 relative z-10">
+                            3</div>
+                        <h3 class="text-lg font-bold mb-2">Vendor Risk Scoring</h3>
+                        <p class="text-sm text-gray-400">Score vendors based on behavior and fraud signals.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div
+                        class="glass p-6 rounded-2xl border border-white/10 text-center hover:border-neon-cyan transition-colors">
+                        <div
+                            class="w-12 h-12 bg-rich-black border-2 border-neon-cyan rounded-full flex items-center justify-center text-neon-cyan font-bold text-xl mx-auto mb-6 relative z-10">
+                            4</div>
+                        <h3 class="text-lg font-bold mb-2">Recovery Automation</h3>
+                        <p class="text-sm text-gray-400">Automated workflows to reclaim funds and fix issues.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories Section (NEW) -->
+    <section id="case-studies" class="py-24 bg-dark-blue relative">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-6xl font-bold mb-6">Proven Results</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Real recoveries. Real prevention. Real ROI.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Case Study 1: Children's Hospital -->
+                <div
+                    class="glass p-8 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all group lg:col-span-2 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl -mr-32 -mt-32">
+                    </div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <div
+                                class="inline-block px-3 py-1 bg-neon-cyan/20 rounded-lg text-neon-cyan text-xs font-bold tracking-wider">
+                                HEALTHCARE</div>
+                            <i data-lucide="arrow-up-right"
+                                class="w-6 h-6 text-gray-500 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Children's Hospital of Alabama</h3>
+                        <p class="text-gray-400 mb-8 leading-relaxed max-w-xl">
+                            Faced with funding cuts, they needed to recover revenue without burdening staff. iTK's
+                            zero-integration audit found $1.6M in 48 hours using just 3 static files.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <div class="text-4xl font-bold text-white mb-1">$1.6M</div>
+                                <div class="text-sm text-neon-cyan">Recovered Leakage</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-bold text-white mb-1">0</div>
+                                <div class="text-sm text-neon-cyan">New Anomalies (8mo)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2: National Fuel Retailer -->
+                <div
+                    class="glass p-8 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all group flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="inline-block px-3 py-1 bg-deep-purple/20 rounded-lg text-deep-purple text-xs font-bold tracking-wider">
+                            RETAIL</div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">National Fuel Retailer</h3>
+                    <p class="text-gray-400 mb-6 text-sm flex-grow">
+                        700+ locations. System migration caused massive leakage.
+                    </p>
+                    <div class="mt-auto pt-6 border-t border-white/5">
+                        <div class="text-3xl font-bold text-white mb-1">$500M+</div>
+                        <div class="text-sm text-deep-purple">Identified Errors</div>
+                    </div>
+                </div>
+
+                <!-- Case Study 3: UnityPoint Health -->
+                <div
+                    class="glass p-8 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all group flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="inline-block px-3 py-1 bg-neon-cyan/20 rounded-lg text-neon-cyan text-xs font-bold tracking-wider">
+                            HEALTHCARE</div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">UnityPoint Health</h3>
+                    <p class="text-gray-400 mb-6 text-sm flex-grow">
+                        Integrated into Infor in minutes. Validated report in < 48 hours. </p>
+                            <div class="mt-auto pt-6 border-t border-white/5">
+                                <div class="text-3xl font-bold text-white mb-1">$2.7M</div>
+                                <div class="text-sm text-neon-cyan">Identified Leakage</div>
+                            </div>
+                </div>
+
+                <!-- Case Study 4: Virginia Health Center -->
+                <div
+                    class="glass p-8 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all group flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="inline-block px-3 py-1 bg-neon-cyan/20 rounded-lg text-neon-cyan text-xs font-bold tracking-wider">
+                            HEALTHCARE</div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Virginia Health Center</h3>
+                    <p class="text-gray-400 mb-6 text-sm flex-grow">
+                        Advanced Workday migration readiness by cleansing vendor data.
+                    </p>
+                    <div class="mt-auto pt-6 border-t border-white/5">
+                        <div class="text-3xl font-bold text-white mb-1">$1.9M</div>
+                        <div class="text-sm text-neon-cyan">Duplicate Payments</div>
+                    </div>
+                </div>
+
+                <!-- Case Study 5: National Apparel Retailer -->
+                <div
+                    class="glass p-8 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all group flex flex-col">
+                    <div class="flex justify-between items-start mb-6">
+                        <div
+                            class="inline-block px-3 py-1 bg-deep-purple/20 rounded-lg text-deep-purple text-xs font-bold tracking-wider">
+                            RETAIL</div>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">National Apparel Retailer</h3>
+                    <p class="text-gray-400 mb-6 text-sm flex-grow">
+                        400+ stores. Needed visibility into fraud and leakage.
+                    </p>
+                    <div class="mt-auto pt-6 border-t border-white/5">
+                        <div class="text-3xl font-bold text-white mb-1">$1.3M</div>
+                        <div class="text-sm text-deep-purple">Payment Errors</div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -270,6 +478,8 @@
                         <li><a href="#home" class="hover:text-neon-cyan transition-colors">Home</a></li>
                         <li><a href="#about" class="hover:text-neon-cyan transition-colors">About</a></li>
                         <li><a href="#services" class="hover:text-neon-cyan transition-colors">Services</a></li>
+                        <li><a href="#case-studies" class="hover:text-neon-cyan transition-colors">Success Stories</a>
+                        </li>
                     </ul>
                 </div>
                 <div>
