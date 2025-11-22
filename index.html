@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTK Technologies - AI-Driven Financial Assurance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-rich-black text-white font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter text-white">iTK <span
+                            class="text-neon-cyan">Technologies</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#about"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="#services"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Services</a>
+                        <a href="#contact"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-deep-purple/30 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-cyan/20 rounded-full blur-3xl animate-float"
+                style="animation-delay: 2s;"></div>
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+                Protecting Every Dollar,<br>
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple text-glow">Empowering
+                    Every Customer</span>
+            </h1>
+            <p class="mt-4 text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                Identify and prevent financial leakage, fraud, waste, and abuse through automated analytics and advanced
+                machine learning.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#contact"
+                    class="px-8 py-4 bg-neon-cyan text-rich-black font-bold rounded-full hover:bg-white transition-colors shadow-[0_0_20px_rgba(0,243,255,0.5)]">
+                    Get Started
+                </a>
+                <a href="#about"
+                    class="px-8 py-4 glass text-white font-bold rounded-full hover:bg-white/10 transition-colors border border-white/20">
+                    Learn More
+                </a>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 glass rounded-2xl">
+                    <div class="text-4xl font-bold text-neon-cyan mb-2">18x</div>
+                    <div class="text-gray-400">ROI in 60 Days</div>
+                </div>
+                <div class="p-6 glass rounded-2xl">
+                    <div class="text-4xl font-bold text-neon-cyan mb-2">0.5-2%</div>
+                    <div class="text-gray-400">AP Spend Recovered</div>
+                </div>
+                <div class="p-6 glass rounded-2xl">
+                    <div class="text-4xl font-bold text-neon-cyan mb-2">100%</div>
+                    <div class="text-gray-400">Audit-Ready Reporting</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-rich-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">The iTK Difference</h2>
+                <div class="w-24 h-1 bg-neon-cyan mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-white">AI-Driven Financial Assurance</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        iTK Technologies is a leader in AI-driven financial assurance. For over a decade, we have
+                        delivered intelligent anomaly detection, revenue recovery, and real-time leak prevention for AP
+                        and Finance organizations across healthcare, retail, manufacturing, and government sectors.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
+                            <span class="text-gray-300">Recovers 0.5–2% of AP spend</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
+                            <span class="text-gray-300">Prevents future payment errors in real time</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-neon-cyan mr-3 mt-1"></i>
+                            <span class="text-gray-300">Integrates with SAP, Oracle, Workday, Infor</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-3xl border border-white/10 relative overflow-hidden group">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <h4 class="text-xl font-bold mb-6">Leadership</h4>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold">
+                                MP</div>
+                            <div>
+                                <div class="font-bold">Matthew Palmer</div>
+                                <div class="text-sm text-neon-cyan">CEO</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-gradient-to-br from-neon-cyan to-deep-purple flex items-center justify-center font-bold">
+                                AG</div>
+                            <div>
+                                <div class="font-bold">Alex Geraldo</div>
+                                <div class="text-sm text-neon-cyan">CTO</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-dark-blue relative overflow-hidden">
+        <div
+            class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-cyan to-transparent opacity-50">
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Our Capabilities</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Comprehensive solutions for financial integrity and security.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div
+                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    <div
+                        class="w-14 h-14 bg-neon-cyan/20 rounded-xl flex items-center justify-center mb-6 text-neon-cyan">
+                        <i data-lucide="search" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Deep Historical Review</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Recover overpayments, duplicates, and fraud from past transactions. We analyze over $1B spend in
+                        under three hours using our proprietary LLM.
+                    </p>
+                </div>
+
+                <!-- Service 2 -->
+                <div
+                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    <div
+                        class="w-14 h-14 bg-deep-purple/20 rounded-xl flex items-center justify-center mb-6 text-deep-purple">
+                        <i data-lucide="shield-alert" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Real-Time Detection</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Stop erroneous payments before bank submission. Our AI proactively prevents leaks rather than
+                        just identifying them after the fact.
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div
+                    class="glass p-8 rounded-2xl hover:transform hover:-translate-y-2 transition-all duration-300 border border-white/5 hover:border-neon-cyan/50">
+                    <div
+                        class="w-14 h-14 bg-neon-cyan/20 rounded-xl flex items-center justify-center mb-6 text-neon-cyan">
+                        <i data-lucide="lock" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Security Services</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Proactive threat detection, vulnerability assessment, and remediation aligned with NIST and SOC
+                        2 standards.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-rich-black border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="text-2xl font-bold tracking-tighter text-white mb-6 block">iTK <span
+                            class="text-neon-cyan">Technologies</span></span>
+                    <p class="text-gray-400 max-w-sm">
+                        Protecting Every Dollar, Empowering Every Customer. The leader in AI-driven financial assurance.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="#home" class="hover:text-neon-cyan transition-colors">Home</a></li>
+                        <li><a href="#about" class="hover:text-neon-cyan transition-colors">About</a></li>
+                        <li><a href="#services" class="hover:text-neon-cyan transition-colors">Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li>info@itktechnologies.com</li>
+                        <li>1-800-555-0123</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2025 iTK Technologies. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
