@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story - iTK Technologies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-rich-black text-white font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <div class="flex items-center">
+                    <a href="index.html">
+                        <img src="images/logo_transparent.png" alt="iTK Technologies" class="h-20 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="index.html#about"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="our-story.html" class="text-neon-cyan px-3 py-2 rounded-md text-sm font-medium">Our
+                            Story</a>
+                        <a href="our-capabilities.html"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Our
+                            Capabilities</a>
+                        <a href="index.html#process"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Process</a>
+                        <a href="index.html#case-studies"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Success
+                            Stories</a>
+                        <a href="index.html#contact"
+                            class="hover:text-neon-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative py-32 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-deep-purple/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-cyan/10 rounded-full blur-3xl"></div>
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+            <div
+                class="absolute inset-0 bg-grid-pattern [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]">
+            </div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">
+                Our <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple text-glow">Story</span>
+            </h1>
+            <p class="text-xl text-gray-300 leading-relaxed">
+                iTK Technologies was built on resilience, technical ingenuity, and an unwavering commitment to protect
+                the financial systems that keep hospitals and enterprises running.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-20 bg-rich-black relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+
+            <!-- Founding Story -->
+            <div class="glass p-10 rounded-3xl border border-white/5">
+                <h2 class="text-3xl font-bold mb-6 text-white">Founding Story</h2>
+                <div class="space-y-6 text-gray-300 leading-relaxed">
+                    <p>
+                        Before iTK became known for its industry-leading financial protection platform, its founders
+                        spent years deep inside the complex ecosystems of enterprise ERP environments. They witnessed
+                        the same pattern over and over again:
+                    </p>
+                    <p class="font-semibold text-white text-lg border-l-4 border-neon-cyan pl-6 italic">
+                        Critical institutions were losing money—quietly, consistently, and preventably.
+                    </p>
+                    <p>
+                        Invoices were slipping through unnoticed, fraudulent vendors were exploiting system blind spots,
+                        and busy finance teams were left to fight fires with manual tools that couldn’t keep up with
+                        modern complexity.
+                    </p>
+                    <p>
+                        Seeing how widespread and costly the problem had become, the founders understood one truth: The
+                        industry was reaching a breaking point. And fixing it would require a new kind of technology.
+                    </p>
+                </div>
+            </div>
+
+            <!-- The Problem -->
+            <div>
+                <h2 class="text-3xl font-bold mb-8 text-white flex items-center">
+                    <i data-lucide="alert-triangle" class="w-8 h-8 text-deep-purple mr-4"></i>
+                    The Problem We Discovered
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6 text-gray-300 leading-relaxed">
+                        <p>
+                            Across hospitals, retailers, and large enterprises, the founders repeatedly uncovered the
+                            same systemic failures:
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start"><i data-lucide="x-circle"
+                                    class="w-5 h-5 text-red-400 mr-3 mt-1"></i> Duplicate or erroneous payments that
+                                bypassed controls</li>
+                            <li class="flex items-start"><i data-lucide="x-circle"
+                                    class="w-5 h-5 text-red-400 mr-3 mt-1"></i> Spoofed invoices designed to mimic
+                                legitimate vendors</li>
+                            <li class="flex items-start"><i data-lucide="x-circle"
+                                    class="w-5 h-5 text-red-400 mr-3 mt-1"></i> Manual workflows prone to error and
+                                delay</li>
+                            <li class="flex items-start"><i data-lucide="x-circle"
+                                    class="w-5 h-5 text-red-400 mr-3 mt-1"></i> ERP systems unable to understand
+                                behavioral financial patterns</li>
+                            <li class="flex items-start"><i data-lucide="x-circle"
+                                    class="w-5 h-5 text-red-400 mr-3 mt-1"></i> Multi-million-dollar leakage hidden
+                                inside years of transactions</li>
+                        </ul>
+                    </div>
+                    <div class="glass p-8 rounded-2xl border border-white/5 flex flex-col justify-center">
+                        <p class="text-lg text-white font-medium mb-4">
+                            For hospitals—especially children’s hospitals and retailers operating on tight margins—these
+                            silent losses weren’t just too costly.
+                        </p>
+                        <p class="text-neon-cyan font-bold text-xl">
+                            They were threatening long-term financial stability.
+                        </p>
+                        <div class="mt-6 space-y-2 text-sm text-gray-400">
+                            <p>Traditional audits couldn’t prevent it.</p>
+                            <p>Rules-based systems couldn’t catch it.</p>
+                            <p>And cybersecurity tools weren’t built for financial anomaly detection.</p>
+                        </div>
+                        <p class="mt-6 text-white font-semibold">
+                            The industry didn’t need another band-aid. It needed a complete reinvention.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Breakthrough -->
+            <div class="relative">
+                <div
+                    class="absolute -inset-4 bg-gradient-to-r from-neon-cyan/20 to-deep-purple/20 rounded-3xl blur-xl opacity-50">
+                </div>
+                <div class="relative glass p-10 rounded-3xl border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-white flex items-center">
+                        <i data-lucide="zap" class="w-8 h-8 text-neon-cyan mr-4"></i>
+                        The Breakthrough
+                    </h2>
+                    <div class="space-y-6 text-gray-300 leading-relaxed">
+                        <p>
+                            iTK built what the market had been missing. When the co-founders first encountered
+                            Approva—an early rule-based GRC tool widely used by the Big Four—they saw both the promise
+                            and the ceiling of legacy governance technology. They purchased the platform in 2015 and set
+                            out to push the boundaries.
+                        </p>
+                        <p>
+                            By infusing the platform’s rigid rules engine with machine learning and large language model
+                            intelligence, they transformed a static audit tool into a real-time anomaly detection system
+                            capable of understanding financial behavior at scale.
+                        </p>
+                        <div class="mt-8">
+                            <h3 class="text-xl font-bold text-white mb-4">This Finance LLM fundamentally changed what
+                                was possible:</h3>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <li class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5"><i
+                                        data-lucide="check" class="w-5 h-5 text-neon-cyan mr-3"></i> Predicting and
+                                    preventing payment errors before funds leave the bank</li>
+                                <li class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5"><i
+                                        data-lucide="check" class="w-5 h-5 text-neon-cyan mr-3"></i> Detecting subtle
+                                    behavioral patterns invisible to rules-based tools</li>
+                                <li class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5"><i
+                                        data-lucide="check" class="w-5 h-5 text-neon-cyan mr-3"></i> Identifying fraud,
+                                    spoofing, and vendor manipulation in real time</li>
+                                <li class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5"><i
+                                        data-lucide="check" class="w-5 h-5 text-neon-cyan mr-3"></i> Continuously
+                                    learning and adapting to new threats</li>
+                                <li
+                                    class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5 md:col-span-2">
+                                    <i data-lucide="check" class="w-5 h-5 text-neon-cyan mr-3"></i> Achieving the lowest
+                                    false-positive rate in the industry
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mission & Vision -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Mission -->
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-white">Our Mission</h2>
+                    <div class="bg-dark-blue/50 p-8 rounded-3xl border border-white/5 h-full">
+                        <p class="text-xl font-semibold text-white mb-6">
+                            To eliminate preventable financial loss and strengthen the integrity of every payment
+                            flowing through hospitals and enterprises.
+                        </p>
+                        <h3 class="text-neon-cyan font-bold mb-4 uppercase tracking-wider text-sm">We Believe</h3>
+                        <ul class="space-y-4 text-gray-400">
+                            <li class="flex items-start"><span class="text-neon-cyan mr-2">•</span> Patient care should
+                                never be undermined by financial system failures</li>
+                            <li class="flex items-start"><span class="text-neon-cyan mr-2">•</span> Finance teams
+                                deserve intelligent tools that reduce burden, not create it</li>
+                            <li class="flex items-start"><span class="text-neon-cyan mr-2">•</span> AI should bring
+                                trust, transparency, and accountability</li>
+                            <li class="flex items-start"><span class="text-neon-cyan mr-2">•</span> Security must extend
+                                beyond networks into supply chains and payments</li>
+                            <li class="flex items-start"><span class="text-neon-cyan mr-2">•</span> Payment leakage is a
+                                solvable problem—with the right technology</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vision -->
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-white">Our Vision</h2>
+                    <div class="bg-dark-blue/50 p-8 rounded-3xl border border-white/5 h-full">
+                        <p class="text-gray-300 mb-6">
+                            We envision a future where financial systems are self-correcting, self-protecting, and
+                            continuously learning.
+                        </p>
+                        <h3 class="text-deep-purple font-bold mb-4 uppercase tracking-wider text-sm">A Future Where</h3>
+                        <ul class="space-y-4 text-gray-400">
+                            <li class="flex items-start"><i data-lucide="shield-check"
+                                    class="w-5 h-5 text-deep-purple mr-3 mt-1"></i> No fraudulent payment will ever be
+                                released</li>
+                            <li class="flex items-start"><i data-lucide="shield-check"
+                                    class="w-5 h-5 text-deep-purple mr-3 mt-1"></i> No duplicate will slip through</li>
+                            <li class="flex items-start"><i data-lucide="shield-check"
+                                    class="w-5 h-5 text-deep-purple mr-3 mt-1"></i> No vendor manipulation will escape
+                                detection</li>
+                            <li class="flex items-start"><i data-lucide="shield-check"
+                                    class="w-5 h-5 text-deep-purple mr-3 mt-1"></i> No hidden breach can compromise
+                                financial integrity</li>
+                        </ul>
+                        <p class="mt-6 text-white font-medium italic">
+                            Where hospitals—especially children’s hospitals—can redirect millions to patient care,
+                            research, staffing, and innovation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Road Ahead -->
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8 text-white">The Road Ahead</h2>
+                <p class="text-gray-300 mb-8 text-lg">
+                    iTK is expanding across the U.S., providing the most advanced AI-driven payment integrity platform
+                    to hospitals, retailers, and major enterprises.
+                </p>
+                <div class="glass p-8 rounded-3xl border border-white/10 inline-block text-left mb-12">
+                    <h3 class="text-neon-cyan font-bold mb-4">The Next Chapter Includes:</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i data-lucide="arrow-right"
+                                class="w-4 h-4 text-neon-cyan mr-3"></i> Expanding our Finance LLM beyond 3 trillion+
+                            training records</li>
+                        <li class="flex items-center"><i data-lucide="arrow-right"
+                                class="w-4 h-4 text-neon-cyan mr-3"></i> Real-time payment risk scoring</li>
+                        <li class="flex items-center"><i data-lucide="arrow-right"
+                                class="w-4 h-4 text-neon-cyan mr-3"></i> Autonomous AP workflows</li>
+                        <li class="flex items-center"><i data-lucide="arrow-right"
+                                class="w-4 h-4 text-neon-cyan mr-3"></i> AI-driven compliance automation</li>
+                        <li class="flex items-center"><i data-lucide="arrow-right"
+                                class="w-4 h-4 text-neon-cyan mr-3"></i> Deep integrations with Oracle, Workday, Infor,
+                            SAP, and banking networks</li>
+                    </ul>
+                </div>
+                <p class="text-2xl font-bold text-white">
+                    This is our purpose. This is our story.<br>
+                    <span class="text-neon-cyan">And this is only the beginning.</span>
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-rich-black border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="block mb-6">
+                        <img src="images/logo_transparent.png" alt="iTK Technologies" class="h-24 w-auto">
+                    </a>
+                    <p class="text-gray-400 max-w-sm">
+                        Protecting Every Dollar, Empowering Every Customer. The leader in AI-driven financial assurance.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="index.html" class="hover:text-neon-cyan transition-colors">Home</a></li>
+                        <li><a href="index.html#about" class="hover:text-neon-cyan transition-colors">About</a></li>
+                        <li><a href="our-story.html" class="hover:text-neon-cyan transition-colors">Our Story</a></li>
+                        <li><a href="our-capabilities.html" class="hover:text-neon-cyan transition-colors">Our
+                                Capabilities</a></li>
+                        <li><a href="index.html#case-studies" class="hover:text-neon-cyan transition-colors">Success
+                                Stories</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li>info@itktechnologies.com</li>
+                        <li>1-800-555-0123</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2025 iTK Technologies. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
