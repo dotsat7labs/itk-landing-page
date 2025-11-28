@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspectors - Spendshark Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                        'glass-white': 'rgba(255, 255, 255, 0.05)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-link.active {
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            border-right: 2px solid #00f3ff;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass border-r border-glass-border flex flex-col z-20">
+        <div class="h-20 flex items-center px-8 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+            </a>
+            <a href="analytics.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i> Analytics
+            </a>
+            <a href="anomalies.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i> Anomalies
+            </a>
+            <a href="inspectors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5 active">
+                <i data-lucide="shield-alert" class="w-5 h-5 mr-3"></i> Inspectors
+            </a>
+            <a href="vendors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i> Vendors
+            </a>
+            <a href="investigation.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="search" class="w-5 h-5 mr-3"></i> Investigation
+            </a>
+            <a href="credits.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Credits
+            </a>
+            <div class="pt-4 mt-4 border-t border-glass-border">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
+                <a href="integration.html"
+                    class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                    <i data-lucide="settings" class="w-5 h-5 mr-3"></i> Integration Setup
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <header class="h-20 glass border-b border-glass-border flex items-center justify-between px-8 z-10">
+            <h1 class="text-2xl font-bold text-white flex items-center">
+                <i data-lucide="shield-alert" class="w-6 h-6 mr-3 text-neon-cyan"></i>
+                Inspector Configuration
+            </h1>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+
+            <!-- Available Inspectors Section -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-white">Available Inspectors & Algorithms</h2>
+                    <button
+                        class="px-4 py-2 bg-neon-cyan text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors flex items-center">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add Custom Rule
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Exact Match -->
+                    <div
+                        class="glass p-6 rounded-2xl border-l-4 border-neon-cyan hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Exact Match</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Flags invoices where Company #, Vendor #, Invoice #, Date,
+                            and Amount are ALL identical.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Fuzzy Match -->
+                    <div
+                        class="glass p-6 rounded-2xl border-l-4 border-purple-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Fuzzy Match</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Detects similar invoice numbers (e.g., "INV-1001" vs
+                            "INV-100I") using Levenshtein distance.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Benford's Law -->
+                    <div
+                        class="glass p-6 rounded-2xl border-l-4 border-yellow-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Benford's Law</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Statistical analysis of leading digits to detect
+                            artificial or manipulated numerical data.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Weekend Posting -->
+                    <div class="glass p-6 rounded-2xl border-l-4 border-red-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Weekend Posting</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Flags invoices posted on Saturdays or Sundays, which is
+                            often unusual for B2B transactions.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Round Amount -->
+                    <div class="glass p-6 rounded-2xl border-l-4 border-blue-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Round Amount</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Flags invoices with perfectly round numbers (e.g.,
+                            $5,000.00), often a sign of estimates or fraud.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Velocity Check -->
+                    <div
+                        class="glass p-6 rounded-2xl border-l-4 border-orange-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Velocity Check</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Monitors for rapid-fire invoices from the same vendor
+                            within a short time window.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- Clustering & LLM Proximity (NEW) -->
+                    <div class="glass p-6 rounded-2xl border-l-4 border-pink-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">Clustering & LLM</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Uses AI to cluster similar invoices and LLMs to detect
+                            semantic duplicates.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                    <!-- ML Anomaly Detection (NEW) -->
+                    <div
+                        class="glass p-6 rounded-2xl border-l-4 border-green-500 hover:bg-white/5 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-white text-lg">ML Anomaly Detection</h3>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div
+                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4">Machine Learning model trained on historical data to find
+                            outliers.</p>
+                        <button
+                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Audit Log -->
+            <div class="glass p-6 rounded-2xl mt-8">
+                <h3 class="text-lg font-bold text-white mb-4">Inspector Audit Log</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="bg-white/5 text-gray-200 uppercase text-xs">
+                            <tr>
+                                <th class="px-6 py-3">Timestamp</th>
+                                <th class="px-6 py-3">User</th>
+                                <th class="px-6 py-3">Action</th>
+                                <th class="px-6 py-3">Inspector</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-glass-border">
+                            <tr>
+                                <td class="px-6 py-4">2023-10-27 14:30:00</td>
+                                <td class="px-6 py-4">admin@spendshark.com</td>
+                                <td class="px-6 py-4 text-green-400">Enabled</td>
+                                <td class="px-6 py-4">Weekend Posting</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">2023-10-26 09:15:00</td>
+                                <td class="px-6 py-4">system</td>
+                                <td class="px-6 py-4 text-blue-400">Updated Threshold</td>
+                                <td class="px-6 py-4">Fuzzy Match</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

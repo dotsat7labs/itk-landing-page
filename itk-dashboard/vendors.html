@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendors - Spendshark Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                        'glass-white': 'rgba(255, 255, 255, 0.05)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-link.active {
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            border-right: 2px solid #00f3ff;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass border-r border-glass-border flex flex-col z-20">
+        <div class="h-20 flex items-center px-8 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+            </a>
+            <a href="analytics.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i> Analytics
+            </a>
+            <a href="anomalies.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i> Anomalies
+            </a>
+            <a href="inspectors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="shield-alert" class="w-5 h-5 mr-3"></i> Inspectors
+            </a>
+            <a href="vendors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5 active">
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i> Vendors
+            </a>
+            <a href="investigation.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="search" class="w-5 h-5 mr-3"></i> Investigation
+            </a>
+            <a href="credits.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Credits
+            </a>
+            <div class="pt-4 mt-4 border-t border-glass-border">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
+                <a href="integration.html"
+                    class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                    <i data-lucide="settings" class="w-5 h-5 mr-3"></i> Integration Setup
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <header class="h-20 glass border-b border-glass-border flex items-center justify-between px-8 z-10">
+            <h1 class="text-2xl font-bold text-white flex items-center">
+                <i data-lucide="users" class="w-6 h-6 mr-3 text-neon-cyan"></i>
+                Vendor Risk Analysis
+            </h1>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+
+            <!-- Risk Matrix Chart -->
+            <div class="glass p-6 rounded-2xl">
+                <h3 class="text-lg font-bold text-white mb-6">Vendor Risk Matrix (Spend vs. Risk Score)</h3>
+                <div class="h-80 w-full">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Vendor List -->
+            <div class="glass rounded-2xl overflow-hidden">
+                <table class="w-full text-left text-sm text-gray-400">
+                    <thead class="bg-white/5 text-gray-200 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-4">Vendor Name</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Total Spend</th>
+                            <th class="px-6 py-4">Trust Score</th>
+                            <th class="px-6 py-4">Anomalies</th>
+                            <th class="px-6 py-4">Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-glass-border" id="vendors-table">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { generateMockData, formatCurrency } from './js/mockData.js';
+        lucide.createIcons();
+
+        const data = generateMockData();
+        const vendors = data.vendors;
+        const tableBody = document.getElementById('vendors-table');
+
+        // Populate Table
+        vendors.forEach(vendor => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-white/5 transition-colors";
+
+            let riskColor = 'text-green-400';
+            if (vendor.riskScore > 50) riskColor = 'text-yellow-400';
+            if (vendor.riskScore > 80) riskColor = 'text-red-400';
+
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-white font-medium">${vendor.name}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 ${vendor.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'} text-xs rounded-full border border-white/10">${vendor.status}</span>
+                </td>
+                <td class="px-6 py-4">${formatCurrency(vendor.totalSpend)}</td>
+                <td class="px-6 py-4">
+                     <div class="flex items-center">
+                        <div class="w-16 h-2 bg-gray-700 rounded-full mr-2 overflow-hidden">
+                            <div class="h-full bg-neon-cyan" style="width: ${vendor.trustScore}%"></div>
+                        </div>
+                        <span class="text-xs">${vendor.trustScore}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4">${vendor.anomalies}</td>
+                <td class="px-6 py-4 font-bold ${riskColor}">${vendor.riskScore}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        // Chart.js Scatter Plot
+        const ctx = document.getElementById('riskChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Vendors',
+                    data: vendors.map(v => ({ x: v.totalSpend, y: v.riskScore })),
+                    backgroundColor: vendors.map(v => v.riskScore > 80 ? '#ef4444' : (v.riskScore > 50 ? '#eab308' : '#00f3ff')),
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Total Spend ($)', color: '#aaa' },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#aaa' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Risk Score (0-100)', color: '#aaa' },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: '#aaa' },
+                        min: 0, max: 100
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const vendor = vendors[context.dataIndex];
+                                return `${vendor.name}: Risk ${vendor.riskScore}, Spend ${formatCurrency(vendor.totalSpend)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Spendshark Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                        'glass-white': 'rgba(255, 255, 255, 0.05)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-link.active {
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            border-right: 2px solid #00f3ff;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+
+    <!-- Sidebar -->
+    <aside class="w-64 glass border-r border-glass-border flex flex-col z-20">
+        <div class="h-20 flex items-center px-8 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+            </a>
+            <a href="analytics.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5 active">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i> Analytics
+            </a>
+            <a href="anomalies.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i> Anomalies
+            </a>
+            <a href="inspectors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="shield-alert" class="w-5 h-5 mr-3"></i> Inspectors
+            </a>
+            <a href="vendors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i> Vendors
+            </a>
+            <a href="investigation.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="search" class="w-5 h-5 mr-3"></i> Investigation
+            </a>
+            <a href="credits.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Credits
+            </a>
+            <div class="pt-4 mt-4 border-t border-glass-border">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
+                <a href="integration.html"
+                    class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                    <i data-lucide="settings" class="w-5 h-5 mr-3"></i> Integration Setup
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <header class="h-20 glass border-b border-glass-border flex items-center justify-between px-8 z-10">
+            <h1 class="text-2xl font-bold text-white flex items-center">
+                <i data-lucide="bar-chart-2" class="w-6 h-6 mr-3 text-neon-cyan"></i>
+                Performance Analytics
+            </h1>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+
+            <!-- Financial Impact -->
+            <h2 class="text-xl font-bold text-white mb-4">Financial Impact</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass p-6 rounded-2xl border-l-4 border-neon-cyan">
+                    <p class="text-gray-400 text-sm">Potential Detected</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="val-detected">$0.00</h3>
+                </div>
+                <div class="glass p-6 rounded-2xl border-l-4 border-green-500">
+                    <p class="text-gray-400 text-sm">Confirmed Recovered</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="val-recovered">$0.00</h3>
+                </div>
+                <div class="glass p-6 rounded-2xl border-l-4 border-red-500">
+                    <p class="text-gray-400 text-sm">Wasted Time Cost</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="val-wasted">$0.00</h3>
+                    <p class="text-xs text-red-400 mt-1">Based on FP resolution time</p>
+                </div>
+            </div>
+
+            <!-- Operational Efficiency -->
+            <h2 class="text-xl font-bold text-white mb-4 mt-8">Operational Efficiency</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm">Avg Resolution Time</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="avg-time">0 hrs</h3>
+                </div>
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm">Open Cases</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="open-cases">0</h3>
+                </div>
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm">Duplicate Rate</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="dup-rate">0%</h3>
+                    <p class="text-xs text-gray-500">per 1,000 invoices</p>
+                </div>
+                <div class="glass p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm">Accuracy</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="accuracy">0%</h3>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-6">Duplicates by Source</h3>
+                    <div class="h-64 w-full flex items-center justify-center">
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-6">True vs False Positives</h3>
+                    <div class="h-64 w-full">
+                        <canvas id="fpChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Risky Vendors -->
+            <div class="glass rounded-2xl overflow-hidden mt-8">
+                <div class="p-6 border-b border-glass-border">
+                    <h3 class="text-lg font-bold text-white">Top Vendors by Duplicate Risk</h3>
+                </div>
+                <table class="w-full text-left text-sm text-gray-400">
+                    <thead class="bg-white/5 text-gray-200 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-4">Vendor</th>
+                            <th class="px-6 py-4">Risk Score</th>
+                            <th class="px-6 py-4">Duplicate Count</th>
+                            <th class="px-6 py-4">Total Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-glass-border" id="risk-table">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { generateMockData, formatCurrency } from './js/mockData.js';
+        lucide.createIcons();
+
+        const data = generateMockData();
+        const invoices = data.invoices;
+        const suspected = invoices.filter(i => i.status === 'Suspected');
+        const falsePositives = suspected.filter(i => i.isFalsePositive);
+        const truePositives = suspected.filter(i => !i.isFalsePositive);
+
+        // Financials
+        const detectedVal = suspected.reduce((sum, i) => sum + i.amount, 0);
+        const recoveredVal = truePositives.reduce((sum, i) => sum + i.amount, 0);
+        const wastedCost = falsePositives.reduce((sum, i) => sum + (i.resolutionTime * 50), 0); // Assume $50/hr cost
+
+        document.getElementById('val-detected').textContent = formatCurrency(detectedVal);
+        document.getElementById('val-recovered').textContent = formatCurrency(recoveredVal);
+        document.getElementById('val-wasted').textContent = formatCurrency(wastedCost);
+
+        // Efficiency
+        const avgTime = suspected.reduce((sum, i) => sum + (i.resolutionTime || 0), 0) / suspected.length;
+        const dupRate = (suspected.length / invoices.length) * 1000;
+        const accuracy = (truePositives.length / suspected.length) * 100;
+
+        document.getElementById('avg-time').textContent = avgTime.toFixed(1) + ' hrs';
+        document.getElementById('open-cases').textContent = suspected.length;
+        document.getElementById('dup-rate').textContent = dupRate.toFixed(1);
+        document.getElementById('accuracy').textContent = accuracy.toFixed(1) + '%';
+
+        // Source Chart
+        const sources = { 'OCR': 0, 'EDI': 0, 'Manual': 0 };
+        suspected.forEach(i => sources[i.source]++);
+
+        new Chart(document.getElementById('sourceChart'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(sources),
+                datasets: [{
+                    data: Object.values(sources),
+                    backgroundColor: ['#00f3ff', '#7b2cbf', '#3b82f6'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+        });
+
+        // FP Chart
+        new Chart(document.getElementById('fpChart'), {
+            type: 'bar',
+            data: {
+                labels: ['True Positives', 'False Positives'],
+                datasets: [{
+                    label: 'Count',
+                    data: [truePositives.length, falsePositives.length],
+                    backgroundColor: ['#10b981', '#ef4444'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#aaa' } },
+                    x: { grid: { display: false }, ticks: { color: '#aaa' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Risk Table
+        const riskTable = document.getElementById('risk-table');
+        const riskyVendors = data.vendors.sort((a, b) => b.riskScore - a.riskScore).slice(0, 5);
+
+        riskyVendors.forEach(v => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-white/5 transition-colors";
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-white font-medium">${v.name}</td>
+                <td class="px-6 py-4 text-red-400 font-bold">${v.riskScore}</td>
+                <td class="px-6 py-4">${v.anomalies}</td>
+                <td class="px-6 py-4">${formatCurrency(v.totalSpend * 0.05)}</td> <!-- Mock risk value -->
+            `;
+            riskTable.appendChild(tr);
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
