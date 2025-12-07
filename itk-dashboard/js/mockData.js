@@ -244,6 +244,66 @@ export const generateRoiStats = () => {
     };
 };
 
+export const generateOperatorStats = () => {
+    // Mock Operators
+    const ops = [
+        { name: 'Alice Smith', initials: 'AS' },
+        { name: 'Bob Jones', initials: 'BJ' },
+        { name: 'Charlie Brown', initials: 'CB' },
+        { name: 'Diana Prince', initials: 'DP' },
+        { name: 'Evan Wright', initials: 'EW' }
+    ];
+
+    const operators = ops.map(op => {
+        const invoices = Math.floor(Math.random() * 500) + 1500; // 1500-2000
+        const accuracy = (Math.random() * (99.9 - 95) + 95).toFixed(1);
+        return {
+            name: op.name,
+            initials: op.initials,
+            invoicesProcessed: invoices,
+            valueProcessed: invoices * (Math.random() * 500 + 100),
+            avgTime: Math.floor(Math.random() * 10) + 5, // 5-15 mins
+            accuracy: accuracy,
+            sla: Math.floor(Math.random() * (100 - 90) + 90),
+            exceptions: Math.floor(invoices * ((100 - accuracy) / 100)),
+            savings: Math.floor(Math.random() * 50000) + 10000
+        };
+    });
+
+    // Aggregates
+    const totalInvoices = operators.reduce((sum, op) => sum + op.invoicesProcessed, 0);
+    const totalValueProcessed = operators.reduce((sum, op) => sum + op.valueProcessed, 0);
+    const avgProcessingTime = Math.floor(operators.reduce((sum, op) => sum + op.avgTime, 0) / operators.length);
+    const avgAccuracy = (operators.reduce((sum, op) => sum + parseFloat(op.accuracy), 0) / operators.length).toFixed(1);
+    const slaCompliance = Math.floor(operators.reduce((sum, op) => sum + op.sla, 0) / operators.length);
+    const duplicatesBlocked = 45; // Mock
+    const invoicesPerHour = Math.floor(totalInvoices / (operators.length * 40)); // Weekly roughly
+
+    // Exception Types
+    const exceptionTypes = {
+        'Missing PO': 40,
+        'Price Mismatch': 30,
+        'Duplicate': 20,
+        'Vendor Unknown': 10
+    };
+
+    return {
+        operators,
+        totalInvoices,
+        avgProcessingTime,
+        avgAccuracy,
+        slaCompliance,
+        totalValueProcessed,
+        exceptionRate: (100 - avgAccuracy).toFixed(1),
+        reworkRate: 2.5,
+        onTimeRate: 96,
+        duplicatesBlocked,
+        invoicesPerHour,
+        exceptionTypes,
+        slaTrend: [94, 95, 93, 96, 97]
+    };
+};
+
 export const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 };
