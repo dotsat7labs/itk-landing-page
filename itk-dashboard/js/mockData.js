@@ -120,6 +120,47 @@ export const generateMockData = () => {
     return { invoices, vendors, inspectors, predictions };
 };
 
+export const generateRoiStats = () => {
+    // Simulated ROI Data
+    const totalPrevented = 4250000; // $4.25M
+    const preventedCount = 142;
+    const detectionRate = 0.94; // 94%
+    const accuracy = 0.985; // 98.5%
+    const avgValue = totalPrevented / preventedCount;
+
+    // Monthly Savings (Last 12 Months)
+    const monthlySavings = [320000, 340000, 310000, 380000, 360000, 410000, 390000, 420000, 400000, 450000, 430000, 480000];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Savings by Component
+    const savingsByComponent = {
+        'Machine Learning': 1800000,
+        'Rule Engine': 1450000,
+        'Recurring Pattern': 800000,
+        'Manual Review': 200000
+    };
+
+    // Duplicate Types
+    const duplicateTypes = {
+        'Exact Match': 45,
+        'Fuzzy Match': 30,
+        'Recurring Pattern': 15,
+        'Vendor Error': 10
+    };
+
+    return {
+        totalPrevented,
+        preventedCount,
+        detectionRate,
+        accuracy,
+        avgValue,
+        monthlySavings,
+        months,
+        savingsByComponent,
+        duplicateTypes
+    };
+};
+
 export const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 };
