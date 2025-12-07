@@ -65,7 +65,59 @@ export const generateMockData = () => {
         });
     });
 
-    return { invoices, vendors, inspectors };
+    // Generate Predictions
+    const predictions = [];
+    vendors.forEach(vendor => {
+        // Generate monthly historical data (last 6 months)
+        const history = [];
+        const forecast = [];
+        const monthNames = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
+
+        let baseSpend = parseFloat(vendor.totalSpend) / 12; // Rough monthly average
+        let trend = (Math.random() * 0.2) - 0.1; // -10% to +10% trend per month
+
+        // History
+        for (let i = 0; i < 6; i++) {
+            let val = baseSpend * (1 + (trend * i)) + (Math.random() * baseSpend * 0.1); // add noise
+            history.push(val);
+        }
+
+        // Forecast (Next 2 months)
+        for (let i = 6; i < 8; i++) {
+            let val = baseSpend * (1 + (trend * i));
+            forecast.push(val);
+        }
+
+        // Generate Anomalies for specific vendors
+        const alerts = [];
+        if (vendor.riskScore > 80) {
+            alerts.push({
+                type: 'Spike',
+                message: `Projected spend is 45% higher than historical average.`,
+                severity: 'High'
+            });
+        }
+        if (vendor.status === 'Active' && Math.random() > 0.8) {
+            alerts.push({
+                type: 'Off-Cycle',
+                message: `Payment frequency deviation detected.`,
+                severity: 'Medium'
+            });
+        }
+
+        predictions.push({
+            vendorId: vendor.id,
+            vendorName: vendor.name,
+            category: 'General', // Simplified
+            history: history, // Last 6 months
+            forecast: forecast, // Next 2 months
+            confidenceLower: forecast.map(v => v * 0.9),
+            confidenceUpper: forecast.map(v => v * 1.1),
+            alerts: alerts
+        });
+    });
+
+    return { invoices, vendors, inspectors, predictions };
 };
 
 export const formatCurrency = (value) => {

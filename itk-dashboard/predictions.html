@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictions - Spendshark Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                        'glass-white': 'rgba(255, 255, 255, 0.05)',
+                        'glass-border': 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-link.active {
+            background: rgba(0, 243, 255, 0.1);
+            color: #00f3ff;
+            border-right: 2px solid #00f3ff;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+
+    <!-- Sidebar -->
+    <aside
+        class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="h-20 flex items-center px-8 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+            </a>
+            <a href="analytics.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 mr-3"></i> Analytics
+            </a>
+            <a href="predictions.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5 active">
+                <i data-lucide="trending-up" class="w-5 h-5 mr-3"></i> Predictions
+            </a>
+            <a href="anomalies.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-3"></i> Anomalies
+            </a>
+            <a href="inspectors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="shield-alert" class="w-5 h-5 mr-3"></i> Inspectors
+            </a>
+            <a href="vendors.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="users" class="w-5 h-5 mr-3"></i> Vendors
+            </a>
+            <a href="investigation.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="search" class="w-5 h-5 mr-3"></i> Investigation
+            </a>
+            <a href="credits.html"
+                class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                <i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Credits
+            </a>
+            <div class="pt-4 mt-4 border-t border-glass-border">
+                <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Admin</p>
+                <a href="integration.html"
+                    class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg transition-all hover:text-white hover:bg-white/5">
+                    <i data-lucide="settings" class="w-5 h-5 mr-3"></i> Integration Setup
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden relative">
+        <header class="h-20 glass border-b border-glass-border flex items-center justify-between px-8 z-10">
+            <div class="flex items-center">
+                <button id="mobile-menu-btn" class="md:hidden mr-4 text-gray-400 hover:text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h1 class="text-2xl font-bold text-white flex items-center">
+                    <i data-lucide="trending-up" class="w-6 h-6 mr-3 text-neon-cyan"></i>
+                    Predictive Payment Analysis
+                </h1>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div
+                    class="hidden md:flex items-center bg-rich-black/50 rounded-full px-4 py-1 border border-neon-cyan/20">
+                    <div class="w-2 h-2 bg-neon-cyan rounded-full animate-pulse mr-2"></div>
+                    <span class="text-xs text-neon-cyan font-mono">AI Model v2.4 Active</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-8">
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass p-6 rounded-2xl border-l-4 border-neon-cyan">
+                    <p class="text-gray-400 text-sm">Forecasted Monthly Spend</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="kpi-forecast">$0.00</h3>
+                    <p class="text-xs text-neon-cyan mt-2">+5.2% vs Last Month</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-l-4 border-red-500">
+                    <p class="text-gray-400 text-sm">Potential Overpayments</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="kpi-risk">$0.00</h3>
+                    <p class="text-xs text-red-400 mt-2">12 Deviations Detected</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border-l-4 border-green-500">
+                    <p class="text-gray-400 text-sm">Projected Savings</p>
+                    <h3 class="text-3xl font-bold text-white mt-1" id="kpi-savings">$0.00</h3>
+                    <p class="text-xs text-gray-500 mt-2">By stopping early payments</p>
+                </div>
+            </div>
+
+            <!-- Main Chart & Alerts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Chart -->
+                <div class="lg:col-span-2 glass p-6 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-white">Spend Forecast vs. Actuals</h3>
+                        <select
+                            class="bg-rich-black border border-glass-border text-xs text-gray-300 rounded-lg px-2 py-1 outline-none focus:border-neon-cyan">
+                            <option>All Vendors</option>
+                            <option>Top 10 High Spend</option>
+                            <option>Marketing</option>
+                            <option>IT Infrastructure</option>
+                        </select>
+                    </div>
+                    <div class="h-80 w-full">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Anomaly Feed -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                        <i data-lucide="activity" class="w-5 h-5 mr-2 text-red-500"></i>
+                        Live Deviation Alerts
+                    </h3>
+                    <div class="space-y-4 h-80 overflow-y-auto pr-2" id="alerts-feed">
+                        <!-- Alert items injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Forecast Table -->
+            <div class="glass rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-glass-border">
+                    <h3 class="text-lg font-bold text-white">Vendor Payment Forecasts</h3>
+                </div>
+                <table class="w-full text-left text-sm text-gray-400">
+                    <thead class="bg-white/5 text-gray-200 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-4">Vendor</th>
+                            <th class="px-6 py-4">Category</th>
+                            <th class="px-6 py-4">Avg Monthly</th>
+                            <th class="px-6 py-4">Next Month (Predicted)</th>
+                            <th class="px-6 py-4">Confidence</th>
+                            <th class="px-6 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-glass-border" id="forecast-table">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { generateMockData, formatCurrency } from './js/mockData.js';
+        import { initSidebar } from './js/sidebar.js';
+
+        initSidebar();
+        lucide.createIcons();
+
+        const data = generateMockData();
+        const predictions = data.predictions;
+
+        // KPI Calculation
+        const totalForecast = predictions.reduce((sum, p) => sum + p.forecast[0], 0);
+        const totalRisk = predictions.filter(p => p.alerts.length > 0).reduce((sum, p) => sum + (p.forecast[0] * 0.15), 0); // Mock risk calc
+
+        document.getElementById('kpi-forecast').textContent = formatCurrency(totalForecast);
+        document.getElementById('kpi-risk').textContent = formatCurrency(totalRisk);
+        document.getElementById('kpi-savings').textContent = formatCurrency(totalRisk * 0.8);
+
+        // Chart.js
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+
+        // Aggregate data for chart
+        const months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec (Est)', 'Jan (Est)'];
+        const aggHistory = [0, 0, 0, 0, 0, 0];
+        const aggForecast = [null, null, null, null, null, null, 0, 0]; // Overlap on present month for continuity? simplified here.
+
+        predictions.forEach(p => {
+            p.history.forEach((val, idx) => aggHistory[idx] += val);
+            aggForecast[6] += p.forecast[0];
+            aggForecast[7] += p.forecast[1];
+        });
+
+        // Connect the line
+        const historyLine = [...aggHistory, null, null];
+        const forecastLine = [null, null, null, null, null, aggHistory[5], aggForecast[6], aggForecast[7]];
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Actual / Historical',
+                        data: historyLine,
+                        borderColor: '#00f3ff',
+                        backgroundColor: 'rgba(0, 243, 255, 0.1)',
+                        tension: 0.3,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Predicted',
+                        data: forecastLine,
+                        borderDash: [5, 5],
+                        borderColor: '#7b2cbf',
+                        backgroundColor: 'rgba(123, 44, 191, 0.05)',
+                        tension: 0.3,
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#aaa' } },
+                    x: { grid: { display: false }, ticks: { color: '#aaa' } }
+                }
+            }
+        });
+
+        // Populate Alert Feed
+        const feed = document.getElementById('alerts-feed');
+        const riskyVendors = predictions.filter(p => p.alerts.length > 0);
+
+        riskyVendors.forEach(v => {
+            v.alerts.forEach(alert => {
+                const div = document.createElement('div');
+                div.className = "p-4 bg-white/5 rounded-lg border-l-4 border-red-500 hover:bg-white/10 transition-colors";
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <h4 class="text-sm font-bold text-white">${v.vendorName}</h4>
+                        <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded-full uppercase">${alert.type}</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1">${alert.message}</p>
+                `;
+                feed.appendChild(div);
+            });
+        });
+
+        // Populate Forecast Table
+        const table = document.getElementById('forecast-table');
+        predictions.sort((a, b) => b.forecast[0] - a.forecast[0]).slice(0, 10).forEach(p => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-white/5 transition-colors";
+
+            const hasAlert = p.alerts.length > 0;
+            const statusHtml = hasAlert
+                ? `<span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full border border-red-500/30">Deviation</span>`
+                : `<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full border border-green-500/30">Normal</span>`;
+
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-white font-medium">${p.vendorName}</td>
+                <td class="px-6 py-4 text-gray-400">${p.category}</td>
+                 <td class="px-6 py-4 text-gray-400">${formatCurrency(p.history.reduce((a, b) => a + b, 0) / 6)}</td>
+                <td class="px-6 py-4 font-bold text-white">${formatCurrency(p.forecast[0])}</td>
+                <td class="px-6 py-4">
+                     <div class="flex items-center">
+                        <div class="w-16 h-2 bg-gray-700 rounded-full mr-2 overflow-hidden">
+                            <div class="h-full bg-neon-cyan" style="width: 92%"></div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">${statusHtml}</td>
+            `;
+            table.appendChild(tr);
+        });
+
+    </script>
+</body>
+
+</html>
