@@ -120,6 +120,89 @@ export const generateMockData = () => {
     return { invoices, vendors, inspectors, predictions };
 };
 
+export const generateVendorStats = (vendors) => {
+    // 1. Executive KPIs
+    const avgRiskScore = Math.floor(vendors.reduce((acc, v) => acc + v.riskScore, 0) / vendors.length);
+    const highRiskVendors = vendors.filter(v => v.riskScore > 80);
+    const highRiskCount = highRiskVendors.length;
+
+    // Calculate total spend
+    const totalSpend = vendors.reduce((acc, v) => acc + parseFloat(v.totalSpend), 0);
+    const highRiskSpend = highRiskVendors.reduce((acc, v) => acc + parseFloat(v.totalSpend), 0);
+    const percentSpendAtRisk = ((highRiskSpend / totalSpend) * 100).toFixed(1);
+
+    // Derived Metrics (Simulated)
+    const duplicateRate = 2.4; // %
+    const totalVendorSavings = 1250000; // $1.25M
+
+    // 2. Operational KPIs (Simulated Averages)
+    const onboardingSla = 92; // %
+    const invoiceQuality = 88; // %
+    const disputeRate = 5.2; // %
+    const contractCompliance = 94; // %
+    const lateDeliveries = 12; // Count
+
+    // 3. Chart Data Generation
+
+    // Risk Classification (Donut)
+    const riskCounts = {
+        High: highRiskCount,
+        Medium: vendors.filter(v => v.riskScore > 50 && v.riskScore <= 80).length,
+        Low: vendors.filter(v => v.riskScore <= 50).length,
+        New: Math.floor(Math.random() * 3) // Random small number
+    };
+
+    // Duplicate Rate by Vendor (Bar) - Top 5 Risky
+    const topRiskyVendors = [...vendors].sort((a, b) => b.riskScore - a.riskScore).slice(0, 5);
+    const duplicateRates = topRiskyVendors.map(v => ({
+        name: v.name,
+        rate: (Math.random() * 5 + 1).toFixed(1) // 1-6%
+    }));
+
+    // Vendor Savings (Bar)
+    const vendorSavings = topRiskyVendors.map(v => ({
+        name: v.name,
+        amount: Math.floor(Math.random() * 100000 + 10000)
+    }));
+
+    // Invoice Error Types (Stacked Bar)
+    const errorTypes = { // Random distribution
+        'Missing PO': 35,
+        'Tax ID Error': 20,
+        'Currency Mismatch': 15,
+        'Format Error': 30
+    };
+
+    // SLA Compliance Over Time (Line)
+    const slaTrend = [85, 87, 86, 89, 90, 92, 91, 93, 94, 92, 95, 96];
+
+    // Contract Compliance (Bar)
+    const complianceData = topRiskyVendors.map(v => ({
+        name: v.name,
+        compliance: Math.floor(Math.random() * 20 + 80) // 80-100%
+    }));
+
+    return {
+        avgRiskScore,
+        highRiskCount,
+        percentSpendAtRisk,
+        duplicateRate,
+        totalVendorSavings,
+        onboardingSla,
+        invoiceQuality,
+        disputeRate,
+        contractCompliance,
+        lateDeliveries,
+        riskCounts,
+        duplicateRates,
+        vendorSavings,
+        errorTypes,
+        slaTrend,
+        complianceData,
+        topRiskyVendors // For Scatter/Bubble and Heatmap
+    };
+};
+
 export const generateRoiStats = () => {
     // Simulated ROI Data
     const totalPrevented = 4250000; // $4.25M

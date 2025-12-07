@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendors - Spendshark Dashboard</title>
+    <title>Vendor Risk Analysis - Spendshark Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,6 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.3.0/dist/chartjs-chart-matrix.min.js"></script>
     <style>
         body {
             background-color: #0a0a0a;
@@ -114,45 +115,188 @@
                 </button>
                 <h1 class="text-2xl font-bold text-white flex items-center">
                     <i data-lucide="users" class="w-6 h-6 mr-3 text-neon-cyan"></i>
-                    Vendor Risk Analysis
+                    Vendor Risk Intelligence
                 </h1>
             </div>
+
+            <button
+                class="flex items-center bg-neon-cyan/10 text-neon-cyan px-4 py-2 rounded-lg hover:bg-neon-cyan/20 transition-colors">
+                <i data-lucide="file-down" class="w-4 h-4 mr-2"></i> Export Analysis
+            </button>
         </header>
 
         <div class="flex-1 overflow-y-auto p-8 space-y-8">
 
-            <!-- Risk Matrix Chart -->
-            <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold text-white mb-6">Vendor Risk Matrix (Spend vs. Risk Score)</h3>
-                <div class="h-80 w-full">
-                    <canvas id="riskChart"></canvas>
+            <!-- Executive Summary (Top 5 Headlines) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="glass p-4 rounded-xl border-t-4 border-red-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Avg Vendor Risk</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="kpi-avg-risk">0</h3>
+                    <p class="text-[10px] text-red-400 mt-1">Composite Score (0-100)</p>
+                </div>
+                <div class="glass p-4 rounded-xl border-t-4 border-orange-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">High-Risk Vendors</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="kpi-high-risk-count">0</h3>
+                    <p class="text-[10px] text-gray-400 mt-1">Requires Immediate Action</p>
+                </div>
+                <div class="glass p-4 rounded-xl border-t-4 border-yellow-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Spend at Risk</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="kpi-spend-at-risk">0%</h3>
+                    <p class="text-[10px] text-gray-500 mt-1">Of Total AP Spend</p>
+                </div>
+                <div class="glass p-4 rounded-xl border-t-4 border-blue-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Duplicate Rate</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="kpi-duplicate-rate">0%</h3>
+                    <p class="text-[10px] text-gray-500 mt-1">Avg Across Vendors</p>
+                </div>
+                <div class="glass p-4 rounded-xl border-t-4 border-green-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Avoided Losses</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="kpi-vendor-savings">$0</h3>
+                    <p class="text-[10px] text-green-400 mt-1">From High Risk Vendors</p>
                 </div>
             </div>
 
-            <!-- Vendor List -->
-            <div class="glass rounded-2xl overflow-hidden">
-                <table class="w-full text-left text-sm text-gray-400">
-                    <thead class="bg-white/5 text-gray-200 uppercase text-xs">
-                        <tr>
-                            <th class="px-6 py-4">Vendor Name</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Total Spend</th>
-                            <th class="px-6 py-4">Trust Score</th>
-                            <th class="px-6 py-4">Anomalies</th>
-                            <th class="px-6 py-4">Risk</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-glass-border" id="vendors-table">
-                        <!-- Rows injected by JS -->
-                    </tbody>
-                </table>
+            <!-- Operational Metrics (Row 2) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="glass p-3 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Onboarding SLA</p>
+                        <p class="text-lg font-bold text-white" id="op-onboarding">0%</p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400"><i
+                            data-lucide="check-circle" class="w-4 h-4"></i></div>
+                </div>
+                <div class="glass p-3 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Invoice Quality</p>
+                        <p class="text-lg font-bold text-white" id="op-quality">0%</p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400"><i
+                            data-lucide="file-check" class="w-4 h-4"></i></div>
+                </div>
+                <div class="glass p-3 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Dispute Rate</p>
+                        <p class="text-lg font-bold text-white" id="op-dispute">0%</p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400">
+                        <i data-lucide="alert-octagon" class="w-4 h-4"></i></div>
+                </div>
+                <div class="glass p-3 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Contract Match</p>
+                        <p class="text-lg font-bold text-white" id="op-contract">0%</p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
+                        <i data-lucide="scroll" class="w-4 h-4"></i></div>
+                </div>
+                <div class="glass p-3 rounded-lg flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase">Late Deliveries</p>
+                        <p class="text-lg font-bold text-white" id="op-late">0</p>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400"><i
+                            data-lucide="clock" class="w-4 h-4"></i></div>
+                </div>
+            </div>
+
+            <!-- Visualizations Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- 1. Risk Heatmap (Simulated Scatter for now as Matrix isn't standard in Chart.js core) -->
+                <div class="glass p-6 rounded-2xl col-span-2">
+                    <h3 class="text-sm font-bold text-white mb-4">Vendor Risk Heatmap (Invoice Quality vs Duplicates)
+                    </h3>
+                    <div class="h-64">
+                        <canvas id="riskHeatmap"></canvas>
+                    </div>
+                </div>
+
+                <!-- 2. Risk Classification -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-white mb-4">Risk Classification</h3>
+                    <div class="h-64 flex justify-center">
+                        <canvas id="riskDonut"></canvas>
+                    </div>
+                </div>
+
+                <!-- 3. Duplicate Rate by Vendor -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-white mb-4">Top Generators of Duplicates</h3>
+                    <div class="h-64">
+                        <canvas id="duplicateRateChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 4. Spend vs Risk (Bubble) -->
+                <div class="glass p-6 rounded-2xl col-span-2">
+                    <h3 class="text-sm font-bold text-white mb-4">Spend vs Risk Exposure</h3>
+                    <div class="h-64">
+                        <canvas id="spendRiskBubble"></canvas>
+                    </div>
+                </div>
+
+                <!-- 5. Savings by Vendor -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-white mb-4">Savings Impact</h3>
+                    <div class="h-64">
+                        <canvas id="vendorSavingsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 6. Invoice Error Breakdown -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-sm font-bold text-white mb-4">Invoice Error Types</h3>
+                    <div class="h-64">
+                        <canvas id="errorTypeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 7. SLA Trend -->
+                <div class="glass p-6 rounded-2xl col-span-2">
+                    <h3 class="text-sm font-bold text-white mb-4">SLA Compliance Trend</h3>
+                    <div class="h-64">
+                        <canvas id="slaTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 8. Contract Compliance -->
+                <div class="glass p-6 rounded-2xl col-span-2">
+                    <h3 class="text-sm font-bold text-white mb-4">Contract Pricing Compliance</h3>
+                    <div class="h-64">
+                        <canvas id="complianceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vendor List Table (Simplified for space) -->
+            <div class="glass rounded-2xl overflow-hidden mt-8">
+                <div class="p-6 border-b border-glass-border">
+                    <h3 class="text-lg font-bold text-white">All Vendors Overview</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-400">
+                        <thead class="bg-white/5 text-gray-200 uppercase text-xs">
+                            <tr>
+                                <th class="px-6 py-4">Vendor Name</th>
+                                <th class="px-6 py-4">Total Spend</th>
+                                <th class="px-6 py-4">Risk %</th>
+                                <th class="px-6 py-4">Anomalies</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-glass-border" id="vendors-table">
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
     </main>
 
     <script type="module">
-        import { generateMockData, formatCurrency } from './js/mockData.js';
+        import { generateMockData, generateVendorStats, formatCurrency } from './js/mockData.js';
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
 
@@ -160,83 +304,176 @@
         initAiBot();
         lucide.createIcons();
 
-        const data = generateMockData();
-        const vendors = data.vendors;
-        const tableBody = document.getElementById('vendors-table');
+        const rawData = generateMockData();
+        const stats = generateVendorStats(rawData.vendors);
 
-        // Populate Table
-        vendors.forEach(vendor => {
-            const tr = document.createElement('tr');
-            tr.className = "hover:bg-white/5 transition-colors";
+        // --- 1. POPULATE KPIs ---
+        document.getElementById('kpi-avg-risk').textContent = stats.avgRiskScore;
+        document.getElementById('kpi-high-risk-count').textContent = stats.highRiskCount;
+        document.getElementById('kpi-spend-at-risk').textContent = stats.percentSpendAtRisk + '%';
+        document.getElementById('kpi-duplicate-rate').textContent = stats.duplicateRate + '%';
+        document.getElementById('kpi-vendor-savings').textContent = formatCurrency(stats.totalVendorSavings);
 
-            let riskColor = 'text-green-400';
-            if (vendor.riskScore > 50) riskColor = 'text-yellow-400';
-            if (vendor.riskScore > 80) riskColor = 'text-red-400';
+        document.getElementById('op-onboarding').textContent = stats.onboardingSla + '%';
+        document.getElementById('op-quality').textContent = stats.invoiceQuality + '%';
+        document.getElementById('op-dispute').textContent = stats.disputeRate + '%';
+        document.getElementById('op-contract').textContent = stats.contractCompliance + '%';
+        document.getElementById('op-late').textContent = stats.lateDeliveries;
 
-            tr.innerHTML = `
-                <td class="px-6 py-4 text-white font-medium">${vendor.name}</td>
-                <td class="px-6 py-4">
-                    <span class="px-2 py-1 ${vendor.status === 'Active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'} text-xs rounded-full border border-white/10">${vendor.status}</span>
-                </td>
-                <td class="px-6 py-4">${formatCurrency(vendor.totalSpend)}</td>
-                <td class="px-6 py-4">
-                     <div class="flex items-center">
-                        <div class="w-16 h-2 bg-gray-700 rounded-full mr-2 overflow-hidden">
-                            <div class="h-full bg-neon-cyan" style="width: ${vendor.trustScore}%"></div>
-                        </div>
-                        <span class="text-xs">${vendor.trustScore}</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4">${vendor.anomalies}</td>
-                <td class="px-6 py-4 font-bold ${riskColor}">${vendor.riskScore}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
 
-        // Chart.js Scatter Plot
-        const ctx = document.getElementById('riskChart').getContext('2d');
-        new Chart(ctx, {
+        // --- 2. POPULATE CHARTS ---
+
+        // Chart 1: Risk Heatmap (Scatter: X=InvQuality, Y=DupFreq, Color=Risk)
+        // Simulated: InvQuality (random 60-100), DupFreq (random 0-10)
+        const heatmapData = stats.topRiskyVendors.map(v => ({
+            x: Math.floor(Math.random() * 40 + 60), // Quality
+            y: Math.floor(Math.random() * 10), // Dup Freq
+            r: 8 // fixed point size
+        }));
+        new Chart(document.getElementById('riskHeatmap'), {
             type: 'scatter',
             data: {
                 datasets: [{
                     label: 'Vendors',
-                    data: vendors.map(v => ({ x: v.totalSpend, y: v.riskScore })),
-                    backgroundColor: vendors.map(v => v.riskScore > 80 ? '#ef4444' : (v.riskScore > 50 ? '#eab308' : '#00f3ff')),
-                    pointRadius: 6,
-                    pointHoverRadius: 8
+                    data: heatmapData,
+                    backgroundColor: heatmapData.map(d => d.y > 5 ? '#ef4444' : '#eab308')
                 }]
             },
             options: {
-                responsive: true,
                 maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        title: { display: true, text: 'Total Spend ($)', color: '#aaa' },
-                        grid: { color: 'rgba(255,255,255,0.1)' },
-                        ticks: { color: '#aaa' }
-                    },
-                    y: {
-                        title: { display: true, text: 'Risk Score (0-100)', color: '#aaa' },
-                        grid: { color: 'rgba(255,255,255,0.1)' },
-                        ticks: { color: '#aaa' },
-                        min: 0, max: 100
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: (context) => {
-                                const vendor = vendors[context.dataIndex];
-                                return `${vendor.name}: Risk ${vendor.riskScore}, Spend ${formatCurrency(vendor.totalSpend)}`;
-                            }
-                        }
-                    }
+                    x: { title: { display: true, text: 'Invoice Quality Score' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    y: { title: { display: true, text: 'Duplicate Freq' }, grid: { color: 'rgba(255,255,255,0.1)' } }
                 }
             }
         });
 
-        lucide.createIcons();
+        // Chart 2: Risk Classification (Donut)
+        new Chart(document.getElementById('riskDonut'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(stats.riskCounts),
+                datasets: [{
+                    data: Object.values(stats.riskCounts),
+                    backgroundColor: ['#ef4444', '#f97316', '#10b981', '#64748b'],
+                    borderWidth: 0
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#fff', font: { size: 10 } } } } }
+        });
+
+        // Chart 3: Duplicate Rate (Bar)
+        new Chart(document.getElementById('duplicateRateChart'), {
+            type: 'bar',
+            data: {
+                labels: stats.duplicateRates.map(d => d.name),
+                datasets: [{
+                    data: stats.duplicateRates.map(d => d.rate),
+                    backgroundColor: '#ef4444',
+                    borderRadius: 4
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, indexAxis: 'y', scales: { x: { display: false }, y: { ticks: { color: '#aaa', font: { size: 10 } } } } }
+        });
+
+        // Chart 4: Spend vs Risk (Bubble: X=Risk, Y=DupRate, R=Spend)
+        new Chart(document.getElementById('spendRiskBubble'), {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Vendors',
+                    data: stats.topRiskyVendors.map(v => ({
+                        x: v.riskScore,
+                        y: Math.random() * 5,
+                        r: parseFloat(v.totalSpend) / 100000 // Scale radius
+                    })),
+                    backgroundColor: 'rgba(0, 243, 255, 0.6)'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Risk Score' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    y: { title: { display: true, text: 'Dup Rate %' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                }
+            }
+        });
+
+        // Chart 5: Savings (Bar)
+        new Chart(document.getElementById('vendorSavingsChart'), {
+            type: 'bar',
+            data: {
+                labels: stats.vendorSavings.map(d => d.name),
+                datasets: [{
+                    data: stats.vendorSavings.map(d => d.amount),
+                    backgroundColor: '#10b981',
+                    borderRadius: 4
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+        });
+
+        // Chart 6: Error Types (Stacked Bar - Simulated as Simple Bar for clarity)
+        new Chart(document.getElementById('errorTypeChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(stats.errorTypes),
+                datasets: [{
+                    data: Object.values(stats.errorTypes),
+                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6'],
+                    borderRadius: 4
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { ticks: { color: '#aaa', font: { size: 9 } } } } }
+        });
+
+        // Chart 7: SLA Trend (Line)
+        new Chart(document.getElementById('slaTrendChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    data: stats.slaTrend,
+                    borderColor: '#7b2cbf',
+                    backgroundColor: 'rgba(123, 44, 191, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { min: 80 } } }
+        });
+
+        // Chart 8: Compliance (Bar/Waterfall)
+        new Chart(document.getElementById('complianceChart'), {
+            type: 'bar',
+            data: {
+                labels: stats.complianceData.map(d => d.name),
+                datasets: [{
+                    data: stats.complianceData.map(d => d.compliance),
+                    backgroundColor: '#00f3ff',
+                    borderRadius: 4
+                }]
+            },
+            options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { min: 60 } } }
+        });
+
+        // --- 3. POPULATE TABLE ---
+        const tableBody = document.getElementById('vendors-table');
+        rawData.vendors.forEach(vendor => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-white/5 transition-colors";
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-white font-medium">${vendor.name}</td>
+                <td class="px-6 py-4">${formatCurrency(vendor.totalSpend)}</td>
+                <td class="px-6 py-4 ${vendor.riskScore > 80 ? 'text-red-400 font-bold' : 'text-gray-400'}">${vendor.riskScore}</td>
+                <td class="px-6 py-4">${vendor.anomalies}</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 bg-white/10 rounded text-xs">${vendor.status}</span></td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
     </script>
 </body>
 
