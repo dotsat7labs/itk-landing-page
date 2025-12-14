@@ -205,8 +205,8 @@ export const generateVendorStats = (vendors) => {
 
 export const generateRoiStats = () => {
     // Simulated ROI Data
-    const totalPrevented = 4250000; // $4.25M
-    const preventedCount = 142;
+    const totalPrevented = 1000000; // $4.2B
+    const preventedCount = 428571; // $4.2B / $9,800 avg
     const detectionRate = 0.94; // 94%
     const accuracy = 0.985; // 98.5%
     const avgValue = totalPrevented / preventedCount;
@@ -218,7 +218,8 @@ export const generateRoiStats = () => {
     // Savings by Component
     const savingsByComponent = {
         'Machine Learning': 1800000,
-        'Rule Engine': 1450000,
+        'Rule Engine': 1100000,
+        'Deep Learning': 1750000,
         'Recurring Pattern': 800000,
         'Manual Review': 200000
     };
