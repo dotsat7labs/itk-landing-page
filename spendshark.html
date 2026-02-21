@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendShark — Agentic Edition | iTK Technologies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-cyan': '#00f3ff',
+                        'deep-purple': '#7b2cbf',
+                        'rich-black': '#0a0a0a',
+                        'dark-blue': '#0f172a',
+                        'amber': '#f59e0b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 243, 255, 0.5); }
+        }
+        @keyframes slide-down {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pipeline-flow {
+            0% { stroke-dashoffset: 300; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-glow { text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+        .bg-grid-pattern {
+            background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .agent-card { transition: all 0.3s ease; }
+        .agent-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 243, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+        }
+        .pipeline-connector {
+            width: 2px;
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(0, 243, 255, 0.6), rgba(123, 44, 191, 0.6));
+            margin: 0 auto;
+        }
+        .pipeline-connector-animated {
+            background: linear-gradient(to bottom, rgba(0, 243, 255, 0.8), rgba(123, 44, 191, 0.8));
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .coming-soon-badge {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .log-line { animation: slide-down 0.4s ease-out forwards; opacity: 0; }
+        .comparison-row:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+        .comparison-row:hover { background: rgba(0, 243, 255, 0.03); }
+
+        /* ── Scroll reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.10s; }
+        .reveal-delay-2 { transition-delay: 0.20s; }
+        .reveal-delay-3 { transition-delay: 0.30s; }
+        .reveal-delay-4 { transition-delay: 0.40s; }
+        .reveal-delay-5 { transition-delay: 0.50s; }
+
+        /* ── Floating section nav ── */
+        #section-nav {
+            position: fixed; right: 20px; top: 50%;
+            transform: translateY(-50%); z-index: 40;
+            display: flex; flex-direction: column; gap: 14px;
+            align-items: flex-end;
+        }
+        .s-dot {
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer; position: relative;
+        }
+        .s-dot-pip {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease; flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .s-dot.active .s-dot-pip { background: #00f3ff; transform: scale(1.4); border-color: #00f3ff; box-shadow: 0 0 8px rgba(0,243,255,0.6); }
+        .s-dot:hover .s-dot-pip { background: rgba(0,243,255,0.5); }
+        .s-dot-label {
+            font-size: 11px; color: #9ca3af; white-space: nowrap;
+            opacity: 0; transition: opacity 0.2s ease;
+            background: rgba(10,10,10,0.85); padding: 3px 8px;
+            border-radius: 4px; border: 1px solid rgba(255,255,255,0.08);
+            pointer-events: none;
+        }
+        .s-dot:hover .s-dot-label { opacity: 1; }
+        @media (max-width: 768px) { #section-nav { display: none; } }
+
+        /* ── Back to top ── */
+        #back-to-top {
+            position: fixed; bottom: 28px; right: 24px; z-index: 40;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(0,243,255,0.15); border: 1px solid rgba(0,243,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: #00f3ff; cursor: pointer; transition: all 0.3s ease;
+            opacity: 0; transform: translateY(12px); pointer-events: none;
+            backdrop-filter: blur(10px);
+        }
+        #back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+        #back-to-top:hover { background: rgba(0,243,255,0.3); box-shadow: 0 0 20px rgba(0,243,255,0.3); }
+
+        /* ── Stats strip ── */
+        @keyframes count-up { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
+        .stat-number { animation: count-up 0.5s ease forwards; }
+
+        /* ── Decision tabs ── */
+        .mode-tab { transition: all 0.25s ease; }
+        .mode-tab.active {
+            background: rgba(0,243,255,0.15);
+            border-color: rgba(0,243,255,0.5);
+            color: #00f3ff;
+        }
+        .mode-content { display: none; }
+        .mode-content.active { display: block; }
+
+        /* ── Leadership banner ── */
+        #preview-banner { transition: max-height 0.3s ease, opacity 0.3s ease; overflow: hidden; max-height: 48px; }
+        #preview-banner.dismissed { max-height: 0; opacity: 0; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-rich-black text-white font-sans antialiased overflow-x-hidden">
+
+    <!-- Leadership Preview Banner -->
+    <div id="preview-banner" class="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-deep-purple/90 to-[#0a0a0a]/90 border-b border-deep-purple/40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 h-10 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 flex-1 justify-center">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>
+                <p class="text-xs text-white/80">
+                    <span class="font-bold text-amber-400">Internal Preview</span>
+                    <span class="hidden sm:inline"> — SpendShark Agentic Edition is under active development. Shared with leadership for review.</span>
+                    <a href="mailto:info@itktechnologies.com" class="ml-2 text-neon-cyan underline underline-offset-2 hover:text-white transition-colors">Send feedback →</a>
+                </p>
+            </div>
+            <button id="dismiss-banner" class="text-gray-500 hover:text-white transition-colors flex-shrink-0" aria-label="Dismiss">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Section Nav -->
+    <div id="section-nav" aria-hidden="true">
+        <div class="s-dot" data-target="hero"><span class="s-dot-label">Overview</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="whats-new"><span class="s-dot-label">What's New</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="evolution"><span class="s-dot-label">Evolution</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="how-it-works"><span class="s-dot-label">Pipeline</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="detective"><span class="s-dot-label">Detective Agents</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="meet-agents"><span class="s-dot-label">Meet the Agents</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="platform"><span class="s-dot-label">Platform</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="realtime"><span class="s-dot-label">Real-Time Demo</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="trust"><span class="s-dot-label">Explainability</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="availability"><span class="s-dot-label">Availability</span><span class="s-dot-pip"></span></div>
+    </div>
+
+    <!-- Back to top -->
+    <button id="back-to-top" aria-label="Back to top">
+        <i data-lucide="chevron-up" class="w-5 h-5"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-10 w-full z-50 glass border-b border-white/10 transition-[top] duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <div class="flex items-center">
+                    <a href="index.html">
+                        <img src="images/logo_transparent.png" alt="iTK Technologies" class="h-20 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="index.html" class="hover:text-neon-cyan transition-colors text-sm font-medium text-gray-300">Home</a>
+                    <a href="our-story.html" class="hover:text-neon-cyan transition-colors text-sm font-medium text-gray-300">Our Story</a>
+                    <a href="our-capabilities.html" class="hover:text-neon-cyan transition-colors text-sm font-medium text-gray-300">Our Capabilities</a>
+                    <span class="text-neon-cyan text-sm font-bold border-b-2 border-neon-cyan pb-0.5">SpendShark</span>
+                    <a href="index.html#contact" class="px-5 py-2 bg-neon-cyan text-rich-black font-bold text-sm rounded-full hover:bg-white transition-all">Contact Us</a>
+                </div>
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg glass">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-white/10 px-4 py-4 space-y-3">
+            <a href="index.html" class="block text-gray-300 hover:text-neon-cyan py-2">Home</a>
+            <a href="our-story.html" class="block text-gray-300 hover:text-neon-cyan py-2">Our Story</a>
+            <a href="our-capabilities.html" class="block text-gray-300 hover:text-neon-cyan py-2">Our Capabilities</a>
+            <a href="index.html#contact" class="block text-neon-cyan font-bold py-2">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════════════════════ -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-36">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-deep-purple/30 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-cyan/20 rounded-full blur-3xl animate-float" style="animation-delay:2s;"></div>
+            <div class="absolute inset-0 bg-grid-pattern [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+            <!-- Coming Soon Badge -->
+            <div class="inline-flex items-center gap-2 coming-soon-badge rounded-full px-5 py-2 mb-8">
+                <i data-lucide="construction" class="w-4 h-4 text-amber-400"></i>
+                <span class="text-amber-400 text-sm font-bold tracking-wide">COMING SOON — UNDER ACTIVE DEVELOPMENT</span>
+            </div>
+
+            <!-- Product Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-neon-cyan/10 rounded-full border border-neon-cyan/30 mb-6">
+                <i data-lucide="zap" class="w-4 h-4 text-neon-cyan"></i>
+                <span class="text-neon-cyan text-sm font-semibold tracking-wider">SPENDSHARK — AGENTIC EDITION</span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter leading-tight">
+                Autonomous Spend Investigation,<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-white to-deep-purple text-glow">
+                    Reimagined.
+                </span>
+            </h1>
+
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-6 leading-relaxed">
+                SpendShark has evolved from a detection tool into a real-time, explainable, AI-driven investigation system —
+                powered by a coordinated team of specialized agents that analyze, reason, and learn like experienced financial analysts.
+            </p>
+
+            <p class="text-base text-gray-500 max-w-2xl mx-auto mb-12">
+                This is not just an upgrade. <strong class="text-gray-300">It's a new operating model for spend intelligence.</strong>
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#how-it-works"
+                    class="px-10 py-5 bg-neon-cyan text-rich-black font-bold text-lg rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,243,255,0.4)]">
+                    See How It Works
+                </a>
+                <a href="#meet-agents"
+                    class="px-10 py-5 glass text-white font-bold text-lg rounded-full hover:bg-white/10 transition-all border border-white/20 hover:border-neon-cyan/50">
+                    Meet the Agents
+                </a>
+            </div>
+
+            <!-- Scroll hint -->
+            <div class="mt-20 flex flex-col items-center gap-2 text-gray-600">
+                <span class="text-xs tracking-widest uppercase">Scroll to explore</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 animate-bounce"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         STATS STRIP
+    ══════════════════════════════════════════════════════════ -->
+    <div class="bg-dark-blue border-y border-white/5 py-8 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-white/10">
+                <div class="text-center reveal" data-stat="11">
+                    <div class="text-4xl md:text-5xl font-bold text-neon-cyan text-glow stat-val">11</div>
+                    <div class="text-sm text-gray-400 mt-1">Specialized Agents</div>
+                </div>
+                <div class="text-center reveal reveal-delay-1" data-stat="8">
+                    <div class="text-4xl md:text-5xl font-bold text-neon-cyan text-glow stat-val">8</div>
+                    <div class="text-sm text-gray-400 mt-1">Detection Techniques</div>
+                </div>
+                <div class="text-center reveal reveal-delay-2">
+                    <div class="text-4xl md:text-5xl font-bold text-neon-cyan text-glow">&lt;1s</div>
+                    <div class="text-sm text-gray-400 mt-1">Decision Time</div>
+                </div>
+                <div class="text-center reveal reveal-delay-3">
+                    <div class="text-4xl md:text-5xl font-bold text-neon-cyan text-glow">100%</div>
+                    <div class="text-sm text-gray-400 mt-1">Audit Trail Coverage</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         WHAT'S NEW TABLE
+    ══════════════════════════════════════════════════════════ -->
+    <section id="whats-new" class="py-24 bg-rich-black relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">What's Actually New</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    A category upgrade — not an iteration. Here's exactly what changed and why it matters.
+                </p>
+            </div>
+
+            <!-- Table header -->
+            <div class="grid grid-cols-3 gap-0 mb-2 reveal reveal-delay-1">
+                <div class="col-span-1"></div>
+                <div class="text-center py-3 px-4 bg-white/5 rounded-tl-xl border border-white/10 border-r-0">
+                    <span class="text-sm text-gray-400 font-semibold">Previous SpendShark</span>
+                </div>
+                <div class="text-center py-3 px-4 bg-neon-cyan/10 rounded-tr-xl border border-neon-cyan/30 border-l-0">
+                    <span class="text-sm text-neon-cyan font-bold">SpendShark — Agentic Edition</span>
+                </div>
+            </div>
+
+            <!-- Table rows -->
+            <div class="rounded-b-xl overflow-hidden border border-white/10 reveal reveal-delay-2">
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Architecture
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Rule-based duplicate checks</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Multi-agent investigation framework
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Analysis Speed
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Batch or near-real-time</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Real-time, event-driven — &lt;1 second
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Decision Logic
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Single fraud or risk score</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Context-aware, evidence-based reasoning
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="bell-off" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> False Positives
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">High alert volume</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Aggressively reduced via recurrence &amp; vendor resolution
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="users" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Human Review
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Heavy manual review process</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Human-in-the-loop only when confidence is low
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Detection Methods
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Static detection logic</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> 8 parallel techniques: exact, fuzzy, Benford's, velocity &amp; more
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0 border-b border-white/5">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Explainability
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Score only, no reasoning</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Full reasoning trail, agent contributions, confidence level
+                    </div>
+                </div>
+
+                <div class="comparison-row grid grid-cols-3 gap-0">
+                    <div class="py-4 px-5 text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="brain" class="w-4 h-4 text-neon-cyan flex-shrink-0"></i> Learning
+                    </div>
+                    <div class="py-4 px-5 text-sm text-gray-400 border-l border-white/5 flex items-center">Static — no self-improvement</div>
+                    <div class="py-4 px-5 text-sm text-white border-l border-neon-cyan/10 flex items-center gap-2 bg-neon-cyan/5">
+                        <i data-lucide="check" class="w-3.5 h-3.5 text-neon-cyan flex-shrink-0"></i> Continuously learning detective agents, always running
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom note -->
+            <p class="text-center text-gray-600 text-sm mt-8 reveal reveal-delay-3">
+                SpendShark's foundation remains — its intelligence has evolved.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EVOLUTION SECTION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="evolution" class="py-24 bg-dark-blue relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">From Detection to Investigation</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    Traditional payment controls rely on rules and scores. SpendShark — Agentic Edition investigates.
+                </p>
+            </div>
+
+            <!-- Before / After Visual -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Before -->
+                <div class="glass p-8 rounded-3xl border border-white/10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-red-500/5 rounded-full blur-2xl -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <div class="inline-block px-3 py-1 bg-white/5 rounded-lg text-gray-500 text-xs font-bold tracking-wider mb-6">PREVIOUS SPENDSHARK</div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">Rule-based duplicate checks</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">Batch or near-real-time analysis</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">Single fraud or risk score</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">High alert volume &amp; manual review</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">Static detection logic</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+                                <span class="text-gray-400">After-the-fact alerts</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- After -->
+                <div class="glass p-8 rounded-3xl border border-neon-cyan/30 relative overflow-hidden animate-pulse-glow">
+                    <div class="absolute top-0 right-0 w-48 h-48 bg-neon-cyan/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <div class="inline-block px-3 py-1 bg-neon-cyan/10 rounded-lg text-neon-cyan text-xs font-bold tracking-wider mb-6">SPENDSHARK — AGENTIC EDITION</div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Multi-agent investigation framework</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Real-time, event-driven decisions</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Context-aware, evidence-based reasoning</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Aggressively reduced false positives</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Continuously learning agent network</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                                <span class="text-white">Prevention before money moves</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- One-liner -->
+            <div class="text-center mt-16">
+                <p class="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple">
+                    "SpendShark is a digital fraud investigation team — not a fraud score."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         HOW IT WORKS — AGENT PIPELINE
+    ══════════════════════════════════════════════════════════ -->
+    <section id="how-it-works" class="py-24 bg-rich-black relative">
+        <div class="absolute inset-0 bg-grid-pattern [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)] opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">The Agentic Pipeline</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    Every payment passes through a coordinated team of AI agents — each applying a different investigative lens.
+                    They don't vote. They argue. Evidence is weighed. Conflicts are surfaced. A decision is reached.
+                </p>
+            </div>
+
+            <!-- Pipeline Visual -->
+            <div class="max-w-3xl mx-auto">
+
+                <!-- Entry Point -->
+                <div class="text-center mb-2">
+                    <div class="inline-flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/20 rounded-2xl">
+                        <i data-lucide="radio" class="w-5 h-5 text-neon-cyan animate-pulse"></i>
+                        <span class="font-bold text-white">Live Payment Event</span>
+                        <span class="text-xs text-gray-500">— connected to your payment system</span>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector pipeline-connector-animated my-1"></div>
+
+                <!-- Agent 0 -->
+                <div class="glass p-5 rounded-2xl border border-white/10 hover:border-neon-cyan/40 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-neon-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/20 transition-all">
+                            <i data-lucide="plug-zap" class="w-5 h-5 text-neon-cyan"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-bold text-neon-cyan/60 tracking-wider">AGENT 0</span>
+                                <span class="text-xs text-gray-600">·</span>
+                                <span class="text-xs text-gray-500">Real-Time Ingestion</span>
+                            </div>
+                            <h4 class="font-bold text-white">Real-Time Ingestion Agent</h4>
+                            <p class="text-sm text-gray-400 mt-1">Listens to live payment events from ERP, AP systems, or event streams. Normalizes data instantly and triggers the full pipeline. Latency target: sub-second.</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-xs font-mono text-gray-600 bg-white/5 rounded px-2 py-1">T+0.0s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agent 1 -->
+                <div class="glass p-5 rounded-2xl border border-white/10 hover:border-neon-cyan/40 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-neon-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/20 transition-all">
+                            <i data-lucide="scan-search" class="w-5 h-5 text-neon-cyan"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-bold text-neon-cyan/60 tracking-wider">AGENT 1</span>
+                                <span class="text-xs text-gray-600">·</span>
+                                <span class="text-xs text-gray-500">Signal Interpretation</span>
+                            </div>
+                            <h4 class="font-bold text-white">Signal Interpreter Agent</h4>
+                            <p class="text-sm text-gray-400 mt-1">Parses and normalizes the payment payload. Extracts intent, urgency, and key fields. Assigns an initial risk baseline before deeper analysis begins.</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-xs font-mono text-gray-600 bg-white/5 rounded px-2 py-1">T+0.1s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agents 2–5 run in parallel -->
+                <div class="glass p-4 rounded-2xl border border-deep-purple/30 bg-deep-purple/5">
+                    <div class="text-center mb-4">
+                        <span class="text-xs font-bold text-deep-purple/80 tracking-wider uppercase">Parallel Investigation — Agents 2 through 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                        <!-- Agent 2 -->
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-neon-cyan/30 transition-all group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-neon-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/20 transition-all">
+                                    <i data-lucide="file-search-2" class="w-4 h-4 text-neon-cyan"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-neon-cyan/60 mb-0.5">AGENT 2</div>
+                                    <h5 class="font-bold text-sm text-white">Similar Invoice Detection</h5>
+                                    <p class="text-xs text-gray-500 mt-1">Fuzzy-matches invoice numbers, amounts, and date windows. Catches duplicates even when IDs are altered (INV-1023 vs INV1023).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Agent 3 -->
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-neon-cyan/30 transition-all group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-deep-purple/20 flex items-center justify-center flex-shrink-0 group-hover:bg-deep-purple/30 transition-all">
+                                    <i data-lucide="building-2" class="w-4 h-4 text-deep-purple"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-deep-purple/80 mb-0.5">AGENT 3</div>
+                                    <h5 class="font-bold text-sm text-white">Vendor Resolution</h5>
+                                    <p class="text-xs text-gray-500 mt-1">Resolves vendor aliases, trade vs legal names, shared tax IDs, and subsidiary relationships. Eliminates vendor-identity noise.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Agent 4 -->
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-neon-cyan/30 transition-all group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-neon-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/20 transition-all">
+                                    <i data-lucide="repeat" class="w-4 h-4 text-neon-cyan"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-neon-cyan/60 mb-0.5">AGENT 4</div>
+                                    <h5 class="font-bold text-sm text-white">Recurrence Pattern</h5>
+                                    <p class="text-xs text-gray-500 mt-1">Identifies legitimate recurring payments (monthly rent, subscriptions, payroll). Applies variance tolerances to avoid false positives.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Agent 5 -->
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-neon-cyan/30 transition-all group">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-deep-purple/20 flex items-center justify-center flex-shrink-0 group-hover:bg-deep-purple/30 transition-all">
+                                    <i data-lucide="triangle-alert" class="w-4 h-4 text-deep-purple"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-deep-purple/80 mb-0.5">AGENT 5</div>
+                                    <h5 class="font-bold text-sm text-white">Outlier Detection</h5>
+                                    <p class="text-xs text-gray-500 mt-1">Spots anomalies within recurring patterns: amount spikes, timing deviations, frequency changes. Recurring ≠ safe.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="text-xs font-mono text-gray-600 bg-white/5 rounded px-2 py-1">T+0.3s — T+0.6s</span>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agent 6 -->
+                <div class="glass p-5 rounded-2xl border border-white/10 hover:border-neon-cyan/40 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-neon-cyan/10 flex items-center justify-center flex-shrink-0 group-hover:bg-neon-cyan/20 transition-all">
+                            <i data-lucide="layers" class="w-5 h-5 text-neon-cyan"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-bold text-neon-cyan/60 tracking-wider">AGENT 6</span>
+                                <span class="text-xs text-gray-600">·</span>
+                                <span class="text-xs text-gray-500">Evidence Synthesis</span>
+                            </div>
+                            <h4 class="font-bold text-white">Risk Aggregation Agent</h4>
+                            <p class="text-sm text-gray-400 mt-1">Synthesizes all agent evidence using weighted reasoning — not simple averages. Business-policy aware. Conflicts are surfaced, not hidden.</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-xs font-mono text-gray-600 bg-white/5 rounded px-2 py-1">T+0.7s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agent 7 — Decision Core -->
+                <div class="p-5 rounded-2xl border-2 border-neon-cyan/50 bg-neon-cyan/5 relative overflow-hidden group hover:border-neon-cyan transition-all animate-pulse-glow">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-neon-cyan/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="cpu" class="w-6 h-6 text-neon-cyan"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-bold text-neon-cyan tracking-wider">AGENT 7 — CORE</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ProtoVision Decision Engine</span>
+                            </div>
+                            <h4 class="font-bold text-white text-lg">Decision Agent</h4>
+                            <p class="text-sm text-gray-300 mt-1">The final arbiter. Makes the actual decision based on risk score, recurrence confidence, business rules, and historical outcomes. Always explains its reasoning.</p>
+                            <div class="flex gap-3 mt-3">
+                                <span class="flex items-center gap-1.5 text-xs bg-green-500/10 text-green-400 border border-green-500/20 rounded-lg px-3 py-1.5 font-bold">
+                                    <i data-lucide="check" class="w-3 h-3"></i> Auto-Approve
+                                </span>
+                                <span class="flex items-center gap-1.5 text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg px-3 py-1.5 font-bold">
+                                    <i data-lucide="ban" class="w-3 h-3"></i> Block
+                                </span>
+                                <span class="flex items-center gap-1.5 text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg px-3 py-1.5 font-bold">
+                                    <i data-lucide="user" class="w-3 h-3"></i> Escalate
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-xs font-mono text-neon-cyan/60 bg-neon-cyan/10 rounded px-2 py-1">T+0.9s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agent 8 — Human Gate (conditional) -->
+                <div class="glass p-5 rounded-2xl border border-amber-500/20 bg-amber-500/5 group hover:border-amber-500/40 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-amber-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <span class="text-xs font-bold text-amber-400/80 tracking-wider">AGENT 8</span>
+                                <span class="text-xs bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full">Conditional — low confidence only</span>
+                            </div>
+                            <h4 class="font-bold text-white">Human-in-the-Loop Gate</h4>
+                            <p class="text-sm text-gray-400 mt-1">Only triggers when confidence falls below threshold. Presents clear reasoning, pauses the payment, and requests human approval. Human decisions are captured as training feedback.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pipeline-connector my-1"></div>
+
+                <!-- Agents 9 & 10 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="glass p-5 rounded-2xl border border-white/10 hover:border-deep-purple/40 transition-all group">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-deep-purple/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="clipboard-check" class="w-5 h-5 text-deep-purple"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-deep-purple/80 mb-0.5">AGENT 9</div>
+                                <h5 class="font-bold text-white">Outcome Validation</h5>
+                                <p class="text-xs text-gray-500 mt-1">Confirms what actually happened: Was payment reversed? Was vendor contacted? Was dispute raised?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass p-5 rounded-2xl border border-white/10 hover:border-neon-cyan/40 transition-all group">
+                        <div class="flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-neon-cyan/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="brain" class="w-5 h-5 text-neon-cyan"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-neon-cyan/60 mb-0.5">AGENT 10</div>
+                                <h5 class="font-bold text-white">Learning &amp; Memory</h5>
+                                <p class="text-xs text-gray-500 mt-1">Updates confidence models, vendor aliases, recurrence patterns. Every decision makes the system smarter.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timing Summary -->
+                <div class="mt-6 p-4 glass rounded-xl border border-white/5 text-center">
+                    <p class="text-gray-400 text-sm">Full pipeline decision:</p>
+                    <p class="text-2xl font-bold text-neon-cyan mt-1">≤ 1 Second</p>
+                    <p class="text-xs text-gray-600 mt-1">Before payment is released</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         DETECTIVE AGENTS
+    ══════════════════════════════════════════════════════════ -->
+    <section id="detective" class="py-24 bg-dark-blue relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-deep-purple/10 rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-deep-purple/10 rounded-full border border-deep-purple/30 mb-6">
+                        <i data-lucide="search" class="w-4 h-4 text-deep-purple"></i>
+                        <span class="text-deep-purple text-sm font-semibold">ALWAYS RUNNING IN THE BACKGROUND</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4">The Detective Agents</h2>
+                    <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                        These agents aren't triggered by a single payment. They continuously study the data — like a senior fraud analyst who never sleeps.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass p-6 rounded-2xl border border-white/10 hover:border-deep-purple/40 transition-all agent-card">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-deep-purple/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="trending-up" class="w-5 h-5 text-deep-purple"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Behavioral Drift Agent</h4>
+                                <p class="text-sm text-gray-400">Detects changes in vendor or payer behavior over time — subtle shifts that only emerge across hundreds of transactions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl border border-white/10 hover:border-deep-purple/40 transition-all agent-card">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-deep-purple/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="scatter-chart" class="w-5 h-5 text-deep-purple"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Temporal Pattern Agent</h4>
+                                <p class="text-sm text-gray-400">Studies timing anomalies across the full payment history — payments too soon, too frequent, or on unusual schedules.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl border border-white/10 hover:border-deep-purple/40 transition-all agent-card">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-deep-purple/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="git-branch" class="w-5 h-5 text-deep-purple"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Amount Deviation Agent</h4>
+                                <p class="text-sm text-gray-400">Spots subtle overpayments hidden within normal ranges — 2%, 5%, or 8% above historical means that rules would never catch.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-2xl border border-white/10 hover:border-deep-purple/40 transition-all agent-card">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-deep-purple/20 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-deep-purple"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Pattern Discovery Agent</h4>
+                                <p class="text-sm text-gray-400">Continuously discovers new recurring payment patterns, emerging fraud tactics, and vendor behavior shifts — then propagates findings to the live pipeline.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What detectives produce -->
+                <div class="mt-10 p-8 glass rounded-3xl border border-deep-purple/20 text-center">
+                    <h3 class="text-xl font-bold mb-4 text-white">What the Detective Agents Produce</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                        <div>
+                            <i data-lucide="lightbulb" class="w-6 h-6 text-deep-purple mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-400">New hypotheses</p>
+                        </div>
+                        <div>
+                            <i data-lucide="library" class="w-6 h-6 text-deep-purple mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-400">Updated pattern libraries</p>
+                        </div>
+                        <div>
+                            <i data-lucide="sliders-horizontal" class="w-6 h-6 text-deep-purple mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-400">Improved agent heuristics</p>
+                        </div>
+                        <div>
+                            <i data-lucide="arrow-down-to-line" class="w-6 h-6 text-deep-purple mx-auto mb-2"></i>
+                            <p class="text-sm text-gray-400">Reduced false positives</p>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-gray-500 text-sm italic">
+                        "ProtoVision discovered a new quarterly billing pattern for this vendor."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MEET THE AGENTS GRID
+    ══════════════════════════════════════════════════════════ -->
+    <section id="meet-agents" class="py-24 bg-rich-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Meet the Agents</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    Each agent is independent, opinionated, and specialized.
+                    They don't average results — they present evidence and let the Decision Agent reason through conflicts.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="plug-zap" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Real-Time Ingestion Agent</h4>
+                    <p class="text-sm text-gray-400">Connects to your payment systems and streams live transactions into the analysis pipeline. Event-driven, zero batch delay.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 0 · Entry Point</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="scan-search" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Signal Interpreter Agent</h4>
+                    <p class="text-sm text-gray-400">Classifies, normalizes, and scores each payment event before it reaches the specialist agents. Sets the analytical baseline.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 1 · Intake</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="file-search-2" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Invoice Similarity Agents</h4>
+                    <p class="text-sm text-gray-400">Exact and fuzzy matching across invoice IDs, amounts, and date windows. Catches duplicates even when identifiers are deliberately altered.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 2 · Exact + Fuzzy Match</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-deep-purple/20 flex items-center justify-center mb-4">
+                        <i data-lucide="building-2" class="w-6 h-6 text-deep-purple"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Vendor Resolution Agent</h4>
+                    <p class="text-sm text-gray-400">Detects duplicate vendors, legal vs trade name aliases, shared bank accounts, and subsidiary relationships. Massive reduction in false positives.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-deep-purple/60 font-mono">Agent 3 · Identity Resolution</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="repeat" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Recurrence Pattern Agent</h4>
+                    <p class="text-sm text-gray-400">Distinguishes legitimate recurring payments (subscriptions, rent, payroll) from risky repetitions. Applies variance tolerances and cadence models.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 4 · Context Analysis</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-deep-purple/20 flex items-center justify-center mb-4">
+                        <i data-lucide="triangle-alert" class="w-6 h-6 text-deep-purple"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Outlier Detection Agent</h4>
+                    <p class="text-sm text-gray-400">Spots anomalies within recurring patterns: amount spikes, timing shifts, frequency changes. Because recurring does not mean safe.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-deep-purple/60 font-mono">Agent 5 · Anomaly Detection</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="layers" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Risk Aggregation Agent</h4>
+                    <p class="text-sm text-gray-400">Synthesizes evidence from all agents using weighted, context-aware reasoning. Not a simple average — conflicts are surfaced explicitly.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 6 · Evidence Synthesis</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-neon-cyan/30 agent-card relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/5 rounded-full blur-xl -mr-6 -mt-6"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center mb-4">
+                            <i data-lucide="cpu" class="w-6 h-6 text-neon-cyan"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Decision Agent <span class="text-neon-cyan text-xs font-normal ml-1">— Core</span></h4>
+                        <p class="text-sm text-gray-400">The ProtoVision decision engine. Auto-approves, blocks, or escalates based on aggregated evidence, business rules, and learned history. Always explains its reasoning.</p>
+                        <div class="mt-4 pt-4 border-t border-white/5">
+                            <span class="text-xs text-neon-cyan font-mono">Agent 7 · ProtoVision Core</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-amber-500/20 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-amber-400"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Human-in-the-Loop Gate</h4>
+                    <p class="text-sm text-gray-400">Automatically pauses payments when confidence is low. Presents reasoning clearly. Human approval is logged and used to train future decisions.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-amber-400/60 font-mono">Agent 8 · Trust &amp; Compliance</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-deep-purple/20 flex items-center justify-center mb-4">
+                        <i data-lucide="clipboard-check" class="w-6 h-6 text-deep-purple"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Outcome Validation Agent</h4>
+                    <p class="text-sm text-gray-400">Closes the loop by confirming the real-world result of every decision — reversal, vendor contact, dispute, or clean payment.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-deep-purple/60 font-mono">Agent 9 · Validation</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-white/10 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 flex items-center justify-center mb-4">
+                        <i data-lucide="brain" class="w-6 h-6 text-neon-cyan"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Learning &amp; Memory Agent</h4>
+                    <p class="text-sm text-gray-400">Updates vendor aliases, recurrence models, and confidence weights after every outcome. The system improves without constant reconfiguration.</p>
+                    <div class="mt-4 pt-4 border-t border-white/5">
+                        <span class="text-xs text-neon-cyan/60 font-mono">Agent 10 · Continuous Learning</span>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl border border-deep-purple/30 bg-deep-purple/5 agent-card">
+                    <div class="w-12 h-12 rounded-xl bg-deep-purple/20 flex items-center justify-center mb-4">
+                        <i data-lucide="search" class="w-6 h-6 text-deep-purple"></i>
+                    </div>
+                    <h4 class="font-bold text-white mb-2">Detective Learning Agents</h4>
+                    <p class="text-sm text-gray-400">Always-on background agents that study historical data to discover new fraud tactics, emerging patterns, and behavioral changes — before they become a problem.</p>
+                    <div class="mt-4 pt-4 border-t border-deep-purple/10">
+                        <span class="text-xs text-deep-purple/60 font-mono">Background · Always Active</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PLATFORM IN ACTION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="platform" class="py-24 bg-dark-blue relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-deep-purple/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 mb-6">
+                    <i data-lucide="monitor" class="w-4 h-4 text-neon-cyan"></i>
+                    <span class="text-gray-300 text-sm font-semibold">ALREADY BUILT &amp; RUNNING</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">The Platform in Action</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    The agents aren't theoretical. They're already wired into the SpendShark dashboard.
+                    Explore the platform to see how each capability works in practice.
+                </p>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+
+                <!-- Card 1: Executive Dashboard -->
+                <a href="itk-dashboard/index.html" target="_blank"
+                    class="group glass p-0 rounded-3xl border border-white/10 hover:border-neon-cyan/50 transition-all overflow-hidden flex flex-col">
+                    <!-- Card Header -->
+                    <div class="p-6 border-b border-white/10 bg-gradient-to-r from-neon-cyan/10 to-transparent">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center">
+                                <i data-lucide="layout-dashboard" class="w-6 h-6 text-neon-cyan"></i>
+                            </div>
+                            <i data-lucide="external-link" class="w-5 h-5 text-gray-600 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Executive Dashboard</h3>
+                        <p class="text-sm text-gray-400">The command center. Real-time KPIs, trend charts, and live agent activity — in one view.</p>
+                    </div>
+                    <!-- Dashboard preview mock -->
+                    <div class="p-6 flex-1 space-y-3">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-white/5 rounded-lg p-3 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">Total Spend Analyzed</p>
+                                <p class="text-lg font-bold text-white">$2.4B</p>
+                                <p class="text-xs text-green-400 mt-0.5">↑ 12% vs last month</p>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">Potential Savings</p>
+                                <p class="text-lg font-bold text-neon-cyan">$3.2M</p>
+                                <p class="text-xs text-neon-cyan mt-0.5">45 new anomalies</p>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">Prevented + Recovered</p>
+                                <p class="text-lg font-bold text-green-400">$1.28M</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Year to date</p>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3 border border-white/5">
+                                <p class="text-xs text-gray-500 mb-1">AI Auto-Correction</p>
+                                <p class="text-lg font-bold text-blue-400">98.5%</p>
+                                <p class="text-xs text-blue-400 mt-0.5">⚡ High confidence</p>
+                            </div>
+                        </div>
+                        <!-- Mini log -->
+                        <div class="bg-rich-black/60 rounded-lg p-3 border border-white/5 font-mono text-xs space-y-1">
+                            <p class="text-neon-cyan/80">&gt; Scanning Invoice #9921...</p>
+                            <p class="text-gray-500">&gt; Vendor 'Acme Corp' verified.</p>
+                            <p class="text-red-400">&gt; Duplicate detected: INV-2023-001</p>
+                            <p class="text-gray-500">&gt; Anomaly Score: 0.02 (Low Risk)</p>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 border-t border-white/10">
+                        <span class="text-neon-cyan font-bold text-sm group-hover:underline flex items-center gap-2">
+                            Open Dashboard <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Card 2: Inspectors (Agents) -->
+                <a href="itk-dashboard/inspectors.html" target="_blank"
+                    class="group glass p-0 rounded-3xl border border-white/10 hover:border-deep-purple/50 transition-all overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-white/10 bg-gradient-to-r from-deep-purple/10 to-transparent">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-deep-purple/20 flex items-center justify-center">
+                                <i data-lucide="shield-alert" class="w-6 h-6 text-deep-purple"></i>
+                            </div>
+                            <i data-lucide="external-link" class="w-5 h-5 text-gray-600 group-hover:text-deep-purple transition-colors"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Inspector Agents</h3>
+                        <p class="text-sm text-gray-400">The agents made configurable. Each detection algorithm can be enabled, tuned, or customized per your organization's rules.</p>
+                    </div>
+                    <div class="p-6 flex-1 space-y-2">
+                        <!-- Inspector pills -->
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-3">Active Detection Algorithms</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">Exact Match</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">Fuzzy Match (Levenshtein)</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">Benford's Law Analysis</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">Velocity Check</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">Clustering &amp; LLM Proximity</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white/5 rounded-lg px-3 py-2 border border-white/5">
+                                <span class="text-sm text-white font-medium">ML Anomaly Detection</span>
+                                <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-0.5 rounded-full font-bold">ON</span>
+                            </div>
+                        </div>
+                        <div class="pt-2 flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4 text-gray-500"></i>
+                            <span class="text-xs text-gray-500">+ Weekend Posting, Round Amount &amp; custom rules</span>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4 border-t border-white/10">
+                        <span class="text-deep-purple font-bold text-sm group-hover:underline flex items-center gap-2">
+                            Configure Inspectors <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Card 3: Investigation Board -->
+                <a href="itk-dashboard/investigation.html" target="_blank"
+                    class="group glass p-0 rounded-3xl border border-white/10 hover:border-amber-500/50 transition-all overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-white/10 bg-gradient-to-r from-amber-500/10 to-transparent">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                                <i data-lucide="kanban" class="w-6 h-6 text-amber-400"></i>
+                            </div>
+                            <i data-lucide="external-link" class="w-5 h-5 text-gray-600 group-hover:text-amber-400 transition-colors"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1">Investigation Board</h3>
+                        <p class="text-sm text-gray-400">The human-in-the-loop made visible. A Kanban board for every case the agents escalate for review.</p>
+                    </div>
+                    <div class="p-6 flex-1">
+                        <!-- Kanban mini preview -->
+                        <div class="grid grid-cols-4 gap-2 h-48">
+                            <!-- To Do -->
+                            <div class="bg-white/5 rounded-lg border-t-2 border-gray-500 p-2 flex flex-col gap-1.5">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider text-center">To Do</p>
+                                <div class="bg-white/5 rounded p-1.5 border border-white/5">
+                                    <p class="text-[10px] text-red-400 font-bold">High</p>
+                                    <p class="text-[10px] text-gray-300">INV-9921</p>
+                                    <p class="text-[10px] text-gray-500">$24,500</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-1.5 border border-white/5">
+                                    <p class="text-[10px] text-red-400 font-bold">High</p>
+                                    <p class="text-[10px] text-gray-300">INV-8834</p>
+                                    <p class="text-[10px] text-gray-500">$8,200</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-1.5 border border-white/5">
+                                    <p class="text-[10px] text-yellow-400 font-bold">Med</p>
+                                    <p class="text-[10px] text-gray-300">INV-7712</p>
+                                    <p class="text-[10px] text-gray-500">$3,900</p>
+                                </div>
+                            </div>
+                            <!-- In Progress -->
+                            <div class="bg-white/5 rounded-lg border-t-2 border-neon-cyan p-2 flex flex-col gap-1.5">
+                                <p class="text-[10px] font-bold text-neon-cyan uppercase tracking-wider text-center">Active</p>
+                                <div class="bg-white/5 rounded p-1.5 border border-neon-cyan/20">
+                                    <p class="text-[10px] text-yellow-400 font-bold">Med</p>
+                                    <p class="text-[10px] text-gray-300">INV-6601</p>
+                                    <p class="text-[10px] text-gray-500">$12,100</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-1.5 border border-neon-cyan/20">
+                                    <p class="text-[10px] text-yellow-400 font-bold">Med</p>
+                                    <p class="text-[10px] text-gray-300">INV-5543</p>
+                                    <p class="text-[10px] text-gray-500">$6,750</p>
+                                </div>
+                            </div>
+                            <!-- Review -->
+                            <div class="bg-white/5 rounded-lg border-t-2 border-deep-purple p-2 flex flex-col gap-1.5">
+                                <p class="text-[10px] font-bold text-deep-purple uppercase tracking-wider text-center">Review</p>
+                                <div class="bg-white/5 rounded p-1.5 border border-deep-purple/20">
+                                    <p class="text-[10px] text-red-400 font-bold">High</p>
+                                    <p class="text-[10px] text-gray-300">INV-4421</p>
+                                    <p class="text-[10px] text-gray-500">$18,300</p>
+                                </div>
+                            </div>
+                            <!-- Resolved -->
+                            <div class="bg-white/5 rounded-lg border-t-2 border-green-500 p-2 flex flex-col gap-1.5">
+                                <p class="text-[10px] font-bold text-green-500 uppercase tracking-wider text-center">Done</p>
+                                <div class="bg-white/5 rounded p-1.5 border border-green-500/20">
+                                    <p class="text-[10px] text-green-400 font-bold">✓ Closed</p>
+                                    <p class="text-[10px] text-gray-300">INV-3310</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-1.5 border border-green-500/20">
+                                    <p class="text-[10px] text-green-400 font-bold">✓ Closed</p>
+                                    <p class="text-[10px] text-gray-300">INV-2209</p>
+                                </div>
+                                <div class="bg-white/5 rounded p-1.5 border border-green-500/20">
+                                    <p class="text-[10px] text-green-400 font-bold">✓ Closed</p>
+                                    <p class="text-[10px] text-gray-300">INV-1187</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-4 text-center">Every escalated payment becomes a trackable case.</p>
+                    </div>
+                    <div class="px-6 py-4 border-t border-white/10">
+                        <span class="text-amber-400 font-bold text-sm group-hover:underline flex items-center gap-2">
+                            Open Investigation Board <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+
+            <!-- Also explore banner -->
+            <div class="glass rounded-2xl border border-white/10 p-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">More to Explore in the Dashboard</h3>
+                        <p class="text-sm text-gray-400">The platform includes Analytics, Predictions, ROI &amp; Value, Vendor Risk, AP Performance, Credits, and Integration Setup.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3 flex-shrink-0">
+                        <a href="itk-dashboard/analytics.html" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-neon-cyan hover:border-neon-cyan/30 transition-all">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Analytics
+                        </a>
+                        <a href="itk-dashboard/predictions.html" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-neon-cyan hover:border-neon-cyan/30 transition-all">
+                            <i data-lucide="trending-up" class="w-4 h-4"></i> Predictions
+                        </a>
+                        <a href="itk-dashboard/roi.html" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-neon-cyan hover:border-neon-cyan/30 transition-all">
+                            <i data-lucide="dollar-sign" class="w-4 h-4"></i> ROI &amp; Value
+                        </a>
+                        <a href="itk-dashboard/vendors.html" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-neon-cyan hover:border-neon-cyan/30 transition-all">
+                            <i data-lucide="building-2" class="w-4 h-4"></i> Vendors
+                        </a>
+                        <a href="itk-dashboard/anomalies.html" target="_blank"
+                            class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-neon-cyan hover:border-neon-cyan/30 transition-all">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i> Anomalies
+                        </a>
+                        <a href="itk-dashboard/index.html" target="_blank"
+                            class="flex items-center gap-2 px-5 py-2 bg-neon-cyan text-rich-black font-bold rounded-lg text-sm hover:bg-white transition-all">
+                            <i data-lucide="external-link" class="w-4 h-4"></i> Full Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         REAL-TIME DEMO SIMULATION
+    ══════════════════════════════════════════════════════════ -->
+    <section id="realtime" class="py-24 bg-dark-blue relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-neon-cyan/10 rounded-full border border-neon-cyan/30 mb-6">
+                        <span class="w-2 h-2 bg-neon-cyan rounded-full animate-pulse"></span>
+                        <span class="text-neon-cyan text-sm font-semibold">REAL-TIME BY DESIGN</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Decisions at Payment Speed.</h2>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        SpendShark connects directly to your payment systems and analyzes transactions in real time —
+                        using agentic AI to stop fraud before money moves.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Event-driven ingestion</h4>
+                                <p class="text-sm text-gray-400">No batch delays. Every payment is analyzed the moment it enters the system.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="git-merge" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Parallel agent execution</h4>
+                                <p class="text-sm text-gray-400">Agents 2 through 5 run simultaneously, delivering depth without sacrificing speed.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="settings-2" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-white mb-3">Configurable decision modes</h4>
+                                <!-- Mode tabs -->
+                                <div class="flex gap-2 mb-3">
+                                    <button class="mode-tab active text-xs font-bold px-3 py-1.5 rounded-lg border border-white/10 text-gray-400" data-mode="soft-hold">Soft Hold</button>
+                                    <button class="mode-tab text-xs font-bold px-3 py-1.5 rounded-lg border border-white/10 text-gray-400" data-mode="pre-auth">Pre-Authorization</button>
+                                    <button class="mode-tab text-xs font-bold px-3 py-1.5 rounded-lg border border-white/10 text-gray-400" data-mode="post-auth">Post-Authorization</button>
+                                </div>
+                                <div id="mode-soft-hold" class="mode-content active">
+                                    <p class="text-sm text-gray-400">Payment is temporarily paused while agents analyze. Released automatically if approved — blocked if not. <span class="text-neon-cyan font-semibold">Recommended default.</span> Best balance of safety and speed.</p>
+                                </div>
+                                <div id="mode-pre-auth" class="mode-content">
+                                    <p class="text-sm text-gray-400">Decision must complete <em>before</em> the payment is authorized. Highest protection — ideal for high-value or first-time vendors. May add latency for edge cases.</p>
+                                </div>
+                                <div id="mode-post-auth" class="mode-content">
+                                    <p class="text-sm text-gray-400">Payment is released immediately; agents flag anomalies for audit and recovery. Best for organizations prioritizing payment continuity, with recovery workflows in place.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="shield" class="w-5 h-5 text-neon-cyan flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-white">Deterministic fail-safe behavior</h4>
+                                <p class="text-sm text-gray-400">Safe under latency pressure. No decision is worse than a cautious fallback.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Log Simulation -->
+                <div>
+                    <div class="glass rounded-3xl border border-white/10 overflow-hidden">
+                        <div class="bg-white/5 px-6 py-4 border-b border-white/10 flex items-center gap-3">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500/60"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-mono">spendshark — live analysis feed</span>
+                            <div class="ml-auto flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                                <span class="text-xs text-green-400">LIVE</span>
+                            </div>
+                        </div>
+                        <div id="log-container" class="p-6 font-mono text-xs space-y-2 min-h-64 bg-rich-black/80">
+                            <p class="text-gray-600">Waiting for payment event...</p>
+                        </div>
+                        <div class="px-6 py-4 border-t border-white/10 flex justify-between items-center">
+                            <button id="run-demo-btn"
+                                class="px-6 py-2.5 bg-neon-cyan text-rich-black font-bold text-sm rounded-full hover:bg-white transition-all">
+                                Run Analysis
+                            </button>
+                            <span id="demo-result" class="text-sm font-bold text-gray-600"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         TRUST & EXPLAINABILITY
+    ══════════════════════════════════════════════════════════ -->
+    <section id="trust" class="py-24 bg-rich-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Explainable. Auditable. Trusted.</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+                    Every decision SpendShark makes includes the full reasoning trail —
+                    so your finance team, auditors, and executives can always understand why.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+                <div class="text-center p-8 glass rounded-3xl border border-white/10 hover:border-neon-cyan/30 transition-all">
+                    <i data-lucide="file-text" class="w-10 h-10 text-neon-cyan mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold mb-3">Full Reasoning Trail</h3>
+                    <p class="text-gray-400 text-sm">Every decision includes which agents contributed, what evidence was considered, and why a specific action was recommended.</p>
+                </div>
+                <div class="text-center p-8 glass rounded-3xl border border-white/10 hover:border-neon-cyan/30 transition-all">
+                    <i data-lucide="bar-chart-3" class="w-10 h-10 text-neon-cyan mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold mb-3">Confidence Scoring</h3>
+                    <p class="text-gray-400 text-sm">Every recommendation includes a confidence level. Low confidence automatically triggers human review — autonomy is earned, not assumed.</p>
+                </div>
+                <div class="text-center p-8 glass rounded-3xl border border-white/10 hover:border-neon-cyan/30 transition-all">
+                    <i data-lucide="user-check" class="w-10 h-10 text-neon-cyan mx-auto mb-4"></i>
+                    <h3 class="text-xl font-bold mb-3">Human-First Design</h3>
+                    <p class="text-gray-400 text-sm">Automation is gated by confidence. Humans remain in control. Every approval or override is captured and improves future decisions.</p>
+                </div>
+            </div>
+
+            <!-- Sample decision card -->
+            <div class="max-w-2xl mx-auto glass p-8 rounded-3xl border border-white/10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                    <span class="text-xs font-mono text-gray-400">Sample Decision Output</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center pb-4 border-b border-white/10">
+                        <span class="text-gray-400 text-sm">Decision</span>
+                        <span class="font-bold text-green-400 bg-green-400/10 px-3 py-1 rounded-lg text-sm">AUTO-APPROVED</span>
+                    </div>
+                    <div class="flex justify-between items-center pb-4 border-b border-white/10">
+                        <span class="text-gray-400 text-sm">Confidence</span>
+                        <span class="font-bold text-white">91%</span>
+                    </div>
+                    <div class="pb-4 border-b border-white/10">
+                        <span class="text-gray-400 text-sm block mb-2">Primary Reason</span>
+                        <span class="text-white text-sm">Matches known recurring vendor pattern observed 14 times over 12 months. No historical disputes. Amount within normal variance (±3%).</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400 text-sm block mb-2">Contributing Agents</span>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-neon-cyan/10 text-neon-cyan px-2 py-1 rounded">Invoice Similarity ✓</span>
+                            <span class="text-xs bg-neon-cyan/10 text-neon-cyan px-2 py-1 rounded">Vendor Resolution ✓</span>
+                            <span class="text-xs bg-neon-cyan/10 text-neon-cyan px-2 py-1 rounded">Recurrence Pattern ✓</span>
+                            <span class="text-xs bg-amber-500/10 text-amber-400 px-2 py-1 rounded">Outlier Agent ⚠ mild</span>
+                            <span class="text-xs bg-deep-purple/10 text-deep-purple px-2 py-1 rounded">Detective Agent ✓ learned</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         WHY IT MATTERS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="py-24 bg-dark-blue relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Why This Matters</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Built on years of real-world experience in payment systems and enterprise data platforms. This reflects lessons from production — not experiments.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl border border-white/10 hover:border-neon-cyan/30 transition-all text-center">
+                    <i data-lucide="trending-down" class="w-8 h-8 text-neon-cyan mx-auto mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Fewer False Positives</h4>
+                    <p class="text-sm text-gray-400">Finance teams see dramatically fewer alerts without losing detection power.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/10 hover:border-neon-cyan/30 transition-all text-center">
+                    <i data-lucide="timer" class="w-8 h-8 text-neon-cyan mx-auto mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Faster Decisions</h4>
+                    <p class="text-sm text-gray-400">Sub-second to seconds-level payment decisions — before money leaves the account.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/10 hover:border-neon-cyan/30 transition-all text-center">
+                    <i data-lucide="users" class="w-8 h-8 text-neon-cyan mx-auto mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Less Manual Review</h4>
+                    <p class="text-sm text-gray-400">AP teams trust the automation. Human review reserved for genuinely uncertain cases.</p>
+                </div>
+                <div class="glass p-6 rounded-2xl border border-white/10 hover:border-neon-cyan/30 transition-all text-center">
+                    <i data-lucide="refresh-cw" class="w-8 h-8 text-neon-cyan mx-auto mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Continuous Improvement</h4>
+                    <p class="text-sm text-gray-400">The system gets smarter over time without constant reconfiguration or retraining cycles.</p>
+                </div>
+            </div>
+
+            <!-- Audience callouts -->
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-center">
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                    <p class="text-neon-cyan font-bold text-sm mb-1">Finance Teams</p>
+                    <p class="text-xs text-gray-500">"Fewer alerts"</p>
+                </div>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                    <p class="text-neon-cyan font-bold text-sm mb-1">Auditors</p>
+                    <p class="text-xs text-gray-500">"Explainable decisions"</p>
+                </div>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                    <p class="text-neon-cyan font-bold text-sm mb-1">Engineers</p>
+                    <p class="text-xs text-gray-500">"Composable, extensible"</p>
+                </div>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                    <p class="text-neon-cyan font-bold text-sm mb-1">Executives</p>
+                    <p class="text-xs text-gray-500">"Gets smarter over time"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         AVAILABILITY — COMING SOON
+    ══════════════════════════════════════════════════════════ -->
+    <section id="availability" class="py-24 bg-rich-black relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon-cyan/5 rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+            <div class="inline-flex items-center gap-2 coming-soon-badge rounded-full px-6 py-3 mb-8">
+                <i data-lucide="construction" class="w-5 h-5 text-amber-400"></i>
+                <span class="text-amber-400 font-bold tracking-wide">COMING SOON</span>
+            </div>
+
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                The New Release is <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple">Almost Here.</span>
+            </h2>
+
+            <p class="text-gray-400 text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+                SpendShark — Agentic Edition is currently under active development and validation.
+                We're focused on production readiness, enterprise safety, accuracy, and responsible autonomy.
+            </p>
+
+            <!-- What we're focused on -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-3xl mx-auto">
+                <div class="p-4 glass rounded-xl border border-white/5 text-center">
+                    <i data-lucide="server" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Production Readiness</p>
+                </div>
+                <div class="p-4 glass rounded-xl border border-white/5 text-center">
+                    <i data-lucide="lock" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Enterprise Safety</p>
+                </div>
+                <div class="p-4 glass rounded-xl border border-white/5 text-center">
+                    <i data-lucide="target" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Accuracy &amp; Explainability</p>
+                </div>
+                <div class="p-4 glass rounded-xl border border-white/5 text-center">
+                    <i data-lucide="hand" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Responsible Autonomy</p>
+                </div>
+            </div>
+
+            <p class="text-gray-500 mb-10">
+                If you'd like early access, updates, or a private walkthrough — we'd love to hear from you.
+            </p>
+
+            <a href="mailto:info@itktechnologies.com"
+                class="inline-flex items-center gap-3 px-10 py-5 bg-neon-cyan text-rich-black font-bold text-lg rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,243,255,0.4)]">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+                Request Early Access
+            </a>
+
+            <p class="mt-6 text-xs text-gray-600">
+                Developed by iTK Technologies — built on years of real-world payment systems and enterprise data experience.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-rich-black border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="block mb-6">
+                        <img src="images/logo_transparent.png" alt="iTK Technologies" class="h-24 w-auto">
+                    </a>
+                    <p class="text-gray-400 max-w-sm">
+                        Protecting Every Dollar, Empowering Every Customer. The leader in AI-driven financial assurance.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="index.html" class="hover:text-neon-cyan transition-colors">Home</a></li>
+                        <li><a href="our-story.html" class="hover:text-neon-cyan transition-colors">Our Story</a></li>
+                        <li><a href="our-capabilities.html" class="hover:text-neon-cyan transition-colors">Our Capabilities</a></li>
+                        <li><a href="spendshark.html" class="hover:text-neon-cyan transition-colors text-neon-cyan">SpendShark — Agentic Edition</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6">Contact</h4>
+                    <ul class="space-y-4 text-gray-400">
+                        <li><a href="mailto:info@itktechnologies.com" class="hover:text-neon-cyan transition-colors">info@itktechnologies.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2026 iTK Technologies. All rights reserved. &nbsp;|&nbsp; SpendShark — Agentic Edition is under active development.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // ── Mobile menu ──────────────────────────────────────────
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        }
+
+        // ── Leadership banner dismiss ────────────────────────────
+        const banner = document.getElementById('preview-banner');
+        const mainNav = document.getElementById('main-nav');
+        document.getElementById('dismiss-banner')?.addEventListener('click', () => {
+            banner.classList.add('dismissed');
+            mainNav.style.top = '0';
+        });
+
+        // ── Scroll reveal (IntersectionObserver) ─────────────────
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ── Floating section nav ──────────────────────────────────
+        const sectionIds = ['hero','whats-new','evolution','how-it-works','detective','meet-agents','platform','realtime','trust','availability'];
+        const dots = document.querySelectorAll('.s-dot');
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const target = document.getElementById(dot.dataset.target);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        function updateNav() {
+            const scrollY = window.scrollY + window.innerHeight * 0.4;
+            let activeId = sectionIds[0];
+            sectionIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.offsetTop <= scrollY) activeId = id;
+            });
+            dots.forEach(dot => {
+                dot.classList.toggle('active', dot.dataset.target === activeId);
+            });
+        }
+
+        // ── Back to top ───────────────────────────────────────────
+        const backToTop = document.getElementById('back-to-top');
+        backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        window.addEventListener('scroll', () => {
+            updateNav();
+            if (backToTop) {
+                backToTop.classList.toggle('visible', window.scrollY > 500);
+            }
+        }, { passive: true });
+
+        updateNav();
+
+        // ── Decision mode tabs ────────────────────────────────────
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const mode = tab.dataset.mode;
+                document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('mode-' + mode)?.classList.add('active');
+            });
+        });
+
+        // ── Live analysis log demo ────────────────────────────────
+        const logContainer = document.getElementById('log-container');
+        const runDemoBtn = document.getElementById('run-demo-btn');
+        const demoResult = document.getElementById('demo-result');
+
+        const logEvents = [
+            { delay: 0,    cls: 'text-gray-400',                text: '[T+0.00s] Payment event received — INV-2024-8821, $14,250.00, Acme Logistics LLC' },
+            { delay: 300,  cls: 'text-[#00f3ff]',               text: '[T+0.08s] Signal Interpreter Agent → normalized, risk baseline: LOW' },
+            { delay: 700,  cls: 'text-gray-300',                text: '[T+0.12s] Similar Invoice Agent → fuzzy match score: 0.97 (INV-2024-8821 vs INV2024-8821)' },
+            { delay: 900,  cls: 'text-gray-300',                text: '[T+0.18s] Vendor Resolution Agent → "Acme Logistics LLC" resolves to verified entity (TIN match)' },
+            { delay: 1100, cls: 'text-gray-300',                text: '[T+0.31s] Recurrence Pattern Agent → 30-day cadence confirmed, 14 prior occurrences' },
+            { delay: 1400, cls: 'text-amber-400',               text: '[T+0.45s] Outlier Detection Agent → amount +2.1% above 12-month mean ⚠ mild deviation' },
+            { delay: 1800, cls: 'text-[#7b2cbf]',              text: '[T+0.61s] Detective Agent → pattern recently updated, quarterly adjustment expected ✓' },
+            { delay: 2100, cls: 'text-gray-300',                text: '[T+0.72s] Risk Aggregation Agent → weighted score: 0.18 (LOW)' },
+            { delay: 2400, cls: 'text-green-400 font-semibold', text: '[T+0.91s] Decision Agent → AUTO-APPROVE (Confidence: 91%)' },
+            { delay: 2700, cls: 'text-green-400',               text: '[T+1.02s] Payment released. Decision logged. Learning Agent updated.' },
+        ];
+
+        let demoRunning = false;
+
+        runDemoBtn?.addEventListener('click', () => {
+            if (demoRunning) return;
+            demoRunning = true;
+            runDemoBtn.textContent = 'Analyzing...';
+            runDemoBtn.disabled = true;
+            demoResult.textContent = '';
+            logContainer.innerHTML = '';
+
+            logEvents.forEach(({ delay, cls, text }) => {
+                setTimeout(() => {
+                    const line = document.createElement('p');
+                    line.className = `${cls} log-line`;
+                    line.style.animationDelay = '0ms';
+                    line.textContent = text;
+                    logContainer.appendChild(line);
+                    logContainer.scrollTop = logContainer.scrollHeight;
+
+                    if (delay === 2700) {
+                        setTimeout(() => {
+                            demoResult.innerHTML = '<span class="text-green-400 font-bold">✓ AUTO-APPROVED — 1.02s</span>';
+                            runDemoBtn.textContent = 'Run Again';
+                            runDemoBtn.disabled = false;
+                            demoRunning = false;
+                        }, 500);
+                    }
+                }, delay);
+            });
+        });
+    </script>
+
+</body>
+</html>
