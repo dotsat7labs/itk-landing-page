@@ -188,6 +188,7 @@
         <div class="s-dot" data-target="whats-new"><span class="s-dot-label">What's New</span><span class="s-dot-pip"></span></div>
         <div class="s-dot" data-target="evolution"><span class="s-dot-label">Evolution</span><span class="s-dot-pip"></span></div>
         <div class="s-dot" data-target="how-it-works"><span class="s-dot-label">Pipeline</span><span class="s-dot-pip"></span></div>
+        <div class="s-dot" data-target="inspectors-agents"><span class="s-dot-label">Inspectors → Agents</span><span class="s-dot-pip"></span></div>
         <div class="s-dot" data-target="detective"><span class="s-dot-label">Detective Agents</span><span class="s-dot-pip"></span></div>
         <div class="s-dot" data-target="meet-agents"><span class="s-dot-label">Meet the Agents</span><span class="s-dot-pip"></span></div>
         <div class="s-dot" data-target="platform"><span class="s-dot-label">Platform</span><span class="s-dot-pip"></span></div>
@@ -779,6 +780,305 @@
                     <p class="text-xs text-gray-600 mt-1">Before payment is released</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         INSPECTORS POWER THE AGENTS
+    ══════════════════════════════════════════════════════════ -->
+    <section id="inspectors-agents" class="py-24 bg-dark-blue relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-3xl -ml-48 -mb-48"></div>
+            <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-deep-purple/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+            <!-- Header -->
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-neon-cyan/10 rounded-full border border-neon-cyan/30 mb-6">
+                    <i data-lucide="link" class="w-4 h-4 text-neon-cyan"></i>
+                    <span class="text-neon-cyan text-sm font-semibold tracking-wider">EXISTING FEATURE — ELEVATED</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Inspectors Power the Agents</h2>
+                <p class="text-gray-400 text-lg max-w-3xl mx-auto">
+                    The Inspectors are one of SpendShark's strongest proven features.
+                    In the Agentic Edition, they don't get replaced —
+                    they become the <strong class="text-white">detection engine each agent calls</strong>,
+                    with their results interpreted in context rather than fired as isolated alerts.
+                </p>
+            </div>
+
+            <!-- Before / After architecture callout -->
+            <div class="max-w-3xl mx-auto mb-14 reveal reveal-delay-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass p-5 rounded-2xl border border-white/10 text-center">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Previous SpendShark</p>
+                        <div class="flex items-center justify-center gap-2 flex-wrap text-sm">
+                            <span class="px-3 py-1.5 bg-white/5 rounded-lg text-gray-300 border border-white/10 font-mono">Inspector</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-gray-600"></i>
+                            <span class="px-3 py-1.5 bg-red-500/10 rounded-lg text-red-300 border border-red-500/20 font-mono">Alert</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-gray-600"></i>
+                            <span class="px-3 py-1.5 bg-white/5 rounded-lg text-gray-300 border border-white/10 font-mono">Human</span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-3">Every inspector fires independently. Every alert requires manual review.</p>
+                    </div>
+                    <div class="glass p-5 rounded-2xl border border-neon-cyan/30 text-center bg-neon-cyan/5">
+                        <p class="text-xs font-bold text-neon-cyan uppercase tracking-wider mb-3">Agentic Edition</p>
+                        <div class="flex items-center justify-center gap-2 flex-wrap text-sm">
+                            <span class="px-3 py-1.5 bg-neon-cyan/10 rounded-lg text-neon-cyan border border-neon-cyan/20 font-mono">Inspector</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/50"></i>
+                            <span class="px-3 py-1.5 bg-deep-purple/20 rounded-lg text-white border border-deep-purple/30 font-mono">Agent</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/50"></i>
+                            <span class="px-3 py-1.5 bg-green-500/10 rounded-lg text-green-400 border border-green-500/20 font-mono">Decision</span>
+                        </div>
+                        <p class="text-xs text-neon-cyan/60 mt-3">Inspectors run inside agents. Humans review only when confidence is low.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inspector → Agent mapping table -->
+            <div class="max-w-4xl mx-auto reveal reveal-delay-2">
+                <div class="glass rounded-3xl border border-white/10 overflow-hidden">
+
+                    <!-- Table header -->
+                    <div class="grid grid-cols-12 bg-white/5 border-b border-white/10 px-6 py-3">
+                        <div class="col-span-5 text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-neon-cyan"></i> Inspector
+                        </div>
+                        <div class="col-span-1 text-center text-xs text-gray-600">→</div>
+                        <div class="col-span-6 text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-3.5 h-3.5 text-neon-cyan"></i> Owned by Agent
+                        </div>
+                    </div>
+
+                    <!-- Row: Exact Match -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-[#00f3ff] flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Exact Match</p>
+                                <p class="text-xs text-gray-500">Company, vendor, invoice, date &amp; amount all identical</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neon-cyan/10 text-neon-cyan text-xs font-bold rounded-lg border border-neon-cyan/20">
+                                <i data-lucide="file-search-2" class="w-3 h-3"></i> Agent 2 — Invoice Similarity
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Fuzzy Match -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Fuzzy Match</p>
+                                <p class="text-xs text-gray-500">Levenshtein distance — catches altered invoice IDs</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neon-cyan/10 text-neon-cyan text-xs font-bold rounded-lg border border-neon-cyan/20">
+                                <i data-lucide="file-search-2" class="w-3 h-3"></i> Agent 2 — Invoice Similarity
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Clustering & LLM -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-pink-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Clustering &amp; LLM</p>
+                                <p class="text-xs text-gray-500">Semantic similarity — catches meaning-level duplicates</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6 flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neon-cyan/10 text-neon-cyan text-xs font-bold rounded-lg border border-neon-cyan/20">
+                                <i data-lucide="file-search-2" class="w-3 h-3"></i> Agent 2 — Invoice Similarity
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="search" class="w-3 h-3"></i> Detective Agents
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Velocity Check -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-orange-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Velocity Check</p>
+                                <p class="text-xs text-gray-500">Rapid-fire invoices from the same vendor in a time window</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neon-cyan/10 text-neon-cyan text-xs font-bold rounded-lg border border-neon-cyan/20">
+                                <i data-lucide="repeat" class="w-3 h-3"></i> Agent 4 — Recurrence Pattern
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Benford's Law -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Benford's Law</p>
+                                <p class="text-xs text-gray-500">Leading-digit statistics — catches manipulated numbers</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="triangle-alert" class="w-3 h-3"></i> Agent 5 — Outlier Detection
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Round Amount -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-blue-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Round Amount</p>
+                                <p class="text-xs text-gray-500">Perfectly round numbers — often estimates or fraud signals</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="triangle-alert" class="w-3 h-3"></i> Agent 5 — Outlier Detection
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: Weekend Posting -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 border-b border-white/5 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Weekend Posting</p>
+                                <p class="text-xs text-gray-500">Saturday/Sunday invoice timing — unusual for B2B</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="triangle-alert" class="w-3 h-3"></i> Agent 5 — Outlier Detection
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Row: ML Anomaly Detection -->
+                    <div class="grid grid-cols-12 items-center px-6 py-4 hover:bg-white/2 transition-colors group">
+                        <div class="col-span-5 flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-400 flex-shrink-0"></div>
+                            <div>
+                                <p class="text-sm font-bold text-white">ML Anomaly Detection</p>
+                                <p class="text-xs text-gray-500">Trained on historical data — finds statistical outliers</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-neon-cyan/30 group-hover:text-neon-cyan transition-colors"></i>
+                        </div>
+                        <div class="col-span-6 flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="triangle-alert" class="w-3 h-3"></i> Agent 5 — Outlier Detection
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-deep-purple/20 text-purple-300 text-xs font-bold rounded-lg border border-deep-purple/30">
+                                <i data-lucide="search" class="w-3 h-3"></i> Detective Agents
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- All evidence flows into Risk Aggregator -->
+            <div class="max-w-4xl mx-auto mt-6 reveal reveal-delay-3">
+                <div class="flex items-center gap-4">
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent to-neon-cyan/30"></div>
+                    <div class="flex items-center gap-2 text-xs text-gray-500 text-center">
+                        <i data-lucide="arrow-down" class="w-4 h-4 text-neon-cyan/50"></i>
+                        <span>All agent evidence flows into</span>
+                    </div>
+                    <div class="flex-1 h-px bg-gradient-to-l from-transparent to-neon-cyan/30"></div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 mt-4 justify-center items-center">
+                    <div class="flex items-center gap-2 px-5 py-3 glass rounded-xl border border-neon-cyan/30 bg-neon-cyan/5">
+                        <i data-lucide="layers" class="w-5 h-5 text-neon-cyan"></i>
+                        <div>
+                            <p class="text-xs text-neon-cyan/70 font-bold">AGENT 6</p>
+                            <p class="text-sm font-bold text-white">Risk Aggregation</p>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-neon-cyan/40 hidden sm:block"></i>
+                    <i data-lucide="arrow-down" class="w-5 h-5 text-neon-cyan/40 sm:hidden"></i>
+                    <div class="flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-neon-cyan/50 bg-neon-cyan/10">
+                        <i data-lucide="cpu" class="w-5 h-5 text-neon-cyan"></i>
+                        <div>
+                            <p class="text-xs text-neon-cyan font-bold">AGENT 7 — ProtoVision Core</p>
+                            <p class="text-sm font-bold text-white">Decision Agent</p>
+                        </div>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-neon-cyan/40 hidden sm:block"></i>
+                    <i data-lucide="arrow-down" class="w-5 h-5 text-neon-cyan/40 sm:hidden"></i>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-2 bg-green-500/10 text-green-400 border border-green-500/20 rounded-lg text-xs font-bold">✓ Approve</span>
+                        <span class="px-3 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-xs font-bold">✗ Block</span>
+                        <span class="px-3 py-2 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-lg text-xs font-bold">⚠ Escalate</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key insight box -->
+            <div class="max-w-3xl mx-auto mt-12 reveal reveal-delay-4">
+                <div class="glass p-6 rounded-2xl border border-white/10 bg-gradient-to-r from-neon-cyan/5 to-transparent">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-neon-cyan/10 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="lightbulb" class="w-5 h-5 text-neon-cyan"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2">The key difference</h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                In the previous version, an inspector firing on a recurring monthly payment would generate an alert — and a human would spend time reviewing it, only to clear it.
+                                In the Agentic Edition, the Recurrence Pattern Agent sees that same inspector signal,
+                                cross-references 14 months of payment history, and <strong class="text-white">suppresses the false positive automatically</strong> —
+                                with confidence 94% and a full explanation. No human time wasted.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA to inspector dashboard -->
+            <div class="text-center mt-10 reveal reveal-delay-5">
+                <a href="itk-dashboard/inspectors.html" target="_blank"
+                    class="inline-flex items-center gap-3 px-8 py-4 glass border border-neon-cyan/30 text-neon-cyan font-bold rounded-full hover:bg-neon-cyan/10 transition-all hover:border-neon-cyan">
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                    View &amp; Configure Inspectors in the Dashboard
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            </div>
+
         </div>
     </section>
 
@@ -1628,7 +1928,7 @@
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
         // ── Floating section nav ──────────────────────────────────
-        const sectionIds = ['hero','whats-new','evolution','how-it-works','detective','meet-agents','platform','realtime','trust','availability'];
+        const sectionIds = ['hero','whats-new','evolution','how-it-works','inspectors-agents','detective','meet-agents','platform','realtime','trust','availability'];
         const dots = document.querySelectorAll('.s-dot');
 
         dots.forEach(dot => {
