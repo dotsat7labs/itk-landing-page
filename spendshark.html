@@ -76,10 +76,6 @@
             background: linear-gradient(to bottom, rgba(0, 243, 255, 0.8), rgba(123, 44, 191, 0.8));
             animation: pulse-glow 2s ease-in-out infinite;
         }
-        .coming-soon-badge {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
-            border: 1px solid rgba(245, 158, 11, 0.4);
-        }
         .log-line { animation: slide-down 0.4s ease-out forwards; opacity: 0; }
         .comparison-row:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
         .comparison-row:hover { background: rgba(0, 243, 255, 0.03); }
@@ -165,15 +161,15 @@
 
 <body class="bg-rich-black text-white font-sans antialiased overflow-x-hidden">
 
-    <!-- Leadership Preview Banner -->
-    <div id="preview-banner" class="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-deep-purple/90 to-[#0a0a0a]/90 border-b border-deep-purple/40 backdrop-blur-md">
+    <!-- Early Access Announcement Banner -->
+    <div id="preview-banner" class="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-neon-cyan/20 to-deep-purple/20 border-b border-neon-cyan/20 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 h-10 flex items-center justify-between gap-4">
             <div class="flex items-center gap-2 flex-1 justify-center">
-                <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400 flex-shrink-0"></i>
+                <span class="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse flex-shrink-0"></span>
                 <p class="text-xs text-white/80">
-                    <span class="font-bold text-amber-400">Internal Preview</span>
-                    <span class="hidden sm:inline"> — SpendShark Agentic Edition is under active development. Shared with leadership for review.</span>
-                    <a href="mailto:info@itktechnologies.com" class="ml-2 text-neon-cyan underline underline-offset-2 hover:text-white transition-colors">Send feedback →</a>
+                    <span class="font-bold text-neon-cyan">Early Access Program is now open.</span>
+                    <span class="hidden sm:inline"> Select organizations can apply to work directly with iTK.</span>
+                    <a href="mailto:info@itktechnologies.com" class="ml-2 text-white underline underline-offset-2 hover:text-neon-cyan transition-colors font-semibold">Apply today →</a>
                 </p>
             </div>
             <button id="dismiss-banner" class="text-gray-500 hover:text-white transition-colors flex-shrink-0" aria-label="Dismiss">
@@ -245,10 +241,10 @@
 
         <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-            <!-- Coming Soon Badge -->
-            <div class="inline-flex items-center gap-2 coming-soon-badge rounded-full px-5 py-2 mb-8">
-                <i data-lucide="construction" class="w-4 h-4 text-amber-400"></i>
-                <span class="text-amber-400 text-sm font-bold tracking-wide">COMING SOON — UNDER ACTIVE DEVELOPMENT</span>
+            <!-- Early Access Badge -->
+            <div class="inline-flex items-center gap-2 px-5 py-2 mb-8 rounded-full border border-neon-cyan/40 bg-neon-cyan/10">
+                <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
+                <span class="text-neon-cyan text-sm font-bold tracking-wide">EARLY ACCESS PROGRAM — NOW OPEN</span>
             </div>
 
             <!-- Product Badge -->
@@ -1805,7 +1801,7 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════════════
-         AVAILABILITY — COMING SOON
+         AVAILABILITY — EARLY ACCESS
     ══════════════════════════════════════════════════════════ -->
     <section id="availability" class="py-24 bg-rich-black relative overflow-hidden">
         <div class="absolute inset-0">
@@ -1813,52 +1809,62 @@
         </div>
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
 
-            <div class="inline-flex items-center gap-2 coming-soon-badge rounded-full px-6 py-3 mb-8">
-                <i data-lucide="construction" class="w-5 h-5 text-amber-400"></i>
-                <span class="text-amber-400 font-bold tracking-wide">COMING SOON</span>
+            <div class="inline-flex items-center gap-2 px-6 py-3 mb-8 rounded-full border border-neon-cyan/40 bg-neon-cyan/10">
+                <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
+                <span class="text-neon-cyan font-bold tracking-wide">EARLY ACCESS PROGRAM</span>
             </div>
 
             <h2 class="text-4xl md:text-6xl font-bold mb-6">
-                The New Release is <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple">Almost Here.</span>
+                Work Directly With <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-deep-purple">Our Team.</span>
             </h2>
 
             <p class="text-gray-400 text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
-                SpendShark — Agentic Edition is currently under active development and validation.
-                We're focused on production readiness, enterprise safety, accuracy, and responsible autonomy.
+                SpendShark — Agentic Edition is available to select organizations through our Early Access Program.
+                Early Access partners work directly with the iTK team on implementation, validation, and configuration
+                — shaping the platform as it scales.
             </p>
 
-            <!-- What we're focused on -->
+            <!-- What early access partners get -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-3xl mx-auto">
-                <div class="p-4 glass rounded-xl border border-white/5 text-center">
-                    <i data-lucide="server" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
-                    <p class="text-xs text-gray-400">Production Readiness</p>
+                <div class="p-4 glass rounded-xl border border-neon-cyan/10 text-center hover:border-neon-cyan/30 transition-colors">
+                    <i data-lucide="users" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Dedicated iTK Team Access</p>
                 </div>
-                <div class="p-4 glass rounded-xl border border-white/5 text-center">
-                    <i data-lucide="lock" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
-                    <p class="text-xs text-gray-400">Enterprise Safety</p>
+                <div class="p-4 glass rounded-xl border border-neon-cyan/10 text-center hover:border-neon-cyan/30 transition-colors">
+                    <i data-lucide="settings-2" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Custom Configuration</p>
                 </div>
-                <div class="p-4 glass rounded-xl border border-white/5 text-center">
-                    <i data-lucide="target" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
-                    <p class="text-xs text-gray-400">Accuracy &amp; Explainability</p>
+                <div class="p-4 glass rounded-xl border border-neon-cyan/10 text-center hover:border-neon-cyan/30 transition-colors">
+                    <i data-lucide="trending-up" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Influence the Roadmap</p>
                 </div>
-                <div class="p-4 glass rounded-xl border border-white/5 text-center">
-                    <i data-lucide="hand" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
-                    <p class="text-xs text-gray-400">Responsible Autonomy</p>
+                <div class="p-4 glass rounded-xl border border-neon-cyan/10 text-center hover:border-neon-cyan/30 transition-colors">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-neon-cyan mx-auto mb-2"></i>
+                    <p class="text-xs text-gray-400">Enterprise-Grade Support</p>
                 </div>
             </div>
 
+            <!-- Social proof line -->
             <p class="text-gray-500 mb-10">
-                If you'd like early access, updates, or a private walkthrough — we'd love to hear from you.
+                Built on years of real-world experience in payment systems and enterprise data platforms.
+                iTK Technologies has analyzed over <strong class="text-gray-300">$2.2 trillion</strong> in transactions across healthcare, retail, and financial services.
             </p>
 
-            <a href="mailto:info@itktechnologies.com"
-                class="inline-flex items-center gap-3 px-10 py-5 bg-neon-cyan text-rich-black font-bold text-lg rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,243,255,0.4)]">
-                <i data-lucide="mail" class="w-5 h-5"></i>
-                Request Early Access
-            </a>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mailto:info@itktechnologies.com"
+                    class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-neon-cyan text-rich-black font-bold text-lg rounded-full hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,243,255,0.4)]">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    Apply for Early Access
+                </a>
+                <a href="itk-dashboard/index.html" target="_blank"
+                    class="inline-flex items-center justify-center gap-3 px-10 py-5 glass border border-white/20 hover:border-neon-cyan/50 text-white font-bold text-lg rounded-full hover:bg-white/5 transition-all">
+                    <i data-lucide="external-link" class="w-5 h-5"></i>
+                    Explore the Dashboard
+                </a>
+            </div>
 
-            <p class="mt-6 text-xs text-gray-600">
-                Developed by iTK Technologies — built on years of real-world payment systems and enterprise data experience.
+            <p class="mt-8 text-xs text-gray-600">
+                Accepting a limited number of Early Access partners. Contact us to discuss fit and timeline.
             </p>
         </div>
     </section>
@@ -1892,7 +1898,7 @@
                 </div>
             </div>
             <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
-                &copy; 2026 iTK Technologies. All rights reserved. &nbsp;|&nbsp; SpendShark — Agentic Edition is under active development.
+                &copy; 2026 iTK Technologies. All rights reserved. &nbsp;|&nbsp; SpendShark — Agentic Edition Early Access Program.
             </div>
         </div>
     </footer>
