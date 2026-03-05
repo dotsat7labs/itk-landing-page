@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investigation - Spendshark Dashboard</title>
+    <title>Investigation - SpendShark — Agentic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,9 +36,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-link.active {
@@ -57,15 +57,21 @@
             border-radius: 2px;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -141,47 +147,76 @@
 
                 <!-- To Do Column -->
                 <div class="w-80 flex flex-col h-full glass rounded-2xl border-t-4 border-gray-500">
-                    <div class="p-4 border-b border-glass-border flex justify-between items-center">
-                        <h3 class="font-bold text-gray-300">To Do</h3>
-                        <span class="bg-gray-800 text-xs px-2 py-1 rounded-full">3</span>
+                    <div class="p-4 border-b border-glass-border">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-gray-300">To Do</h3>
+                            <span class="bg-gray-800 text-xs px-2 py-1 rounded-full" id="cnt-todo">0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Exposure: <span class="text-red-400 font-bold" id="exp-todo">$0</span></p>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-todo">
-                        <!-- Cards injected by JS -->
-                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-todo"></div>
                 </div>
 
                 <!-- In Progress Column -->
                 <div class="w-80 flex flex-col h-full glass rounded-2xl border-t-4 border-neon-cyan">
-                    <div class="p-4 border-b border-glass-border flex justify-between items-center">
-                        <h3 class="font-bold text-neon-cyan">In Progress</h3>
-                        <span class="bg-neon-cyan/20 text-neon-cyan text-xs px-2 py-1 rounded-full">2</span>
+                    <div class="p-4 border-b border-glass-border">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-neon-cyan">In Progress</h3>
+                            <span class="bg-neon-cyan/20 text-neon-cyan text-xs px-2 py-1 rounded-full" id="cnt-progress">0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Exposure: <span class="text-amber-400 font-bold" id="exp-progress">$0</span></p>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-progress">
-                        <!-- Cards injected by JS -->
-                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-progress"></div>
                 </div>
 
                 <!-- Review Column -->
                 <div class="w-80 flex flex-col h-full glass rounded-2xl border-t-4 border-deep-purple">
-                    <div class="p-4 border-b border-glass-border flex justify-between items-center">
-                        <h3 class="font-bold text-deep-purple">Under Review</h3>
-                        <span class="bg-deep-purple/20 text-deep-purple text-xs px-2 py-1 rounded-full">1</span>
+                    <div class="p-4 border-b border-glass-border">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-deep-purple">Under Review</h3>
+                            <span class="bg-deep-purple/20 text-deep-purple text-xs px-2 py-1 rounded-full" id="cnt-review">0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Exposure: <span class="text-purple-400 font-bold" id="exp-review">$0</span></p>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-review">
-                        <!-- Cards injected by JS -->
-                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-review"></div>
                 </div>
 
                 <!-- Closed Column -->
                 <div class="w-80 flex flex-col h-full glass rounded-2xl border-t-4 border-green-500">
-                    <div class="p-4 border-b border-glass-border flex justify-between items-center">
-                        <h3 class="font-bold text-green-500">Resolved</h3>
-                        <span class="bg-green-500/20 text-green-500 text-xs px-2 py-1 rounded-full">4</span>
+                    <div class="p-4 border-b border-glass-border">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-green-500">Resolved</h3>
+                            <span class="bg-green-500/20 text-green-500 text-xs px-2 py-1 rounded-full" id="cnt-done">0</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Recovered: <span class="text-green-400 font-bold" id="exp-done">$0</span></p>
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-done">
-                        <!-- Cards injected by JS -->
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col" id="col-done"></div>
+                </div>
+
+                <!-- Recover Specialists Column -->
+                <div
+                    class="w-96 flex flex-col h-full glass rounded-2xl border-t-4 border-indigo-500 bg-indigo-500/5 relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent pointer-events-none">
+                    </div>
+                    <div class="p-4 border-b border-indigo-500/20 flex justify-between items-center relative z-10">
+                        <h3 class="font-bold text-indigo-400 flex items-center">
+                            <i data-lucide="headset" class="w-4 h-4 mr-2"></i>
+                            Recover Specialists
+                        </h3>
+                        <span
+                            class="bg-indigo-500/20 text-indigo-400 text-xs px-2 py-1 rounded-full border border-indigo-500/30">Handoff</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 kanban-col relative z-10" id="col-recover">
+                        <!-- Dropzone for recovery -->
+                        <div
+                            class="border-2 border-dashed border-indigo-500/30 rounded-xl p-6 text-center text-indigo-400/70 hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer h-32">
+                            <i data-lucide="arrow-down-to-line" class="w-6 h-6"></i>
+                            <span class="text-sm font-medium">Drop confirmed fraud here for Specialist assignment</span>
+                        </div>
                     </div>
                 </div>
+
 
             </div>
         </div>
@@ -199,7 +234,7 @@
         const data = generateMockData();
 
         // Helper to create card
-        const createCard = (invoice, priority = 'Medium') => {
+        const createCard = (invoice, priority = 'Medium', ageDays = null) => {
             const div = document.createElement('div');
             div.className = "bg-rich-black/50 p-4 rounded-xl border border-glass-border hover:border-neon-cyan/50 cursor-pointer transition-all group relative";
 
@@ -207,34 +242,84 @@
             if (priority === 'High') priorityColor = 'text-red-400';
             if (priority === 'Low') priorityColor = 'text-green-400';
 
+            const age = ageDays ?? Math.floor(Math.random() * 14) + 1;
+            const ageColor = age > 7 ? 'text-red-400' : age > 3 ? 'text-amber-400' : 'text-gray-400';
+
             div.innerHTML = `
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-xs font-mono text-gray-500">${invoice.id}</span>
                     <span class="text-xs font-bold ${priorityColor}">${priority}</span>
                 </div>
                 <h4 class="font-medium text-white text-sm mb-1">${invoice.vendor}</h4>
-                <p class="text-xs text-gray-400 mb-3">Potential duplicate payment detected.</p>
-                <div class="flex justify-between items-center pt-2 border-t border-white/5">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] ${ageColor} flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        ${age}d old${age > 7 ? ' ⚠' : ''}
+                    </span>
+                    <span class="text-[10px] text-gray-500">${invoice.inspector || 'Exact Match'}</span>
+                </div>
+                <p class="text-xs text-gray-400 mb-3 truncate">Potential duplicate or anomaly detected.</p>
+                
+                <!-- Reasoning Expanded Section (Hidden by default) -->
+                <div class="hidden reasoning-section mt-2 mb-3 bg-white/5 rounded-lg p-3 border border-white/5">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] text-gray-400 uppercase font-bold">Confidence Score</span>
+                        <span class="text-xs font-bold ${priority === 'Low' ? 'text-green-400' : 'text-amber-400'}">${priority === 'High' ? '42%' : priority === 'Medium' ? '68%' : '91%'}</span>
+                    </div>
+                    <p class="text-xs text-gray-300 mb-2 leading-relaxed">
+                        ${priority === 'High' ? 'Agent 5 (Outlier) flagged weekend posting. Agent 2 (Similarity) found 85% match to INV-990.' : 'Recurrence cadence broken. Vendor changed bank details 2 days prior.'}
+                    </p>
+                    <div class="flex gap-1 flex-wrap">
+                        <span class="text-[10px] bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded border border-red-500/20">Outlier ⚠</span>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/20">Similarity ✓</span>
+                        <span class="text-[10px] bg-white/10 text-gray-400 px-1.5 py-0.5 rounded border border-white/10">Benford ✓</span>
+                    </div>
+                    <button class="mt-3 w-full py-1.5 bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 rounded text-xs font-medium hover:bg-indigo-500 hover:text-white transition-colors" onclick="event.stopPropagation(); alert('Evidence trail bundled and sent to Recover Specialists.');">
+                        Assign to Specialist
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center pt-3 border-t border-white/5">
                     <span class="text-sm font-bold text-white">${formatCurrency(invoice.amount)}</span>
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-neon-cyan to-deep-purple flex items-center justify-center text-[10px] font-bold">AS</div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-gray-500 cursor-help" title="Expand reasoning trail">Why?</span>
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-neon-cyan to-deep-purple flex items-center justify-center text-[10px] font-bold">AS</div>
+                    </div>
                 </div>
             `;
+
+            // Toggle reasoning on click
+            div.addEventListener('click', () => {
+                const reasoning = div.querySelector('.reasoning-section');
+                reasoning.classList.toggle('hidden');
+                div.classList.toggle('ring-1');
+                div.classList.toggle('ring-neon-cyan');
+            });
+
             return div;
         };
 
         // Populate Columns
-        const todoCol = document.getElementById('col-todo');
+        const todoCol     = document.getElementById('col-todo');
         const progressCol = document.getElementById('col-progress');
-        const reviewCol = document.getElementById('col-review');
-        const doneCol = document.getElementById('col-done');
+        const reviewCol   = document.getElementById('col-review');
+        const doneCol     = document.getElementById('col-done');
 
-        // Mock distribution
         const cases = data.invoices.filter(i => i.status === 'Suspected').slice(0, 10);
 
-        cases.slice(0, 3).forEach(c => todoCol.appendChild(createCard(c, 'High')));
-        cases.slice(3, 5).forEach(c => progressCol.appendChild(createCard(c, 'Medium')));
-        cases.slice(5, 6).forEach(c => reviewCol.appendChild(createCard(c, 'High')));
-        cases.slice(6, 10).forEach(c => doneCol.appendChild(createCard(c, 'Low')));
+        const colData = [
+            { cases: cases.slice(0, 3), col: todoCol, priority: 'High',   expId: 'exp-todo',     cntId: 'cnt-todo' },
+            { cases: cases.slice(3, 5), col: progressCol, priority: 'Medium', expId: 'exp-progress', cntId: 'cnt-progress' },
+            { cases: cases.slice(5, 6), col: reviewCol, priority: 'High',  expId: 'exp-review',   cntId: 'cnt-review' },
+            { cases: cases.slice(6, 10), col: doneCol, priority: 'Low',   expId: 'exp-done',     cntId: 'cnt-done' },
+        ];
+
+        colData.forEach(({ cases: list, col, priority, expId, cntId }) => {
+            const exposure = list.reduce((s, c) => s + c.amount, 0);
+            document.getElementById(cntId).textContent = list.length;
+            document.getElementById(expId).textContent = formatCurrency(exposure);
+            list.forEach(c => col.appendChild(createCard(c, priority)));
+        });
 
         lucide.createIcons();
     </script>

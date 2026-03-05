@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROI & Savings - Spendshark Dashboard</title>
+    <title>ROI & Savings - SpendShark — Agentic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,9 +37,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-link.active {
@@ -48,15 +48,21 @@
             border-right: 2px solid #00f3ff;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -160,39 +166,61 @@
 
             <!-- Financial Impact & ROI -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- ROI Calculator -->
+                <!-- ROI Calculator (Interactive) -->
                 <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Investment Overview (ROI)</h3>
+                    <h3 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-5 h-5 text-neon-cyan"></i>
+                        ROI Calculator
+                        <span class="text-[10px] text-neon-cyan/60 border border-neon-cyan/20 px-1.5 py-0.5 rounded font-medium">LIVE</span>
+                    </h3>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-400">Annual Savings</span>
-                            <span class="text-neon-cyan font-bold" id="roi-annual-savings">$0.00</span>
+                        <!-- Detected savings (from data) -->
+                        <div class="p-3 bg-neon-cyan/5 border border-neon-cyan/20 rounded-xl">
+                            <p class="text-[11px] text-gray-400 mb-0.5">Annual Savings Detected</p>
+                            <p class="text-2xl font-black text-neon-cyan" id="roi-annual-savings">$0.00</p>
                         </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-400">Solution Cost (Est.)</span>
-                            <span class="text-white font-mono">$90,000</span>
+                        <!-- Configurable cost input -->
+                        <div>
+                            <label class="text-[11px] text-gray-400 flex justify-between mb-1">
+                                Annual Platform Cost
+                                <span class="text-gray-600 italic">enter your contract value</span>
+                            </label>
+                            <div class="flex items-center gap-2 bg-white/5 border border-white/15 rounded-lg px-3 py-2 focus-within:border-neon-cyan/50 transition-colors">
+                                <span class="text-gray-500 text-sm">$</span>
+                                <input type="number" id="roi-cost-input" value="90000" min="0" step="5000"
+                                    class="bg-transparent text-white font-mono text-sm outline-none flex-1 w-full">
+                            </div>
                         </div>
-                        <div class="h-px bg-glass-border my-2"></div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-white font-bold">ROI Multiplier</span>
-                            <span class="text-3xl font-bold text-green-400" id="roi-multiplier">0x</span>
+                        <div class="h-px bg-white/8"></div>
+                        <!-- Computed results -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 bg-white/5 rounded-xl text-center border border-white/5">
+                                <p class="text-[10px] text-gray-500 mb-1">ROI Multiplier</p>
+                                <p class="text-3xl font-black text-green-400" id="roi-multiplier">—</p>
+                            </div>
+                            <div class="p-3 bg-white/5 rounded-xl text-center border border-white/5">
+                                <p class="text-[10px] text-gray-500 mb-1">Payback Period</p>
+                                <p class="text-2xl font-black text-amber-400" id="roi-payback">—</p>
+                            </div>
                         </div>
-                        <div class="mt-4 p-3 bg-white/5 rounded-lg">
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-gray-400">Avoided Loss Ratio</span>
-                                <span class="text-white font-bold">0.85%</span>
+                        <!-- Loss ratio (data-driven) -->
+                        <div class="p-3 bg-white/5 rounded-lg">
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-gray-400">Savings vs. Total Spend</span>
+                                <span class="text-white font-bold" id="roi-loss-ratio">—</span>
                             </div>
                             <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-                                <div class="h-full bg-neon-cyan" style="width: 85%"></div>
+                                <div class="h-full bg-gradient-to-r from-neon-cyan to-green-400 transition-all duration-500" id="roi-loss-bar" style="width:0%"></div>
                             </div>
                         </div>
+                        <p class="text-[11px] text-gray-500 text-center leading-relaxed" id="roi-breakeven-note">—</p>
                     </div>
                 </div>
 
                 <!-- Monthly Savings Chart -->
                 <div class="glass p-6 rounded-2xl lg:col-span-2">
                     <h3 class="text-lg font-bold text-white mb-4">Monthly Prevented Spend</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="monthlySavingsChart"></canvas>
                     </div>
                 </div>
@@ -287,12 +315,14 @@
     </main>
 
     <script type="module">
+        import { applyChartDefaults } from './js/chartDefaults.js';
         import { generateRoiStats, formatCurrency } from './js/mockData.js';
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
 
         initSidebar();
         initAiBot();
+        applyChartDefaults();
         lucide.createIcons();
 
         const stats = generateRoiStats();
@@ -304,10 +334,32 @@
         document.getElementById('kpi-accuracy').textContent = (stats.accuracy * 100).toFixed(1) + '%';
         document.getElementById('kpi-avg-value').textContent = formatCurrency(stats.avgValue);
 
-        // 2. ROI Logic
-        document.getElementById('roi-annual-savings').textContent = formatCurrency(stats.totalPrevented);
-        // const roi = (stats.totalPrevented - 150000) / 150000;
-        document.getElementById('roi-multiplier').textContent = '12x';
+        // 2. Interactive ROI Calculator
+        const annualSavings = stats.totalPrevented;
+        const totalSpend    = stats.months.reduce((s, _, i) => s + (stats.monthlySavings[i] || 0), 0) * 8; // rough total
+        document.getElementById('roi-annual-savings').textContent = formatCurrency(annualSavings);
+
+        function updateRoi() {
+            const cost = Math.max(parseFloat(document.getElementById('roi-cost-input').value) || 1, 1);
+            const multiplier     = annualSavings / cost;
+            const paybackMonths  = (cost / annualSavings) * 12;
+            const lossRatioPct   = totalSpend > 0 ? (annualSavings / totalSpend * 100) : 2.4;
+
+            document.getElementById('roi-multiplier').textContent =
+                multiplier >= 1 ? multiplier.toFixed(1) + 'x' : '<1x';
+            document.getElementById('roi-payback').textContent =
+                paybackMonths < 1  ? '< 1 mo' :
+                paybackMonths < 12 ? paybackMonths.toFixed(1) + ' mo' :
+                                     (paybackMonths / 12).toFixed(1) + ' yr';
+            document.getElementById('roi-loss-ratio').textContent = lossRatioPct.toFixed(2) + '%';
+            document.getElementById('roi-loss-bar').style.width = Math.min(lossRatioPct * 8, 100) + '%';
+            document.getElementById('roi-breakeven-note').textContent =
+                multiplier >= 1
+                    ? `✓ Platform pays for itself in ${paybackMonths.toFixed(1)} months — net gain ${formatCurrency(annualSavings - cost)} per year`
+                    : `⚠ Adjust platform cost — current cost exceeds detected savings`;
+        }
+        document.getElementById('roi-cost-input').addEventListener('input', updateRoi);
+        updateRoi();
 
 
         // 3. Charts

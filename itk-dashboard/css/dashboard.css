@@ -1,0 +1,209 @@
+/* ═══════════════════════════════════════════════════════
+   SpendShark — Agentic Edition | Dashboard Shared Styles
+   Aligned with the SpendShark landing page visual identity
+═══════════════════════════════════════════════════════ */
+
+/* ── Remove external noise texture set via Tailwind bg utility ── */
+body {
+    background-image: none !important;
+}
+
+/* ── Grid pattern overlay (matching landing page) ── */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+}
+
+/* ── Ambient background orbs (matching landing page atmosphere) ── */
+body::after {
+    content: '';
+    position: fixed;
+    top: -80px;
+    left: 30%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(123, 44, 191, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+}
+
+.ambient-orb-secondary {
+    position: fixed;
+    bottom: -80px;
+    right: 8%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+    animation: float 11s ease-in-out infinite;
+    animation-delay: 3s;
+}
+
+/* ── All layout elements sit above background layers ── */
+aside, main, header {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Glass effect — aligned to landing page ── */
+/* Cards and panels: light frosted glass (matching spendshark.html) */
+.glass {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Sidebar: keep more opaque for readability as persistent nav */
+aside {
+    background: rgba(10, 10, 15, 0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+/* Top header: semi-opaque dark glass */
+header.glass {
+    background: rgba(10, 10, 15, 0.72) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* ── Animations (matching landing page) ── */
+@keyframes float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
+    50%       { box-shadow: 0 0 40px rgba(0, 243, 255, 0.5); }
+}
+
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-float      { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
+
+/* ── Text glow (matching landing page) ── */
+.text-glow {
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5) !important;
+}
+
+/* ── Card hover effects (matching agent-card style on landing page) ── */
+.glass-card {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 243, 255, 0.5) !important;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+}
+
+/* Apply to rounded glass panels in dashboard content area */
+main .glass.rounded-2xl,
+main .glass.rounded-xl,
+main .glass.rounded-3xl {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+main .glass.rounded-2xl:hover,
+main .glass.rounded-xl:hover,
+main .glass.rounded-3xl:hover {
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.06);
+}
+
+/* ── Sidebar nav link hover ── */
+.sidebar-link {
+    transition: all 0.2s ease;
+}
+
+.sidebar-link:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.sidebar-link.active {
+    background: rgba(0, 243, 255, 0.1) !important;
+    color: #00f3ff !important;
+    border-right: 2px solid #00f3ff !important;
+}
+
+/* ── Neon cyan "Agentic Edition" badge in sidebar ── */
+.sidebar-link.active i {
+    color: #00f3ff;
+}
+
+/* ── KPI card accent border glow on hover ── */
+.border-l-4.border-neon-cyan:hover,
+.border-l-4.border-deep-purple:hover,
+.border-l-4.border-green-500:hover,
+.border-l-4.border-blue-500:hover {
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.08);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* ── Neon cyan focus outlines for inputs/selects ── */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: rgba(0, 243, 255, 0.5) !important;
+    box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.1);
+}
+
+/* ── Chart.js canvas — block display required for responsive sizing ── */
+canvas {
+    display: block;
+}
+
+/* ── Custom scrollbar (matching landing page dark theme) ── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 243, 255, 0.3);
+}
+
+/* ── Buttons ── */
+button, a {
+    transition: all 0.2s ease;
+}
+
+/* ── Active neon cyan borders get a subtle glow ── */
+[class*="border-neon-cyan"] {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}

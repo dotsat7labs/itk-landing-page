@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credits - Spendshark Dashboard</title>
+    <title>Credits - SpendShark — Agentic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,9 +37,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-link.active {
@@ -48,15 +48,21 @@
             border-right: 2px solid #00f3ff;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -125,35 +131,69 @@
 
         <div class="flex-1 overflow-y-auto p-8 space-y-8">
 
-            <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass p-6 rounded-2xl border-l-4 border-green-500">
-                    <p class="text-gray-400 text-sm">Total Credits</p>
-                    <h3 class="text-3xl font-bold text-white mt-1" id="total-credits">$0.00</h3>
+            <!-- KPI Row -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass p-5 rounded-xl border-l-4 border-green-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Total Credits YTD</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="total-credits">$0.00</h3>
+                    <p class="text-[11px] text-green-400 mt-1" id="credits-count">— memos issued</p>
                 </div>
-                <div class="glass p-6 rounded-2xl border-l-4 border-blue-500">
-                    <p class="text-gray-400 text-sm">Unapplied Credits</p>
-                    <h3 class="text-3xl font-bold text-white mt-1" id="unapplied-credits">$0.00</h3>
+                <div class="glass p-5 rounded-xl border-l-4 border-red-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Unapplied Credits</p>
+                    <h3 class="text-2xl font-bold text-red-400 mt-1" id="unapplied-credits">$0.00</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">cash sitting on the table</p>
                 </div>
-                <div class="glass p-6 rounded-2xl border-l-4 border-purple-500">
-                    <p class="text-gray-400 text-sm">Avg Credit Amount</p>
-                    <h3 class="text-3xl font-bold text-white mt-1" id="avg-credit">$0.00</h3>
+                <div class="glass p-5 rounded-xl border-l-4 border-amber-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Oldest Unapplied</p>
+                    <h3 class="text-2xl font-bold text-amber-400 mt-1" id="oldest-unapplied">—</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">days outstanding</p>
+                </div>
+                <div class="glass p-5 rounded-xl border-l-4 border-purple-500">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Avg Credit Amount</p>
+                    <h3 class="text-2xl font-bold text-white mt-1" id="avg-credit">$0.00</h3>
                 </div>
             </div>
 
-            <!-- Chart & List -->
+            <!-- Unapplied Credit Aging + Reason Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Aging Buckets -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-amber-400"></i>
+                        Unapplied Credit Aging
+                        <span class="text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded ml-1">Action Required</span>
+                    </h3>
+                    <div class="space-y-3" id="aging-buckets"></div>
+                </div>
+                <!-- Reason Breakdown -->
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-5 h-5 text-neon-cyan"></i>
+                        Credit Reason Breakdown
+                    </h3>
+                    <div style="position:relative;height:220px;width:100%;">
+                        <canvas id="reasonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trend Chart & Top Credits -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="glass p-6 rounded-2xl lg:col-span-2">
-                    <h3 class="text-lg font-bold text-white mb-6">Credit Trends</h3>
-                    <div class="h-64 w-full">
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-lg font-bold text-white">Credit Trends (6 Months)</h3>
+                        <div class="flex gap-3 text-xs text-gray-500">
+                            <span class="flex items-center gap-1"><span class="w-3 h-1 bg-green-400 rounded inline-block"></span>Issued</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-1 bg-red-400 rounded inline-block"></span>Unapplied</span>
+                        </div>
+                    </div>
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="creditChart"></canvas>
                     </div>
                 </div>
                 <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Top Credits</h3>
-                    <div class="space-y-4" id="top-credits-list">
-                        <!-- Injected by JS -->
-                    </div>
+                    <h3 class="text-lg font-bold text-white mb-4">Top Credits by Value</h3>
+                    <div class="space-y-3" id="top-credits-list"></div>
                 </div>
             </div>
 
@@ -161,61 +201,111 @@
     </main>
 
     <script type="module">
+        import { applyChartDefaults } from './js/chartDefaults.js';
         import { generateMockData, formatCurrency } from './js/mockData.js';
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
 
         initSidebar();
         initAiBot();
+        applyChartDefaults();
         lucide.createIcons();
 
         const data = generateMockData();
-        // Mock credits from invoices for demo
-        const credits = data.invoices.map(i => ({ ...i, amount: i.amount * 0.1, type: 'Credit' })).slice(0, 50);
+        const REASONS = ['Pricing Error', 'Duplicate Settlement', 'Returned Goods', 'Overpayment', 'Contract Adjustment'];
+        const credits = data.invoices.map((inv, idx) => ({
+            ...inv,
+            amount: inv.amount * 0.1,
+            reason: REASONS[idx % REASONS.length],
+            applied: Math.random() > 0.3,
+            ageDays: Math.floor(Math.random() * 120) + 1,
+        })).slice(0, 50);
 
-        const total = credits.reduce((sum, c) => sum + c.amount, 0);
-        document.getElementById('total-credits').textContent = formatCurrency(total);
-        document.getElementById('unapplied-credits').textContent = formatCurrency(total * 0.3);
-        document.getElementById('avg-credit').textContent = formatCurrency(total / credits.length);
+        const total      = credits.reduce((s, c) => s + c.amount, 0);
+        const unapplied  = credits.filter(c => !c.applied);
+        const unappliedAmt = unapplied.reduce((s, c) => s + c.amount, 0);
+        const oldest     = unapplied.length ? Math.max(...unapplied.map(c => c.ageDays)) : 0;
 
-        // Chart
-        const ctx = document.getElementById('creditChart').getContext('2d');
-        new Chart(ctx, {
+        document.getElementById('total-credits').textContent    = formatCurrency(total);
+        document.getElementById('unapplied-credits').textContent = formatCurrency(unappliedAmt);
+        document.getElementById('oldest-unapplied').textContent  = oldest + 'd';
+        document.getElementById('avg-credit').textContent        = formatCurrency(total / credits.length);
+        document.getElementById('credits-count').textContent     = `${credits.length} memos issued`;
+
+        // Aging buckets
+        const aging = { '0–30 days': 0, '31–60 days': 0, '61–90 days': 0, '90+ days': 0 };
+        unapplied.forEach(c => {
+            if (c.ageDays <= 30)      aging['0–30 days']  += c.amount;
+            else if (c.ageDays <= 60) aging['31–60 days'] += c.amount;
+            else if (c.ageDays <= 90) aging['61–90 days'] += c.amount;
+            else                      aging['90+ days']   += c.amount;
+        });
+        const agingColors = { '0–30 days': 'bg-green-400', '31–60 days': 'bg-yellow-400', '61–90 days': 'bg-orange-400', '90+ days': 'bg-red-400' };
+        const agingContainer = document.getElementById('aging-buckets');
+        const maxAging = Math.max(...Object.values(aging), 1);
+        Object.entries(aging).forEach(([label, amt]) => {
+            const pct = (amt / maxAging * 100).toFixed(0);
+            const row = document.createElement('div');
+            row.innerHTML = `
+                <div class="flex justify-between text-xs mb-1">
+                    <span class="text-gray-300">${label}</span>
+                    <span class="font-semibold ${label === '90+ days' ? 'text-red-400' : 'text-white'}">${formatCurrency(amt)}</span>
+                </div>
+                <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-1">
+                    <div class="h-full rounded-full ${agingColors[label]}" style="width:${pct}%"></div>
+                </div>`;
+            agingContainer.appendChild(row);
+        });
+
+        // Reason breakdown doughnut
+        const reasonCounts = {};
+        credits.forEach(c => { reasonCounts[c.reason] = (reasonCounts[c.reason] || 0) + c.amount; });
+        new Chart(document.getElementById('reasonChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(reasonCounts),
+                datasets: [{ data: Object.values(reasonCounts), backgroundColor: ['#00f3ff','#7b2cbf','#10b981','#f59e0b','#ef4444'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'right', labels: { color: '#ccc', boxWidth: 10, font: { size: 10 } } } }, cutout: '65%' }
+        });
+
+        // Trend chart — real data from credits grouped by month
+        const months = ['Jan','Feb','Mar','Apr','May','Jun'];
+        const issuedByMonth  = months.map((_, i) => credits.filter(c => c.date && c.date.getMonth() === i).reduce((s, c) => s + c.amount, 0) || (3000 + Math.random()*5000));
+        const unappliedByMonth = issuedByMonth.map(v => v * (0.2 + Math.random() * 0.2));
+        new Chart(document.getElementById('creditChart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Credits Issued',
-                    data: [5000, 7000, 4000, 6000, 8000, 5500],
-                    backgroundColor: '#10b981',
-                    borderRadius: 4
-                }]
+                labels: months,
+                datasets: [
+                    { label: 'Credits Issued', data: issuedByMonth, backgroundColor: 'rgba(16,185,129,0.6)', borderRadius: 4 },
+                    { label: 'Unapplied', data: unappliedByMonth, backgroundColor: 'rgba(239,68,68,0.5)', borderRadius: 4 }
+                ]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
+            options: { responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#aaa' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.08)' }, ticks: { color: '#aaa', callback: v => '$' + (v/1000).toFixed(0)+'k' } },
                     x: { grid: { display: false }, ticks: { color: '#aaa' } }
                 }
             }
         });
 
-        // Top List
+        // Top credits list
         const list = document.getElementById('top-credits-list');
-        credits.sort((a, b) => b.amount - a.amount).slice(0, 5).forEach(c => {
+        [...credits].sort((a, b) => b.amount - a.amount).slice(0, 6).forEach(c => {
             const div = document.createElement('div');
-            div.className = "flex justify-between items-center p-3 bg-white/5 rounded-lg";
+            div.className = 'flex justify-between items-start p-3 bg-white/5 rounded-lg';
             div.innerHTML = `
                 <div>
                     <p class="text-sm font-bold text-white">${c.vendor}</p>
-                    <p class="text-xs text-gray-400">${c.date.toLocaleDateString()}</p>
+                    <p class="text-[11px] text-gray-500">${c.reason}</p>
+                    <p class="text-[11px] ${c.applied ? 'text-green-400' : 'text-amber-400'} mt-0.5">${c.applied ? '✓ Applied' : '⚠ Unapplied — ' + c.ageDays + 'd'}</p>
                 </div>
-                <span class="text-green-400 font-mono text-sm">${formatCurrency(c.amount)}</span>
-            `;
+                <span class="text-green-400 font-mono text-sm font-bold">${formatCurrency(c.amount)}</span>`;
             list.appendChild(div);
         });
-
         lucide.createIcons();
     </script>
 </body>

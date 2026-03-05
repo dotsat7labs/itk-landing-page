@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spendshark - AP Operator Performance</title>
+    <title>AP Operator Performance - SpendShark — Agentic Edition</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -49,9 +49,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .glass-hover:hover {
@@ -88,15 +88,21 @@
             background: #555;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -276,7 +282,7 @@
                 <!-- Operator Throughput (Bar) -->
                 <div class="glass p-6 rounded-2xl">
                     <h3 class="text-lg font-bold text-white mb-4">Operator Throughput (Weekly)</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="throughputChart"></canvas>
                     </div>
                 </div>
@@ -284,7 +290,7 @@
                 <!-- Processing Time Distribution (Bar/Box-like) -->
                 <div class="glass p-6 rounded-2xl">
                     <h3 class="text-lg font-bold text-white mb-4">Avg Processing Time per Operator</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="timeChart"></canvas>
                     </div>
                 </div>
@@ -295,7 +301,7 @@
                 <!-- Volume vs Accuracy (Scatter) -->
                 <div class="glass p-6 rounded-2xl lg:col-span-2">
                     <h3 class="text-lg font-bold text-white mb-4">Efficiency Matrix: Volume vs. Accuracy</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="scatterChart"></canvas>
                     </div>
                 </div>
@@ -303,7 +309,7 @@
                 <!-- Exception Breakdown (Donut) -->
                 <div class="glass p-6 rounded-2xl">
                     <h3 class="text-lg font-bold text-white mb-4">Exception Reasons</h3>
-                    <div class="h-64 w-full flex justify-center">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="exceptionChart"></canvas>
                     </div>
                 </div>
@@ -314,7 +320,7 @@
                 <!-- SLA Compliance Trend (Line) -->
                 <div class="glass p-6 rounded-2xl lg:col-span-1">
                     <h3 class="text-lg font-bold text-white mb-4">SLA Compliance Trend</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="slaChart"></canvas>
                     </div>
                 </div>
@@ -322,7 +328,7 @@
                 <!-- Duplicate Prevention Impact (Bar) -->
                 <div class="glass p-6 rounded-2xl lg:col-span-2">
                     <h3 class="text-lg font-bold text-white mb-4">Financial Impact: Duplicates Prevented ($)</h3>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="impactChart"></canvas>
                     </div>
                 </div>
@@ -363,6 +369,7 @@
     </main>
 
     <script type="module">
+        import { applyChartDefaults } from './js/chartDefaults.js';
         import { generateMockData, generateVendorStats, generateOperatorStats, formatCurrency } from './js/mockData.js';
         import { initSidebar } from './js/sidebar.js';
 

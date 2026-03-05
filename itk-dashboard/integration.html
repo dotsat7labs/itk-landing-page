@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integration Setup - Spendshark Dashboard</title>
+    <title>Integration Setup - SpendShark — Agentic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,9 +36,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-link.active {
@@ -47,15 +47,21 @@
             border-right: 2px solid #00f3ff;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -124,106 +130,115 @@
 
         <div class="flex-1 overflow-y-auto p-8 space-y-8">
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Infor S3 -->
-                <div
-                    class="glass p-8 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all group">
-                    <div class="flex justify-between items-start mb-6">
+            <!-- Sync Health Banner -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass p-4 rounded-xl border border-green-500/20 text-center">
+                    <p class="text-xs text-gray-500">Connected Sources</p>
+                    <p class="text-2xl font-black text-green-400 mt-1">1 / 4</p>
+                </div>
+                <div class="glass p-4 rounded-xl border border-neon-cyan/20 text-center">
+                    <p class="text-xs text-gray-500">Last Sync</p>
+                    <p class="text-lg font-black text-white mt-1" id="last-sync-ts">—</p>
+                </div>
+                <div class="glass p-4 rounded-xl border border-purple-500/20 text-center">
+                    <p class="text-xs text-gray-500">Invoices Ingested Today</p>
+                    <p class="text-2xl font-black text-white mt-1" id="invoices-today">—</p>
+                </div>
+                <div class="glass p-4 rounded-xl border border-amber-500/20 text-center">
+                    <p class="text-xs text-gray-500">Data Quality Score</p>
+                    <p class="text-2xl font-black text-amber-400 mt-1">94.2%</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Infor S3 — Connected -->
+                <div class="glass p-6 rounded-2xl border border-green-500/30 hover:border-neon-cyan/50 transition-all">
+                    <div class="flex justify-between items-start mb-4">
                         <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                             <span class="font-bold text-xl">In</span>
                         </div>
-                        <span
-                            class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full border border-green-500/30">Connected</span>
+                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full border border-green-500/30 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>Connected
+                        </span>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Infor S3</h3>
-                    <p class="text-sm text-gray-400 mb-6">ERP integration for invoice and vendor master data.</p>
+                    <h3 class="text-lg font-bold mb-1">Infor S3</h3>
+                    <p class="text-xs text-gray-400 mb-4">ERP — invoice and vendor master data sync</p>
+                    <div class="space-y-2 text-xs mb-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Last sync</span><span class="text-white" id="infor-last-sync">—</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Invoices synced</span><span class="text-neon-cyan font-bold" id="infor-inv-count">—</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Sync frequency</span><span class="text-white">Every 15 min</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">API endpoint</span><span class="text-gray-400 font-mono text-[10px]">api.infor.com/s3/v2</span></div>
+                    </div>
+                    <button class="w-full py-2 border border-neon-cyan text-neon-cyan rounded-lg hover:bg-neon-cyan hover:text-black transition-colors text-sm font-medium">Configure</button>
+                </div>
 
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">API Endpoint</label>
-                            <input type="text" value="https://api.infor.com/s3/v2"
-                                class="w-full bg-rich-black border border-glass-border rounded-lg px-3 py-2 text-sm text-gray-300"
-                                disabled>
+                <!-- SAP S/4HANA — NEW -->
+                <div class="glass p-6 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-blue-900/40 rounded-xl flex items-center justify-center">
+                            <span class="font-bold text-sm text-blue-300">SAP</span>
                         </div>
-                        <button
-                            class="w-full py-2 border border-neon-cyan text-neon-cyan rounded-lg hover:bg-neon-cyan hover:text-rich-black transition-colors font-medium">Configure</button>
+                        <span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">Not Configured</span>
                     </div>
+                    <h3 class="text-lg font-bold mb-1">SAP S/4HANA</h3>
+                    <p class="text-xs text-gray-400 mb-4">Enterprise ERP — BAPI/RFC & OData API connector</p>
+                    <div class="space-y-2 text-xs mb-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Supports</span><span class="text-white">FI-AP, MM-LIV</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Auth method</span><span class="text-white">OAuth 2.0 / API Key</span></div>
+                    </div>
+                    <button class="w-full py-2 bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40 transition-colors text-sm font-medium">Connect SAP</button>
                 </div>
 
                 <!-- Workday -->
-                <div
-                    class="glass p-8 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all group">
-                    <div class="flex justify-between items-start mb-6">
+                <div class="glass p-6 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all">
+                    <div class="flex justify-between items-start mb-4">
                         <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
                             <span class="font-bold text-xl">W</span>
                         </div>
-                        <span
-                            class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">Not
-                            Configured</span>
+                        <span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">Not Configured</span>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Workday</h3>
-                    <p class="text-sm text-gray-400 mb-6">Human Capital Management and Financial Management.</p>
-
-                    <div class="space-y-4">
-                        <button
-                            class="w-full py-2 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors font-medium">Connect</button>
+                    <h3 class="text-lg font-bold mb-1">Workday</h3>
+                    <p class="text-xs text-gray-400 mb-4">Financial Management — Accounts Payable module</p>
+                    <div class="space-y-2 text-xs mb-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Supports</span><span class="text-white">Supplier Invoices, POs</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Auth method</span><span class="text-white">SAML / API</span></div>
                     </div>
+                    <button class="w-full py-2 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors text-sm font-medium">Connect</button>
                 </div>
 
-                <!-- SAP -->
-                <div
-                    class="glass p-8 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 bg-blue-800/20 rounded-xl flex items-center justify-center text-blue-300">
-                            <span class="font-bold text-xl">SAP</span>
+                <!-- Oracle Fusion -->
+                <div class="glass p-6 rounded-2xl border border-glass-border hover:border-neon-cyan/50 transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-red-800/20 rounded-xl flex items-center justify-center text-red-300">
+                            <span class="font-bold text-xs">ORA</span>
                         </div>
-                        <span
-                            class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">Not
-                            Configured</span>
+                        <span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded-full border border-gray-500/30">Not Configured</span>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">SAP S/4HANA</h3>
-                    <p class="text-sm text-gray-400 mb-6">Enterprise resource planning and business suite.</p>
-
-                    <div class="space-y-4">
-                        <button
-                            class="w-full py-2 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors font-medium">Connect</button>
+                    <h3 class="text-lg font-bold mb-1">Oracle Fusion</h3>
+                    <p class="text-xs text-gray-400 mb-4">Cloud ERP — Payables, Procurement & Expenses</p>
+                    <div class="space-y-2 text-xs mb-4">
+                        <div class="flex justify-between"><span class="text-gray-500">Supports</span><span class="text-white">REST / SOAP APIs</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Auth method</span><span class="text-white">OAuth 2.0</span></div>
                     </div>
+                    <button class="w-full py-2 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors text-sm font-medium">Connect</button>
                 </div>
             </div>
 
             <!-- Connection Logs -->
             <div class="glass p-6 rounded-2xl">
-                <h3 class="text-lg font-bold text-white mb-4">Integration Logs</h3>
+                <h3 class="text-lg font-bold text-white mb-4">Integration Activity Log</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-gray-200 uppercase text-xs">
                             <tr>
-                                <th class="px-6 py-3">Timestamp</th>
-                                <th class="px-6 py-3">Source</th>
-                                <th class="px-6 py-3">Event</th>
-                                <th class="px-6 py-3">Status</th>
+                                <th class="px-5 py-3">Timestamp</th>
+                                <th class="px-5 py-3">Source</th>
+                                <th class="px-5 py-3">Event</th>
+                                <th class="px-5 py-3">Records</th>
+                                <th class="px-5 py-3">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-glass-border">
-                            <tr>
-                                <td class="px-6 py-4">2023-10-27 10:45:00</td>
-                                <td class="px-6 py-4">Infor S3</td>
-                                <td class="px-6 py-4">Sync Invoices</td>
-                                <td class="px-6 py-4 text-green-400">Success</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4">2023-10-27 10:30:00</td>
-                                <td class="px-6 py-4">Infor S3</td>
-                                <td class="px-6 py-4">Sync Vendors</td>
-                                <td class="px-6 py-4 text-green-400">Success</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4">2023-10-27 09:15:00</td>
-                                <td class="px-6 py-4">System</td>
-                                <td class="px-6 py-4">Health Check</td>
-                                <td class="px-6 py-4 text-green-400">Healthy</td>
-                            </tr>
-                        </tbody>
+                        <tbody id="integration-log" class="divide-y divide-glass-border"></tbody>
                     </table>
                 </div>
             </div>
@@ -234,9 +249,44 @@
     <script type="module">
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
+        import { generateMockData } from './js/mockData.js';
 
         initSidebar();
         initAiBot();
+
+        const data = generateMockData();
+        const now  = new Date();
+        const minsAgo = m => new Date(now - m * 60000);
+
+        // Banner stats
+        const todayCount = Math.floor(data.invoices.length * 0.15);
+        document.getElementById('last-sync-ts').textContent   = minsAgo(8).toLocaleTimeString();
+        document.getElementById('invoices-today').textContent = todayCount.toLocaleString();
+        document.getElementById('infor-last-sync').textContent    = minsAgo(8).toLocaleTimeString();
+        document.getElementById('infor-inv-count').textContent    = todayCount.toLocaleString() + ' invoices';
+
+        // Activity log — real timestamps, record counts
+        const logEntries = [
+            { mins: 8,   source: 'Infor S3',  event: 'Sync Invoices',       records: todayCount,                    status: 'Success',  color: 'text-green-400' },
+            { mins: 23,  source: 'Infor S3',  event: 'Sync Vendor Master',  records: Math.floor(Math.random()*50+20), status: 'Success',  color: 'text-green-400' },
+            { mins: 38,  source: 'System',    event: 'Health Check',        records: null,                          status: 'Healthy',  color: 'text-green-400' },
+            { mins: 53,  source: 'Infor S3',  event: 'Sync Invoices',       records: Math.floor(Math.random()*80+40), status: 'Success',  color: 'text-green-400' },
+            { mins: 68,  source: 'Infor S3',  event: 'Sync Purchase Orders', records: Math.floor(Math.random()*30+10), status: 'Success',  color: 'text-green-400' },
+            { mins: 142, source: 'System',    event: 'Token Refresh',       records: null,                          status: 'Success',  color: 'text-green-400' },
+            { mins: 188, source: 'Infor S3',  event: 'Sync Invoices',       records: Math.floor(Math.random()*60+30), status: 'Warning: 2 skipped', color: 'text-amber-400' },
+        ];
+        const tbody = document.getElementById('integration-log');
+        logEntries.forEach(e => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="px-5 py-3 font-mono text-xs">${minsAgo(e.mins).toLocaleString()}</td>
+                <td class="px-5 py-3 font-medium text-white">${e.source}</td>
+                <td class="px-5 py-3">${e.event}</td>
+                <td class="px-5 py-3 text-neon-cyan">${e.records !== null ? e.records.toLocaleString() : '—'}</td>
+                <td class="px-5 py-3 ${e.color} font-medium">${e.status}</td>`;
+            tbody.appendChild(tr);
+        });
+
         lucide.createIcons();
     </script>
 </body>

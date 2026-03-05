@@ -3,7 +3,7 @@
 
 const COMPANIES = ['Children\'s Hospital', 'UnityPoint Health', 'Virginia Health', 'National Fuel', 'Apparel Retailer'];
 const VENDORS = ['McKesson', 'Cardinal Health', 'Medline', 'Stryker', 'Johnson & Johnson', 'Siemens Healthineers', 'GE Healthcare', 'Philips', 'Baxter', 'Boston Scientific'];
-const INSPECTORS = ['Duplicate Detector', 'Anomaly Hunter', 'Fraud Watchdog', 'Vendor Validator'];
+const INSPECTORS = ['Exact Match', 'Fuzzy Match', "Benford's Law", 'Velocity Check', 'Round Amount', 'Weekend Posting', 'Clustering & LLM', 'ML Anomaly Detection'];
 const OPERATORS = ['Alice Smith', 'Bob Jones', 'Charlie Brown', 'Diana Prince'];
 
 function randomDate(start, end) {
@@ -215,13 +215,13 @@ export const generateRoiStats = () => {
     const monthlySavings = [320000, 340000, 310000, 380000, 360000, 410000, 390000, 420000, 400000, 450000, 430000, 480000];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // Savings by Component
+    // Savings by Detection Type (aligned to SpendShark inspector names)
     const savingsByComponent = {
-        'Machine Learning': 1800000,
-        'Rule Engine': 1100000,
-        'Deep Learning': 1750000,
-        'Recurring Pattern': 800000,
-        'Manual Review': 200000
+        'Invoice Similarity': 1800000,
+        'Outlier Detection': 1100000,
+        'Recurrence Pattern': 1200000,
+        'Vendor Resolution': 750000,
+        'ML Anomaly Detection': 900000
     };
 
     // Duplicate Types

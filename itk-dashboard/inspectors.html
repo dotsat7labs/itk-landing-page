@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspectors - Spendshark Dashboard</title>
+    <title>Inspectors - SpendShark — Agentic Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,9 +36,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-link.active {
@@ -47,15 +47,21 @@
             border-right: 2px solid #00f3ff;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -134,7 +140,56 @@
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Global Confidence Threshold -->
+                <div class="glass p-6 rounded-2xl border border-neon-cyan/30 bg-neon-cyan/5 mb-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-white text-lg flex items-center mb-2">
+                                <i data-lucide="sliders" class="w-5 h-5 mr-2 text-neon-cyan"></i>
+                                Global Confidence Threshold
+                            </h3>
+                            <p class="text-sm text-gray-400">Settings below this threshold will be flagged for human
+                                review. Settings above will be Auto-Approved.</p>
+                        </div>
+                        <div class="w-full md:w-1/3 flex items-center gap-4">
+                            <span class="text-sm text-gray-400 font-bold font-mono">50%</span>
+                            <div class="relative flex-1">
+                                <div
+                                    class="h-2 w-full bg-rich-black rounded-full overflow-hidden border border-white/10">
+                                    <div
+                                        class="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-green-500 w-[85%]">
+                                    </div>
+                                </div>
+                                <!-- Slider Handle -->
+                                <div class="absolute top-1/2 -mt-2.5 w-5 h-5 bg-white border-2 border-neon-cyan rounded-full shadow-[0_0_10px_rgba(0,243,255,0.5)] cursor-pointer"
+                                    style="left: 85%;"></div>
+                            </div>
+                            <span class="text-lg text-neon-cyan font-bold font-mono">85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Summary Banner -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
+                    <div class="glass p-4 rounded-xl text-center border border-neon-cyan/20">
+                        <p class="text-xs text-gray-500">Total Detections</p>
+                        <p class="text-2xl font-black text-neon-cyan mt-1" id="perf-total-hits">—</p>
+                    </div>
+                    <div class="glass p-4 rounded-xl text-center border border-green-500/20">
+                        <p class="text-xs text-gray-500">Total $ Caught</p>
+                        <p class="text-2xl font-black text-green-400 mt-1" id="perf-total-value">—</p>
+                    </div>
+                    <div class="glass p-4 rounded-xl text-center border border-amber-500/20">
+                        <p class="text-xs text-gray-500">False Positive Rate</p>
+                        <p class="text-2xl font-black text-amber-400 mt-1" id="perf-fp-rate">—</p>
+                    </div>
+                    <div class="glass p-4 rounded-xl text-center border border-purple-500/20">
+                        <p class="text-xs text-gray-500">Best Inspector</p>
+                        <p class="text-base font-black text-white mt-1 leading-tight" id="perf-best">—</p>
+                    </div>
+                </div>
+
+                <div id="inspector-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Exact Match -->
                     <div
                         class="glass p-6 rounded-2xl border-l-4 border-neon-cyan hover:bg-white/5 transition-all group">
@@ -147,10 +202,14 @@
                                 </div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Flags invoices where Company #, Vendor #, Invoice #, Date,
+                        <p class="text-sm text-gray-400 mb-3">Flags invoices where Company #, Vendor #, Invoice #, Date,
                             and Amount are ALL identical.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Exact Match-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Exact Match-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Exact Match-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Fuzzy Match -->
@@ -165,28 +224,38 @@
                                 </div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Detects similar invoice numbers (e.g., "INV-1001" vs
+                        <p class="text-sm text-gray-400 mb-3">Detects similar invoice numbers (e.g., "INV-1001" vs
                             "INV-100I") using Levenshtein distance.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <div class="grid grid-cols-3 gap-2 mb-3 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Fuzzy Match-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Fuzzy Match-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Fuzzy Match-fp">—</p></div>
+                        </div>
+                        <div class="mb-4 pt-3 border-t border-white/5">
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Similarity Threshold</span><span class="text-purple-400 font-mono">90%</span>
+                            </div>
+                            <div class="h-1 w-full bg-rich-black rounded-full overflow-hidden"><div class="h-full bg-purple-500 w-[90%]"></div></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Benford's Law -->
-                    <div
-                        class="glass p-6 rounded-2xl border-l-4 border-yellow-500 hover:bg-white/5 transition-all group">
+                    <div class="glass p-6 rounded-2xl border-l-4 border-yellow-500 hover:bg-white/5 transition-all group">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-white text-lg">Benford's Law</h3>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked class="sr-only peer">
-                                <div
-                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
-                                </div>
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan"></div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Statistical analysis of leading digits to detect
-                            artificial or manipulated numerical data.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Statistical analysis of leading digits to detect artificial or manipulated numerical data.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Benford's Law-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Benford's Law-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Benford's Law-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Weekend Posting -->
@@ -200,10 +269,13 @@
                                 </div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Flags invoices posted on Saturdays or Sundays, which is
-                            often unusual for B2B transactions.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Flags invoices posted on Saturdays or Sundays, which is often unusual for B2B transactions.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Weekend Posting-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Weekend Posting-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Weekend Posting-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Round Amount -->
@@ -212,33 +284,34 @@
                             <h3 class="font-bold text-white text-lg">Round Amount</h3>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked class="sr-only peer">
-                                <div
-                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
-                                </div>
+                                <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan"></div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Flags invoices with perfectly round numbers (e.g.,
-                            $5,000.00), often a sign of estimates or fraud.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Flags invoices with perfectly round numbers (e.g., $5,000.00), often a sign of estimates or fraud.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Round Amount-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Round Amount-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Round Amount-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Velocity Check -->
-                    <div
-                        class="glass p-6 rounded-2xl border-l-4 border-orange-500 hover:bg-white/5 transition-all group">
+                    <div class="glass p-6 rounded-2xl border-l-4 border-orange-500 hover:bg-white/5 transition-all group">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-white text-lg">Velocity Check</h3>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked class="sr-only peer">
-                                <div
-                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
-                                </div>
+                                <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan"></div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Monitors for rapid-fire invoices from the same vendor
-                            within a short time window.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Monitors for rapid-fire invoices from the same vendor within a short time window.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Velocity Check-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Velocity Check-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Velocity Check-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                     <!-- Clustering & LLM Proximity (NEW) -->
@@ -252,28 +325,35 @@
                                 </div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Uses AI to cluster similar invoices and LLMs to detect
-                            semantic duplicates.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Uses AI to cluster similar invoices and LLMs to detect semantic duplicates.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-3 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="Clustering & LLM-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="Clustering & LLM-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="Clustering & LLM-fp">—</p></div>
+                        </div>
+                        <div class="mb-4 pt-3 border-t border-white/5">
+                            <div class="flex justify-between text-xs text-gray-400 mb-1"><span>Semantic Vector Distance</span><span class="text-pink-400 font-mono">0.85</span></div>
+                            <div class="h-1 w-full bg-rich-black rounded-full overflow-hidden"><div class="h-full bg-pink-500 w-[85%]"></div></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
-                    <!-- ML Anomaly Detection (NEW) -->
-                    <div
-                        class="glass p-6 rounded-2xl border-l-4 border-green-500 hover:bg-white/5 transition-all group">
+                    <!-- ML Anomaly Detection -->
+                    <div class="glass p-6 rounded-2xl border-l-4 border-green-500 hover:bg-white/5 transition-all group">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="font-bold text-white text-lg">ML Anomaly Detection</h3>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" checked class="sr-only peer">
-                                <div
-                                    class="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-neon-cyan rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan">
-                                </div>
+                                <div class="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-neon-cyan"></div>
                             </label>
                         </div>
-                        <p class="text-sm text-gray-400 mb-4">Machine Learning model trained on historical data to find
-                            outliers.</p>
-                        <button
-                            class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
+                        <p class="text-sm text-gray-400 mb-3">Machine Learning model trained on historical data to find outliers.</p>
+                        <div class="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/5 rounded-lg">
+                            <div class="text-center"><p class="text-[10px] text-gray-500">Hits</p><p class="text-sm font-bold text-white" data-stat="ML Anomaly Detection-hits">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">$ Caught</p><p class="text-sm font-bold text-green-400" data-stat="ML Anomaly Detection-value">—</p></div>
+                            <div class="text-center"><p class="text-[10px] text-gray-500">FP Rate</p><p class="text-sm font-bold text-amber-400" data-stat="ML Anomaly Detection-fp">—</p></div>
+                        </div>
+                        <button class="text-xs text-neon-cyan border border-neon-cyan px-3 py-1 rounded hover:bg-neon-cyan hover:text-black transition-colors">Configure</button>
                     </div>
 
                 </div>
@@ -292,19 +372,7 @@
                                 <th class="px-6 py-3">Inspector</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-glass-border">
-                            <tr>
-                                <td class="px-6 py-4">2023-10-27 14:30:00</td>
-                                <td class="px-6 py-4">admin@spendshark.com</td>
-                                <td class="px-6 py-4 text-green-400">Enabled</td>
-                                <td class="px-6 py-4">Weekend Posting</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4">2023-10-26 09:15:00</td>
-                                <td class="px-6 py-4">system</td>
-                                <td class="px-6 py-4 text-blue-400">Updated Threshold</td>
-                                <td class="px-6 py-4">Fuzzy Match</td>
-                            </tr>
+                        <tbody id="audit-log-body" class="divide-y divide-glass-border">
                         </tbody>
                     </table>
                 </div>
@@ -316,9 +384,66 @@
     <script type="module">
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
+        import { generateMockData, formatCurrency } from './js/mockData.js';
 
         initSidebar();
         initAiBot();
+
+        const data = generateMockData();
+        const INSPECTORS = ['Exact Match','Fuzzy Match',"Benford's Law",'Weekend Posting','Round Amount','Velocity Check','Clustering & LLM','ML Anomaly Detection'];
+        const FP_RATES   = { 'Exact Match': 0.4, 'Fuzzy Match': 1.8, "Benford's Law": 3.2, 'Weekend Posting': 5.1, 'Round Amount': 2.6, 'Velocity Check': 1.3, 'Clustering & LLM': 2.0, 'ML Anomaly Detection': 1.1 };
+
+        // Build per-inspector stats from mock invoices
+        const stats = {};
+        INSPECTORS.forEach(name => {
+            const hits = data.invoices.filter(inv => inv.inspector === name && inv.status === 'Suspected');
+            stats[name] = {
+                hits: hits.length,
+                value: hits.reduce((s, i) => s + i.amount, 0),
+                fp: FP_RATES[name]
+            };
+        });
+
+        // Populate cards
+        document.querySelectorAll('[data-stat]').forEach(el => {
+            const [inspector, metric] = el.dataset.stat.split('-');
+            if (!stats[inspector]) return;
+            if (metric === 'hits')  el.textContent = stats[inspector].hits;
+            if (metric === 'value') el.textContent = formatCurrency(stats[inspector].value);
+            if (metric === 'fp')    el.textContent = stats[inspector].fp.toFixed(1) + '%';
+        });
+
+        // Summary banner
+        const totalHits  = Object.values(stats).reduce((s, v) => s + v.hits, 0);
+        const totalValue = Object.values(stats).reduce((s, v) => s + v.value, 0);
+        const avgFp      = Object.values(stats).reduce((s, v) => s + v.fp, 0) / INSPECTORS.length;
+        const best       = Object.entries(stats).sort((a, b) => b[1].value - a[1].value)[0];
+        document.getElementById('perf-total-hits').textContent  = totalHits;
+        document.getElementById('perf-total-value').textContent = formatCurrency(totalValue);
+        document.getElementById('perf-fp-rate').textContent     = avgFp.toFixed(1) + '%';
+        document.getElementById('perf-best').textContent        = best ? best[0] : '—';
+
+        // Audit log — recent entries with real dates
+        const auditEvents = [
+            { mins: 12, user: 'admin@spendshark.com', action: 'Updated Threshold', inspector: 'Fuzzy Match', color: 'text-blue-400' },
+            { mins: 47, user: 'admin@spendshark.com', action: 'Enabled', inspector: 'Weekend Posting', color: 'text-green-400' },
+            { mins: 135, user: 'system', action: 'Auto-calibrated', inspector: 'ML Anomaly Detection', color: 'text-purple-400' },
+            { mins: 320, user: 'j.smith@company.com', action: 'Disabled', inspector: 'Weekend Posting', color: 'text-red-400' },
+            { mins: 580, user: 'admin@spendshark.com', action: 'Updated Threshold', inspector: "Benford's Law", color: 'text-blue-400' },
+        ];
+        const now = new Date();
+        const tbody = document.getElementById('audit-log-body');
+        auditEvents.forEach(e => {
+            const ts = new Date(now - e.mins * 60000);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="px-6 py-3 font-mono text-xs">${ts.toLocaleString()}</td>
+                <td class="px-6 py-3">${e.user}</td>
+                <td class="px-6 py-3 ${e.color} font-medium">${e.action}</td>
+                <td class="px-6 py-3">${e.inspector}</td>`;
+            tbody.appendChild(tr);
+        });
+
         lucide.createIcons();
     </script>
 </body>

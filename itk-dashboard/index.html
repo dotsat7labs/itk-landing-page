@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spendshark Dashboard</title>
+    <title>SpendShark — Agentic Edition | Dashboard</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -49,9 +49,9 @@
         }
 
         .glass {
-            background: rgba(10, 10, 15, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .glass-hover:hover {
@@ -88,15 +88,21 @@
             background: #555;
         }
     </style>
+    <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 
 <body class="flex h-screen overflow-hidden bg-[url('https://grainy-gradients.vercel.app/noise.svg')]">
+    <div class="ambient-orb-secondary"></div>
 
     <!-- Sidebar -->
     <aside
         class="fixed inset-y-0 left-0 z-50 w-64 glass border-r border-glass-border flex flex-col transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="h-20 flex items-center px-8 border-b border-glass-border">
-            <img src="./images/logo_transparent.png" alt="Spendshark Logo" class="h-12 w-auto">
+        <div class="flex items-center gap-3 px-5 py-4 border-b border-glass-border">
+            <img src="./images/logo_transparent.png" alt="iTK Technologies" class="h-10 w-10 object-contain flex-shrink-0 rounded-lg">
+            <div>
+                <div class="text-[15px] font-black tracking-tight leading-tight"><span class="text-white">Spend</span><span class="text-neon-cyan">Shark</span></div>
+                <div class="text-[8px] text-neon-cyan/70 font-bold tracking-[0.12em] uppercase mt-0.5">Agentic Edition</div>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <a href="index.html"
@@ -258,7 +264,7 @@
                             <option>Year to Date</option>
                         </select>
                     </div>
-                    <div class="h-64 w-full">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="trendChart"></canvas>
                     </div>
                 </div>
@@ -266,22 +272,265 @@
                 <!-- Distribution Chart -->
                 <div class="glass p-6 rounded-2xl">
                     <h3 class="text-lg font-bold text-white mb-6">Anomaly Distribution</h3>
-                    <div class="h-64 w-full flex items-center justify-center">
+                    <div style="position:relative;height:256px;width:100%;">
                         <canvas id="distChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Bot Activity & Predictive Savings -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Bot Activity Log -->
-                <div class="glass p-6 rounded-2xl">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center">
-                        <i data-lucide="terminal" class="w-5 h-5 mr-2 text-neon-cyan"></i>
-                        Live Bot Activity
+            <!-- Live Agent Activity Feed -->
+            <div class="glass p-5 rounded-2xl border border-neon-cyan/10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
+                        Live Agent Feed
                     </h3>
-                    <div class="space-y-3 h-48 overflow-y-auto pr-2" id="bot-log">
-                        <!-- Log items injected by JS -->
+                    <span class="text-[10px] font-mono text-neon-cyan/50 bg-neon-cyan/5 border border-neon-cyan/10 px-2 py-1 rounded">REAL-TIME</span>
+                </div>
+                <div id="bot-log" class="space-y-2 font-mono text-xs max-h-32 overflow-y-auto pr-1"></div>
+            </div>
+
+            <!-- ═══ ACTION REQUIRED QUEUE ═══ -->
+            <div class="glass p-6 rounded-2xl">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="circle-alert" class="w-5 h-5 text-red-400"></i>
+                        Action Required
+                        <span id="action-count" class="text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-semibold">0</span>
+                    </h3>
+                    <a href="anomalies.html" class="text-xs text-neon-cyan hover:underline flex items-center gap-1">
+                        Full Queue <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-xs text-gray-500 border-b border-white/5">
+                                <th class="text-left pb-3 font-medium">Invoice</th>
+                                <th class="text-left pb-3 font-medium">Vendor</th>
+                                <th class="text-right pb-3 font-medium">Amount</th>
+                                <th class="text-left pb-3 font-medium pl-4">Inspector</th>
+                                <th class="text-right pb-3 font-medium">Risk</th>
+                                <th class="text-right pb-3 font-medium">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="action-queue" class="divide-y divide-white/5"></tbody>
+                    </table>
+                </div>
+                <p id="action-empty" class="text-center text-gray-500 text-sm py-6 hidden">No items currently require review.</p>
+            </div>
+
+            <!-- ═══ TODAY'S SNAPSHOT  +  SYSTEM HEALTH ═══ -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+                <!-- Today's Snapshot (3/5) -->
+                <div class="lg:col-span-3 glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <i data-lucide="activity" class="w-5 h-5 text-neon-cyan"></i> Today's Snapshot
+                    </h3>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs text-gray-500 mb-1">Invoices Processed</p>
+                            <p class="text-2xl font-black text-white" id="snap-processed">—</p>
+                            <p class="text-[11px] text-gray-500 mt-1">since midnight</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs text-gray-500 mb-1">Flags Raised</p>
+                            <p class="text-2xl font-black text-yellow-400" id="snap-flags">—</p>
+                            <p class="text-[11px] text-gray-500 mt-1">by all inspectors</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs text-gray-500 mb-1">Auto-Cleared</p>
+                            <p class="text-2xl font-black text-green-400" id="snap-cleared">—</p>
+                            <p class="text-[11px] text-gray-500 mt-1">high-confidence clean</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs text-gray-500 mb-1">Payments Blocked</p>
+                            <p class="text-2xl font-black text-red-400" id="snap-blocked">—</p>
+                            <p class="text-[11px] text-gray-500 mt-1">pending review</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5">
+                            <p class="text-xs text-gray-500 mb-1">False Positives</p>
+                            <p class="text-2xl font-black text-blue-400" id="snap-fp">—</p>
+                            <p class="text-[11px] text-gray-500 mt-1">cleared by analysts</p>
+                        </div>
+                        <div class="p-4 bg-neon-cyan/5 rounded-xl border border-neon-cyan/20">
+                            <p class="text-xs text-gray-500 mb-1">Amount Saved</p>
+                            <p class="text-xl font-black text-neon-cyan" id="snap-saved">—</p>
+                            <p class="text-[11px] text-neon-cyan/50 mt-1">fraud prevented</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Health (2/5) -->
+                <div class="lg:col-span-2 glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-bold text-white mb-5 flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-5 h-5 text-neon-cyan"></i> Agent System Health
+                    </h3>
+                    <div class="space-y-2.5 text-xs" id="agent-health-list">
+                        <!-- populated by JS -->
+                    </div>
+                    <div class="mt-5 pt-4 border-t border-white/10 grid grid-cols-2 gap-3 text-center">
+                        <div>
+                            <div class="text-xl font-black text-neon-cyan">0.8s</div>
+                            <div class="text-[11px] text-gray-500 mt-0.5">Avg Process Time</div>
+                        </div>
+                        <div>
+                            <div class="text-xl font-black text-green-400" id="queue-depth">—</div>
+                            <div class="text-[11px] text-gray-500 mt-0.5">Queue Depth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ TOP RISK VENDORS ═══ -->
+            <div class="glass p-6 rounded-2xl">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="building-2" class="w-5 h-5 text-deep-purple"></i>
+                        Top Risk Vendors
+                        <span class="text-xs text-gray-500 font-normal">by current risk score</span>
+                    </h3>
+                    <a href="vendors.html" class="text-xs text-neon-cyan hover:underline flex items-center gap-1">
+                        All Vendors <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-xs text-gray-500 border-b border-white/5">
+                                <th class="text-left pb-3 font-medium">Vendor</th>
+                                <th class="text-left pb-3 font-medium">Status</th>
+                                <th class="text-right pb-3 font-medium">Risk Score</th>
+                                <th class="text-right pb-3 font-medium">Open Flags</th>
+                                <th class="text-right pb-3 font-medium">Total Spend</th>
+                                <th class="text-right pb-3 font-medium">Trust Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vendor-risk-table" class="divide-y divide-white/5"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ═══ PLACEHOLDER for old Pipeline section  ═══ (removed below) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" style="display:none">
+                <!-- Agentic Pipeline Visualization — Full 11-Agent Pipeline -->
+                <div class="glass p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center mb-4 relative z-10">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i data-lucide="network" class="w-5 h-5 mr-2 text-neon-cyan"></i>
+                            Live Agent Pipeline
+                        </h3>
+                        <span class="text-xs bg-neon-cyan/20 text-neon-cyan px-2 py-1 rounded border border-neon-cyan/30 animate-pulse">PROCESSING</span>
+                    </div>
+
+                    <div class="relative z-10 space-y-2">
+                        <!-- Entry -->
+                        <div class="flex items-center gap-3">
+                            <div class="w-7 h-7 rounded-full bg-rich-black border-2 border-neon-cyan flex items-center justify-center shadow-[0_0_12px_rgba(0,243,255,0.4)] relative flex-shrink-0">
+                                <i data-lucide="radio" class="w-3 h-3 text-neon-cyan"></i>
+                                <div class="absolute inset-0 rounded-full border border-neon-cyan animate-ping opacity-50"></div>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold text-white">Invoice #89201</span>
+                                <span class="text-[10px] text-gray-500 ml-2">Live Payment Event</span>
+                            </div>
+                        </div>
+                        <div class="w-0.5 h-3 bg-neon-cyan/30 ml-3.5"></div>
+
+                        <!-- Agent 0/1 -->
+                        <div class="flex items-center gap-3">
+                            <div class="w-7 h-7 rounded-full bg-rich-black border border-neon-cyan/70 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="zap" class="w-3 h-3 text-neon-cyan"></i>
+                            </div>
+                            <div class="flex-1 flex items-center justify-between">
+                                <div><span class="text-[10px] font-bold text-neon-cyan/70">AGENT 0/1</span> <span class="text-[10px] text-white ml-1">Ingestion &amp; Signal</span></div>
+                                <span class="text-[9px] font-mono text-gray-600 bg-white/5 rounded px-1.5 py-0.5">T+0.1s</span>
+                            </div>
+                        </div>
+                        <div class="w-0.5 h-3 bg-white/20 ml-3.5"></div>
+
+                        <!-- Agents 2-5 Parallel -->
+                        <div class="border border-deep-purple/30 rounded-xl p-2 bg-deep-purple/5">
+                            <p class="text-[9px] font-bold text-deep-purple/70 uppercase tracking-wider text-center mb-2">Parallel Investigation — Agents 2 → 5</p>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <div class="flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-lg">
+                                    <i data-lucide="file-search-2" class="w-3 h-3 text-neon-cyan"></i>
+                                    <span class="text-[9px] text-gray-400 text-center leading-tight">Ag2 Similarity</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-lg">
+                                    <i data-lucide="building-2" class="w-3 h-3 text-deep-purple"></i>
+                                    <span class="text-[9px] text-gray-400 text-center leading-tight">Ag3 Vendor Res.</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-lg">
+                                    <i data-lucide="repeat" class="w-3 h-3 text-blue-400"></i>
+                                    <span class="text-[9px] text-gray-400 text-center leading-tight">Ag4 Recurrence</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1 p-1.5 bg-white/5 rounded-lg">
+                                    <i data-lucide="triangle-alert" class="w-3 h-3 text-yellow-400"></i>
+                                    <span class="text-[9px] text-gray-400 text-center leading-tight">Ag5 Outlier</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-1"><span class="text-[9px] font-mono text-gray-600">T+0.3s — T+0.6s</span></div>
+                        </div>
+                        <div class="w-0.5 h-3 bg-white/20 ml-3.5"></div>
+
+                        <!-- Agent 6 -->
+                        <div class="flex items-center gap-3">
+                            <div class="w-7 h-7 rounded-full bg-rich-black border border-neon-cyan/50 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="layers" class="w-3 h-3 text-neon-cyan"></i>
+                            </div>
+                            <div class="flex-1 flex items-center justify-between">
+                                <div><span class="text-[10px] font-bold text-neon-cyan/70">AGENT 6</span> <span class="text-[10px] text-white ml-1">Risk Aggregation</span></div>
+                                <span class="text-[9px] font-mono text-gray-600 bg-white/5 rounded px-1.5 py-0.5">T+0.7s</span>
+                            </div>
+                        </div>
+                        <div class="w-0.5 h-3 bg-white/20 ml-3.5"></div>
+
+                        <!-- Agent 7 — Decision Core -->
+                        <div class="flex items-center gap-3 p-2 rounded-xl border border-neon-cyan/40 bg-neon-cyan/5">
+                            <div class="w-8 h-8 rounded-xl bg-rich-black border-2 border-neon-cyan flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.4)] flex-shrink-0">
+                                <i data-lucide="brain-circuit" class="w-4 h-4 text-neon-cyan"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2"><span class="text-[10px] font-bold text-neon-cyan">AGENT 7 — ProtoVision Core</span></div>
+                                <div class="flex gap-1.5 mt-1">
+                                    <span class="text-[9px] bg-green-500/20 text-green-400 border border-green-500/20 rounded px-1.5 py-0.5 font-bold">✓ Approve</span>
+                                    <span class="text-[9px] bg-red-500/20 text-red-400 border border-red-500/20 rounded px-1.5 py-0.5 font-bold">✗ Block</span>
+                                    <span class="text-[9px] bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded px-1.5 py-0.5 font-bold">⚠ Escalate</span>
+                                </div>
+                            </div>
+                            <span class="text-[9px] font-mono text-neon-cyan/60 bg-neon-cyan/10 rounded px-1.5 py-0.5">T+0.9s</span>
+                        </div>
+                        <div class="w-0.5 h-3 bg-amber-400/30 ml-3.5"></div>
+
+                        <!-- Agent 8 conditional -->
+                        <div class="flex items-center gap-3 p-2 rounded-xl border border-amber-500/20 bg-amber-500/5">
+                            <div class="w-7 h-7 rounded-full bg-rich-black border border-amber-500/50 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="shield-check" class="w-3 h-3 text-amber-400"></i>
+                            </div>
+                            <div class="flex-1"><span class="text-[10px] font-bold text-amber-400/80">AGENT 8</span> <span class="text-[10px] text-gray-400 ml-1">Human-in-the-Loop Gate</span> <span class="text-[9px] text-gray-600 ml-1">(low confidence only)</span></div>
+                        </div>
+                        <div class="w-0.5 h-3 bg-white/20 ml-3.5"></div>
+
+                        <!-- Agents 9 & 10 -->
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2 p-1.5 bg-white/5 rounded-lg border border-white/5">
+                                <i data-lucide="clipboard-check" class="w-3 h-3 text-deep-purple flex-shrink-0"></i>
+                                <div><span class="text-[9px] font-bold text-deep-purple/70">AGENT 9</span> <span class="text-[9px] text-gray-400 block">Outcome Validation</span></div>
+                            </div>
+                            <div class="flex items-center gap-2 p-1.5 bg-white/5 rounded-lg border border-white/5">
+                                <i data-lucide="brain" class="w-3 h-3 text-neon-cyan flex-shrink-0"></i>
+                                <div><span class="text-[9px] font-bold text-neon-cyan/60">AGENT 10</span> <span class="text-[9px] text-gray-400 block">Learning &amp; Memory</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Timing summary -->
+                        <div class="text-center pt-1">
+                            <span class="text-xs text-gray-500">Full pipeline decision: </span>
+                            <span class="text-sm font-bold text-neon-cyan">≤ 1 Second</span>
+                        </div>
                     </div>
                 </div>
 
@@ -293,21 +542,15 @@
 
                     <div class="flex items-end space-x-4 h-32">
                         <div class="w-full bg-white/5 rounded-t-lg relative group h-[40%]">
-                            <div
-                                class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50">
-                            </div>
+                            <div class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50"></div>
                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-400">Oct</span>
                         </div>
                         <div class="w-full bg-white/5 rounded-t-lg relative group h-[60%]">
-                            <div
-                                class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50">
-                            </div>
+                            <div class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50"></div>
                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-400">Nov</span>
                         </div>
                         <div class="w-full bg-white/5 rounded-t-lg relative group h-[80%]">
-                            <div
-                                class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50">
-                            </div>
+                            <div class="absolute bottom-0 w-full bg-neon-cyan/30 h-full rounded-t-lg transition-all duration-1000 group-hover:bg-neon-cyan/50"></div>
                             <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-400">Dec</span>
                         </div>
                     </div>
@@ -318,10 +561,13 @@
                 </div>
             </div>
 
+            </div><!-- end hidden placeholder -->
+
         </div>
     </main>
 
     <script type="module">
+        import { applyChartDefaults } from './js/chartDefaults.js';
         import { generateMockData, formatCurrency } from './js/mockData.js';
         import { initSidebar } from './js/sidebar.js';
         import { initAiBot } from './js/aiBot.js';
@@ -329,91 +575,216 @@
         // Initialize Sidebar
         initSidebar();
         initAiBot();
+        applyChartDefaults();
 
         // Initialize Icons
         lucide.createIcons();
 
-        // Load Data
+        // ── Load mock data ────────────────────────────────────────
         const data = generateMockData();
+        const allInvoices  = data.invoices;
+        const allVendors   = data.vendors;
+        const suspected    = allInvoices.filter(i => i.status === 'Suspected');
+        const cleared      = allInvoices.filter(i => i.status === 'Cleared');
+        const falsePos     = allInvoices.filter(i => i.isFalsePositive);
+        const totalSpend   = allInvoices.reduce((s, i) => s + i.amount, 0);
+        const suspectedAmt = suspected.reduce((s, i) => s + i.amount, 0);
+        const recoveredAmt = suspectedAmt * 0.4;
 
-        // Update KPIs
-        const totalSpend = data.invoices.reduce((sum, inv) => sum + inv.amount, 0);
-        const suspected = data.invoices.filter(i => i.status === 'Suspected').reduce((sum, inv) => sum + inv.amount, 0);
-        const recovered = suspected * 0.4; // Mock recovery rate
+        // ── KPIs ──────────────────────────────────────────────────
+        document.getElementById('kpi-spend').textContent     = formatCurrency(totalSpend);
+        document.getElementById('kpi-savings').textContent   = formatCurrency(suspectedAmt);
+        document.getElementById('kpi-recovered').textContent = formatCurrency(recoveredAmt);
 
-        document.getElementById('kpi-spend').textContent = formatCurrency(totalSpend);
-        document.getElementById('kpi-savings').textContent = formatCurrency(suspected);
-        document.getElementById('kpi-recovered').textContent = formatCurrency(recovered);
-
-        // Chart.js Setup
-        const ctxTrend = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctxTrend, {
+        // ── Charts ────────────────────────────────────────────────
+        new Chart(document.getElementById('trendChart').getContext('2d'), {
             type: 'line',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
                     label: 'Suspected',
-                    data: [12000, 19000, 3000, 5000, 2000, 3000],
+                    data: [12000, 19000, 15000, 21000, 18000, suspectedAmt * 0.18],
                     borderColor: '#00f3ff',
                     backgroundColor: 'rgba(0, 243, 255, 0.1)',
-                    fill: true,
-                    tension: 0.4
+                    fill: true, tension: 0.4
                 }, {
                     label: 'Recovered',
-                    data: [8000, 15000, 2000, 4000, 1500, 2500],
+                    data: [8000, 15000, 11000, 17000, 14000, recoveredAmt * 0.18],
                     borderColor: '#7b2cbf',
                     backgroundColor: 'rgba(123, 44, 191, 0.1)',
-                    fill: true,
-                    tension: 0.4
+                    fill: true, tension: 0.4
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: '#fff' } }
-                },
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#fff' } } },
                 scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#aaa' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#aaa', callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
                     x: { grid: { display: false }, ticks: { color: '#aaa' } }
                 }
             }
         });
 
-        const ctxDist = document.getElementById('distChart').getContext('2d');
-        new Chart(ctxDist, {
+        const inspectorCounts = {};
+        suspected.forEach(i => { if(i.inspector) inspectorCounts[i.inspector] = (inspectorCounts[i.inspector]||0) + 1; });
+        const topInspectors = Object.entries(inspectorCounts).sort((a,b) => b[1]-a[1]).slice(0,4);
+        new Chart(document.getElementById('distChart').getContext('2d'), {
             type: 'doughnut',
             data: {
-                labels: ['Duplicate', 'Fraud', 'Vendor Error', 'Other'],
-                datasets: [{
-                    data: [45, 25, 20, 10],
-                    backgroundColor: ['#00f3ff', '#7b2cbf', '#3b82f6', '#10b981'],
-                    borderWidth: 0
-                }]
+                labels: topInspectors.map(e => e[0]),
+                datasets: [{ data: topInspectors.map(e => e[1]), backgroundColor: ['#00f3ff','#7b2cbf','#3b82f6','#10b981'], borderWidth: 0 }]
             },
             options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: '#fff' } }
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: '#fff', boxWidth: 10 } } }
             }
         });
 
-        // Bot Log Simulation
+        // ── Live Agent Feed ───────────────────────────────────────
         const botLog = document.getElementById('bot-log');
-        const logs = [
-            "Scanning Invoice #9921...",
-            "Vendor 'Acme Corp' verified.",
-            "Duplicate detected: INV-2023-001",
-            "Cross-referencing PO #8821...",
-            "Anomaly Score: 0.02 (Low Risk)"
+        const recentSuspected = suspected.slice(0, 3);
+        const feedLogs = [
+            ...recentSuspected.map(inv => ({
+                text: `${inv.inspector} flagged ${inv.id} (${inv.vendor}) — $${Number(inv.amount).toFixed(0)} — confidence ${(inv.confidence*100).toFixed(0)}%`,
+                color: parseFloat(inv.confidence) > 0.9 ? 'text-red-400' : 'text-yellow-400'
+            })),
+            { text: `Risk Aggregation complete — ${suspected.length} transactions in review queue`, color: 'text-neon-cyan' },
+            { text: `Learning Agent updated vendor risk models (${allVendors.length} vendors)`, color: 'text-gray-400' },
         ];
+        if (botLog) {
+            feedLogs.forEach((log, i) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = `${log.color} border-l-2 border-neon-cyan/30 pl-3 py-0.5`;
+                    div.textContent = `> ${log.text}`;
+                    botLog.appendChild(div);
+                    botLog.scrollTop = botLog.scrollHeight;
+                }, i * 700);
+            });
+        }
 
-        logs.forEach(log => {
-            const div = document.createElement('div');
-            div.className = "text-sm text-gray-400 font-mono border-l-2 border-neon-cyan/50 pl-3";
-            div.textContent = `> ${log}`;
-            botLog.appendChild(div);
+        // ── Action Required Queue ─────────────────────────────────
+        const actionItems = suspected.filter(i => !i.isFalsePositive).slice(0, 8);
+        const actionQueueEl = document.getElementById('action-queue');
+        const actionCountEl = document.getElementById('action-count');
+        const actionEmptyEl = document.getElementById('action-empty');
+        actionCountEl.textContent = actionItems.length;
+
+        const riskColor = c => parseFloat(c) >= 0.9  ? 'text-red-400 bg-red-500/10 border-red-500/20'
+                               : parseFloat(c) >= 0.75 ? 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20'
+                               :                          'text-blue-400 bg-blue-500/10 border-blue-500/20';
+
+        if (actionItems.length === 0) {
+            actionEmptyEl.classList.remove('hidden');
+        } else {
+            actionItems.forEach(inv => {
+                const rc = riskColor(inv.confidence);
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/3 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-3 pr-4">
+                        <span class="font-mono text-neon-cyan text-xs">${inv.id}</span>
+                    </td>
+                    <td class="py-3 pr-4">
+                        <span class="text-white text-sm font-medium">${inv.vendor}</span>
+                        <span class="text-gray-500 text-xs block">${inv.company}</span>
+                    </td>
+                    <td class="py-3 pr-4 text-right">
+                        <span class="text-white font-semibold">${formatCurrency(inv.amount)}</span>
+                    </td>
+                    <td class="py-3 pr-4 pl-4">
+                        <span class="text-xs text-gray-300 bg-white/5 border border-white/10 rounded px-2 py-0.5">${inv.inspector}</span>
+                    </td>
+                    <td class="py-3 pr-4 text-right">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded border ${rc}">${(parseFloat(inv.confidence)*100).toFixed(0)}%</span>
+                    </td>
+                    <td class="py-3 text-right">
+                        <div class="flex items-center justify-end gap-1.5">
+                            <button onclick="alert('Approved: ${inv.id}')" class="text-[11px] px-2.5 py-1 rounded bg-green-500/15 text-green-400 border border-green-500/25 hover:bg-green-500/30 transition-all font-semibold">Approve</button>
+                            <button onclick="alert('Blocked: ${inv.id}')" class="text-[11px] px-2.5 py-1 rounded bg-red-500/15 text-red-400 border border-red-500/25 hover:bg-red-500/30 transition-all font-semibold">Block</button>
+                            <a href="investigation.html" class="text-[11px] px-2.5 py-1 rounded bg-amber-500/15 text-amber-400 border border-amber-500/25 hover:bg-amber-500/30 transition-all font-semibold">Investigate</a>
+                        </div>
+                    </td>`;
+                actionQueueEl.appendChild(tr);
+            });
+        }
+
+        // ── Today's Snapshot ──────────────────────────────────────
+        const todayProcessed = Math.floor(allInvoices.length * 0.6);
+        const todayFlags     = Math.floor(suspected.length * 0.6);
+        const todayCleared   = todayProcessed - todayFlags;
+        const todayBlocked   = Math.floor(todayFlags * 0.4);
+        const todayFP        = falsePos.length;
+        document.getElementById('snap-processed').textContent = todayProcessed.toLocaleString();
+        document.getElementById('snap-flags').textContent     = todayFlags;
+        document.getElementById('snap-cleared').textContent   = todayCleared.toLocaleString();
+        document.getElementById('snap-blocked').textContent   = todayBlocked;
+        document.getElementById('snap-fp').textContent        = todayFP;
+        document.getElementById('snap-saved').textContent     = formatCurrency(suspectedAmt * 0.35);
+
+        // ── System Health ─────────────────────────────────────────
+        const agents = [
+            { name: 'Ingestion & Signal',   status: 'Online', latency: '42ms' },
+            { name: 'Invoice Similarity',   status: 'Online', latency: '210ms' },
+            { name: 'Vendor Resolution',    status: 'Online', latency: '88ms' },
+            { name: 'Recurrence Pattern',   status: 'Online', latency: '135ms' },
+            { name: 'Outlier Detection',    status: 'Online', latency: '174ms' },
+            { name: 'Risk Aggregation',     status: 'Online', latency: '62ms' },
+            { name: 'Decision Agent',       status: 'Online', latency: '95ms' },
+            { name: 'Learning & Memory',    status: 'Syncing', latency: '—' },
+        ];
+        const healthList = document.getElementById('agent-health-list');
+        agents.forEach(agent => {
+            const isOnline = agent.status === 'Online';
+            const row = document.createElement('div');
+            row.className = 'flex items-center justify-between py-1.5 border-b border-white/5 last:border-0';
+            row.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 ${isOnline ? 'bg-green-400' : 'bg-amber-400 animate-pulse'}"></span>
+                    <span class="text-gray-300">${agent.name}</span>
+                </div>
+                <div class="flex items-center gap-2 text-right">
+                    <span class="text-gray-600 font-mono">${agent.latency}</span>
+                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${isOnline ? 'text-green-400 bg-green-500/10' : 'text-amber-400 bg-amber-500/10'}">${agent.status}</span>
+                </div>`;
+            healthList.appendChild(row);
+        });
+        document.getElementById('queue-depth').textContent = suspected.length - todayBlocked;
+
+        // ── Top Risk Vendors ──────────────────────────────────────
+        const sortedVendors = [...allVendors].sort((a, b) => b.riskScore - a.riskScore).slice(0, 7);
+        const vendorTable   = document.getElementById('vendor-risk-table');
+        sortedVendors.forEach(v => {
+            const openFlags = allInvoices.filter(i => i.vendor === v.name && i.status === 'Suspected').length;
+            const riskLevel = v.riskScore >= 70 ? ['text-red-400 bg-red-500/10 border-red-500/20', 'High']
+                            : v.riskScore >= 40 ? ['text-yellow-400 bg-yellow-500/10 border-yellow-500/20', 'Medium']
+                            :                     ['text-green-400 bg-green-500/10 border-green-500/20', 'Low'];
+            const trustColor = v.trustScore >= 70 ? 'text-green-400' : v.trustScore >= 40 ? 'text-yellow-400' : 'text-red-400';
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-white/3 transition-colors';
+            tr.innerHTML = `
+                <td class="py-3 pr-4">
+                    <a href="vendors.html" class="text-white font-medium hover:text-neon-cyan transition-colors">${v.name}</a>
+                </td>
+                <td class="py-3 pr-4">
+                    <span class="text-xs px-2 py-0.5 rounded-full border ${v.status === 'Active' ? 'text-green-400 bg-green-500/10 border-green-500/20' : 'text-gray-500 bg-white/5 border-white/10'}">${v.status}</span>
+                </td>
+                <td class="py-3 pr-4 text-right">
+                    <div class="flex items-center justify-end gap-2">
+                        <div class="w-20 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full ${v.riskScore >= 70 ? 'bg-red-400' : v.riskScore >= 40 ? 'bg-yellow-400' : 'bg-green-400'}" style="width:${v.riskScore}%"></div>
+                        </div>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded border ${riskLevel[0]}">${riskLevel[1]} ${v.riskScore}</span>
+                    </div>
+                </td>
+                <td class="py-3 pr-4 text-right">
+                    <span class="${openFlags > 0 ? 'text-yellow-400 font-bold' : 'text-gray-500'}">${openFlags}</span>
+                </td>
+                <td class="py-3 pr-4 text-right text-gray-300">${formatCurrency(v.totalSpend)}</td>
+                <td class="py-3 text-right">
+                    <span class="font-semibold ${trustColor}">${v.trustScore}<span class="text-gray-600 font-normal">/100</span></span>
+                </td>`;
+            vendorTable.appendChild(tr);
         });
 
     </script>
